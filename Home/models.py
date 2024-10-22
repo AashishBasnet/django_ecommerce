@@ -1,0 +1,99 @@
+from django.db import models
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, ValidationError
+import datetime
+from django.utils.text import slugify
+# Create your models here.
+
+class Tag(models.Model):
+    tag = models.CharField(max_length=10)
+    def __str__(self):
+        return self.tag
+# categories of Products
+class Categories(models.Model):
+    category_name = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.category_name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.category_name)
+        super().save(*args, **kwargs)
+
+
+    class Meta:
+        verbose_name_plural = 'categories'
+
+
+class Customer(models.Model):
+    customer_first_name = models.CharField(max_length=50)
+    customer_last_name = models.CharField(max_length=50)
+    customer_phone_number = models.CharField(max_length=10, blank=True, validators=[
+        RegexValidator(
+            regex=r'^\d{10}$',
+            message="Phone number must be exactly 10 digits."
+        )
+    ]
+    )
+    customer_email = models.EmailField(max_length=100)
+    customer_password = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.customer_first_name} {self.customer_last_name}'
+
+
+class Product(models.Model):
+    product_name = models.CharField(max_length=50)
+    product_price = models.DecimalField(
+        default=0, decimal_places=2, max_digits=8)
+    product_category = models.ForeignKey(
+        Categories, on_delete=models.CASCADE, default='')
+    product_description = models.CharField(
+        max_length=1000, default='', blank=True, null=True)
+    product_image = models.ImageField(upload_to='uploads/product/')
+
+    product_tag = models.ManyToManyField(Tag, blank=True)
+
+    product_rating = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)], null=True
+    )
+
+    product_sale_price = models.DecimalField(
+        default=0, decimal_places=2, max_digits=8, null=True, blank=True)
+
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def clean(self):
+        if self.product_sale_price is not None:
+            if self.product_sale_price > self.product_price:
+                raise ValidationError(
+                    'Discount price cannot be greater than the actual price.')
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.product_name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.product_name}'
+
+
+class Order(models.Model):
+    order_product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order_customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    order_quantity = models.IntegerField(default=1)
+    order_address = models.CharField(max_length=100, default='', blank=True)
+    order_phone_number = models.CharField(max_length=10, blank=True, validators=[
+        RegexValidator(
+            regex=r'^\d{10}$',
+            message="Phone number must be exactly 10 digits."
+        )
+    ]
+    )
+    order_date = models.DateField(default=datetime.date.today)
+    order_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.order_product
