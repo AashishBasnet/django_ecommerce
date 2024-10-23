@@ -29,7 +29,7 @@
                   <div class="row">
                     <div class="col-md-3">Quantity:</div>
                     <div class="col-md-3">
-                      <select class="form-select form-select-sm id = qty-cart">
+                      <select class="form-select form-select-sm" id="select{{ products.id }}">
                         {% for key, value in quantities.items %}
                           {% if key == products.id|slugify %}
                             <option selected>{{ value }}</option>
@@ -45,6 +45,8 @@
                   </div>
                   <br />
                   <button class="btn btn-dark m-1" type="">Buy Now</button>
+                  <button type="button" data-index="{{ products.id }}" class="btn btn-outline-dark update-cart">Update Cart</button>
+                  <button type="button" data-index="{{ products.id }}" class="btn btn-danger ms-3 delete-product">Remove Item</button>
                 </div>
               </div>
             </div>
@@ -57,4 +59,43 @@
     {% endif %}
   </div>
   <br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <script>
+    //Update Cart
+    $(document).on('click', '.update-cart', function (e) {
+      e.preventDefault();
+      var productid = $(this).data('index')
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart-update" %}',
+        data: {
+          product_id: $(this).data('index'),
+          product_qty: $('#select' + productid + ' option:selected').text(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'post'
+        },
+        success: function (json) {
+          location.reload()
+        },
+        error: function (xhr, errmsg, err) {}
+      })
+    })
+    
+    //Remove Item From Cart
+    $(document).on('click', '.delete-product', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart-delete" %}',
+        data: {
+          product_id: $(this).data('index'),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'post'
+        },
+        success: function (json) {
+          location.reload()
+        },
+        error: function (xhr, errmsg, err) {}
+      })
+    })
+  </script>
 {% endblock %}

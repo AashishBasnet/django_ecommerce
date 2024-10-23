@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from .cart import Cart
 from Home.models import Product
 from django.http import JsonResponse
@@ -36,7 +36,22 @@ def CartAddView(request):
        
 
 def CartDeleteView(request):
-    pass
+    cart = Cart(request)
+    if request.POST.get('action') == 'post':
+        product_id = int(request.POST.get('product_id'))
+        # Call delete Function in Cart
+        cart.delete(product = product_id)
+
+        response = JsonResponse({'product': product_id})
+        return response
 
 def CartUpdateView(request):
-    pass
+    cart = Cart(request)
+    if request.POST.get('action') == 'post':
+        product_id = int(request.POST.get('product_id'))
+        product_qty = int(request.POST.get('product_qty'))
+
+        cart.update(product = product_id, quantity = product_qty)
+        response = JsonResponse({'qty': product_qty})
+        return response
+        
