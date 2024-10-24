@@ -13,9 +13,8 @@
               </div>
               <div class="col-md-4">
                 <div class="card-body">
-                  <h5 class="card-title">{{ products.product_name }}</h5>
-                  <p class="card-text">{{ products.product_description }}</p>
-                  <br />
+                  <h3 class="card-title">{{ products.product_name }}</h3>
+                  <br /><br /><br /><br />
                   {% if products.product_sale_price is None %}
                     <span class="card-title">${{ products.product_price }}</span>
                   {% else %}
