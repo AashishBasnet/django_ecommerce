@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Django Ecommerce- Update Profile
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <center>
+        <div class="col-8">
+          <form method="POST" action="{% url 'update-user' %}">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            <br /><br />
+            <button type="submit" class="btn btn-secondary">Update Profile</button>
+          </form>
+        </div>
+      </center>
+    </div>
+  </div>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}

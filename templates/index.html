@@ -59,29 +59,37 @@
                 </ul>
               </li>
             </ul>
-              <a href="{% url 'cart-summary' %}">
+            <a href="{% url 'cart-summary' %}">
               <button class="btn btn-outline-dark" type="submit">
                 <i class="bi-cart-fill me-1"></i>
                 Cart
-                <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">{{cart|length}}</span>
+                <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">{{ cart|length }}</span>
               </button>
             </a>
           </div>
         </div>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-          {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href=" {% url 'logout' %} ">Logout</a>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href=" {% url 'login' %} ">Login</a>
-            </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile</a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% if user.is_authenticated %}
+                <li>
+                  <a class="dropdown-item" href=" {% url 'update-user' %} ">Edit Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" href=" {% url 'logout' %} ">Logout</a>
+                </li>
+              {% else %}
+                <li>
+                  <a class="dropdown-item" href=" {% url 'login' %} ">Login</a>
+                </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href=" {% url 'register' %} ">Register</a>
-            </li>
-          {% endif %}
+                <li>
+                  <a class="dropdown-item" href=" {% url 'register' %} ">Register</a>
+                </li>
+              {% endif %}
+            </ul>
+          </li>
         </ul>
       </nav>
     {% endblock %}

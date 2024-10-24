@@ -9,5 +9,5 @@ urlpatterns = [
     path("register/", views.UserRegisterView, name='register'),
     path("product/<slug:slug>", views.SingleProductView, name='product'),
     path("category/<slug>", views.ProductCategoryView, name='category'),
-
+    path("update-user/", views.UpdateUserView, name = 'update-user')
 ]

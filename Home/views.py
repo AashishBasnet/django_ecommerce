@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm
+from .forms import SignUpForm, UpdateUserForm
 from django import forms
 # Create your views here.
+
 
 
 def HomeView(request):
@@ -93,3 +94,23 @@ def ProductCategoryView(request, slug):
     except:
         messages.success(request, ("The Category Doesn't exist"))
         return redirect('home')
+
+def UpdateUserView(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id = request.user.id)
+        user_form = UpdateUserForm(request.POST or None, instance = current_user)
+        if user_form.is_valid():
+            user_form.save()
+
+            login(request, current_user)
+            messages.success(request,"Your Profile has been updated")
+            return redirect('home')
+        return render(request, "Home/update_user_template.html",{
+        'user_form': user_form })
+    
+    else:
+        messages.success(request,"You must be logged in to access the page")
+        return redirect('home')
+
+    return render(request, "Home/update_user_template.html",{})
+
