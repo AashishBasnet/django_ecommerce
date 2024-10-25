@@ -7,16 +7,47 @@ from django.db.models.signals import post_save
 # Create your models here.
 
 
-#create customer profile
+# create customer profile
 class Profile(models.Model):
-    pass
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_modified = models.DateTimeField(auto_now=True)
+    phone = models.CharField(max_length=10, blank=True, validators=[
+        RegexValidator(
+            regex=r'^\d{10}$',
+            message="Phone number must be exactly 10 digits."
+        )])
+    address1 = models.CharField(max_length=200, blank=True)
+    address2 = models.CharField(max_length=200, blank=True)
+    city = models.CharField(max_length=200, blank=True)
+    state = models.CharField(max_length=200, blank=True)
+    zipcode = models.CharField(max_length=200, blank=True)
+    country = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+# create a user profile by default when user signs up
+
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+
+# Automate the profile
+
+
+post_save.connect(create_profile, sender=User)
 
 
 class Tag(models.Model):
     tag = models.CharField(max_length=10)
+
     def __str__(self):
         return self.tag
 # categories of Products
+
+
 class Categories(models.Model):
     category_name = models.CharField(max_length=50)
     slug = models.SlugField(unique=True, blank=True, null=True)
@@ -28,7 +59,6 @@ class Categories(models.Model):
         if not self.slug:
             self.slug = slugify(self.category_name)
         super().save(*args, **kwargs)
-
 
     class Meta:
         verbose_name_plural = 'categories'
@@ -77,7 +107,6 @@ class Product(models.Model):
             if self.product_sale_price > self.product_price:
                 raise ValidationError(
                     'Discount price cannot be greater than the actual price.')
-
 
     def save(self, *args, **kwargs):
         if not self.slug:
