@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Update Info
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <center>
+        <div class="col-8">
+          <form method="POST" action="{% url 'update-info' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br /><br />
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+          </form>
+          <br />
+          or
+          <br />
+          <a href="{% url 'home' %}"><button type="submit" class="btn btn-success">Maybe Later</button></a>
+        </div>
+      </center>
+    </div>
+  </div>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
