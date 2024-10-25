@@ -2,7 +2,15 @@ from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, ValidationError
 import datetime
 from django.utils.text import slugify
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 # Create your models here.
+
+
+#create customer profile
+class Profile(models.Model):
+    pass
+
 
 class Tag(models.Model):
     tag = models.CharField(max_length=10)

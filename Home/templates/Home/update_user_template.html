@@ -13,8 +13,12 @@
             {% csrf_token %}
             {{ user_form.as_p }}
             <br /><br />
-            <button type="submit" class="btn btn-secondary">Update Profile</button>
+            <button type="submit" class="btn btn-primary">Update Profile</button>
           </form>
+          <br />
+          or
+          <br />
+          <a href="{% url 'update-password' %}"><button type="submit" class="btn btn-success">Update Password</button></a>
         </div>
       </center>
     </div>
