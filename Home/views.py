@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
 from django import forms
 from django.db.models import Q
 from cart.cart import Cart
@@ -159,14 +161,26 @@ def UpdatePasswordView(request):
 
 def UpdateUserInfoView(request):
     if request.user.is_authenticated:
+        # Get current user
         current_user = Profile.objects.get(user__id=request.user.id)
+        # Get current users shipping info
+        shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
+
+        # Get original user form
         form = UserInfoForm(request.POST or None, instance=current_user)
-        if form.is_valid():
+        # get user shipping form
+        shipping_form = ShippingForm(
+            request.POST or None, instance=shipping_user)
+        if form.is_valid() or shipping_form.is_valid():
+            # save original form
             form.save()
+            # save shipping form
+            shipping_form.save()
             messages.success(request, "Your Info has been updated")
             return redirect('home')
         return render(request, "Home/update_user_info_template.html", {
-            'form': form})
+            'form': form,
+            'shipping_form': shipping_form})
 
     else:
         messages.success(request, "You must be logged in to access the page")
