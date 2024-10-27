@@ -53,3 +53,36 @@ class ShippingForm(forms.ModelForm):
         fields = ['shipping_full_name', 'shipping_email', 'shipping_address1', 'shipping_address2',
                   'shipping_city', 'shipping_state', 'shipping_zipcode', 'shipping_country', 'shipping_phone']
         exclude = ['user',]
+
+
+class PaymentForm(forms.Form):
+    card_name = forms.CharField(max_length=255, required=True, label="",
+                                widget=forms.TextInput(
+                                    attrs={'class': 'form-control', 'placeholder': 'Name on Card'}))
+    card_number = forms.CharField(max_length=255, required=True, label="",
+                                  widget=forms.TextInput(
+                                      attrs={'class': 'form-control', 'placeholder': 'Card Number'}))
+    card_exp_date = forms.CharField(max_length=255, required=True, label="",
+                                    widget=forms.TextInput(
+                                        attrs={'class': 'form-control', 'placeholder': 'Expiration Date'}))
+    card_cvv_number = forms.CharField(max_length=255, required=True, label="",
+                                      widget=forms.TextInput(
+                                          attrs={'class': 'form-control', 'placeholder': 'CVV'}))
+    card_address1 = forms.CharField(max_length=255, required=True, label="",
+                                    widget=forms.TextInput(
+                                        attrs={'class': 'form-control', 'placeholder': 'Billing Address 1'}))
+    card_address2 = forms.CharField(max_length=255, required=False, label="",
+                                    widget=forms.TextInput(
+                                        attrs={'class': 'form-control', 'placeholder': 'Billing Address 2'}))
+    card_city = forms.CharField(max_length=255, required=True, label="",
+                                widget=forms.TextInput(
+                                    attrs={'class': 'form-control', 'placeholder': 'City'}))
+    card_state = forms.CharField(max_length=255, required=True, label="",
+                                 widget=forms.TextInput(
+                                     attrs={'class': 'form-control', 'placeholder': 'State'}))
+    card_zipcode = forms.CharField(max_length=255, required=True, label="",
+                                   widget=forms.TextInput(
+                                       attrs={'class': 'form-control', 'placeholder': 'Zip Code'}))
+    card_country = forms.CharField(max_length=255, required=True, label="",
+                                   widget=forms.TextInput(
+                                       attrs={'class': 'form-control', 'placeholder': 'Country'}))
