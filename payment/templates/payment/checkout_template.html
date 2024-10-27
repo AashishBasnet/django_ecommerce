@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+{% block title %}
+  Checkout
+{% endblock %}
+{% block content %}
+  <br /><br /><br /><br />
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <div class="card-header">Order Summary</div>
+          <div class="card-body">
+            {% for products in cart_products %}
+              {{ products.product_name }}: ${% if products.product_sale_price is not None %}
+                {{ products.product_sale_price }}
+              {% else %}
+                {{ products.product_price }}
+              {% endif %}
+              <br />
+              <small>
+                Quantity:{% for key, value in quantities.items %}
+                  {% if key == products.id|slugify %}
+                    {{ value }}
+                  {% endif %}
+                {% endfor %}
+              </small>
+              <br /> <br /><br />
+            {% endfor %} <strong>Total: ${{ totals }}</strong>
+            <br /><br />
+            <a href="{% url 'cart-summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
+            <br />
+          </div>
+        </div>
+        <br /><br />
+        <div class="card">
+          <div class="card-header">Shipping Info</div>
+          <div class="card-body">{{ shipping_form.as_p }}</div>
+        </div>
+        <br /><br />
+        <a href="#" class="btn btn-secondary">Continue To Billing</a>
+      </div>
+    </div>
+  </div>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
