@@ -171,13 +171,14 @@ def UpdateUserInfoView(request):
         # get user shipping form
         shipping_form = ShippingForm(
             request.POST or None, instance=shipping_user)
-        if form.is_valid() or shipping_form.is_valid():
+        if form.is_valid() and shipping_form.is_valid():
             # save original form
             form.save()
             # save shipping form
             shipping_form.save()
             messages.success(request, "Your Info has been updated")
             return redirect('home')
+
         return render(request, "Home/update_user_info_template.html", {
             'form': form,
             'shipping_form': shipping_form})
