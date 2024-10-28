@@ -24,7 +24,9 @@
             <tbody>
               {% for order in orders %}
                 <tr>
-                  <td>{{ order.id }}</td>
+                  <td>
+                    <a href="{% url 'orders' order.id %}">{{ order.id }}</a>
+                  </td>
                   <td>{{ order.amount_paid }}</td>
                   <td>
                     {% if order.email %}

@@ -207,3 +207,17 @@ def ShippedDashboardView(request):
         messages.success(
             request, "Access Denied! only authorized users can view this page.")
         return redirect('home')
+
+
+def OrdersView(request, pk):
+    if request.user.is_authenticated and request.user.is_superuser:
+        # get the order
+        order = Order.objects.get(id=pk)
+        # get the order items
+        items = OrderItem.objects.filter(order=pk)
+        return render(request, 'payment/orders_template.html', {"order": order, "items": items})
+
+    else:
+        messages.success(
+            request, "Access Denied! only authorized users can view this page.")
+        return redirect('home')

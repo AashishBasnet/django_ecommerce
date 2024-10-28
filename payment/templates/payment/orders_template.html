@@ -1,0 +1,87 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Shipping Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <center>
+        <div class="col-8">
+          <br /><br />
+          <div class="card mb-3">
+            <div class="card-header bg-dark text-white text-start">
+              <h4 class="mb-0">Order #{{ order.id }}</h4>
+            </div>
+            <div class="card-body text-start">
+              <p>
+                {% if order.email %}
+                  <strong>Email:&nbsp;</strong> <a href="mailto:{{ order.email }}" class="text-decoration-none">{{ order.email }}</a>
+                {% endif %}
+              </p>
+              <p>
+                <strong>Date Ordered:</strong> {{ order.date_ordered }}
+              </p>
+              {% if order.date_shipped %}
+                <p>
+                  <strong>Date Shipped:</strong> {{ order.date_shipped }}
+                </p>
+              {% endif %}
+              <hr />
+
+              <h5>{{ order.full_name }}</h5>
+
+              <p>{{ order.shipping_address }}</p>
+              <hr />
+              <h3>Items Bought:</h3>
+              <br />
+              <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in items %}
+                    <tr>
+                      <td>{{ item.product }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>${{ item.price }}</td>
+                    </tr>
+                  {% endfor %}
+                  <tr>
+                    <td>
+                      <strong>Total</strong>
+                    </td>
+                    <td colspan="1"></td>
+                    <td>
+                      <strong>${{ order.amount_paid }}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {% if not order.shipped %}
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="shipping_status" value="true" />
+                  <button class="btn btn-dark">Mark As Shipped</button>
+                </form>
+              {% else %}
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="shipping_status" value="false" />
+                  <button class="btn btn-dark">Mark As Not Shipped</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </center>
+    </div>
+  </div>
+
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}

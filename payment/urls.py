@@ -9,5 +9,5 @@ urlpatterns = [
     path("shipped-dashboard", views.ShippedDashboardView, name='shipped-dashboard'),
     path("not-shipped-dashboard", views.NotShippedDashboardView,
          name='not-shipped-dashboard'),
-
+    path("orders/<int:pk>", views.OrdersView, name="orders")
 ]
