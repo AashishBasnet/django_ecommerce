@@ -5,6 +5,7 @@ from .models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
 from Home.models import Product
+import datetime
 # Create your views here.
 
 
@@ -191,6 +192,19 @@ def ProcessOrderView(request):
 def NotShippedDashboardView(request):
     if request.user.is_authenticated and request.user.is_superuser:
         orders = Order.objects.filter(shipped=False).order_by('-date_ordered')
+        if request.POST:
+            status = request.POST['shipping_status']
+            num = request.POST['num']
+            # get the order
+            order = Order.objects.filter(id=num)
+
+            # grab date and time
+            now = datetime.datetime.now()
+            # update order
+            order.update(shipped=True, date_shipped=now)
+            # redirect
+            messages.success(request, "Shipping Status Updated")
+            return redirect('not-shipped-dashboard')
 
         return render(request, "payment/not_shipped_dashboard_template.html", {"orders": orders})
     else:
@@ -202,6 +216,18 @@ def NotShippedDashboardView(request):
 def ShippedDashboardView(request):
     if request.user.is_authenticated and request.user.is_superuser:
         orders = Order.objects.filter(shipped=True).order_by('-date_shipped')
+        if request.POST:
+            status = request.POST['shipping_status']
+            num = request.POST['num']
+            # get the order
+            order = Order.objects.filter(id=num)
+            # grab date and time
+            now = datetime.datetime.now()
+            # update order
+            order.update(shipped=False)
+            # redirect
+            messages.success(request, "Shipping Status Updated")
+            return redirect('shipped-dashboard')
         return render(request, "payment/shipped_dashboard_template.html", {"orders": orders})
     else:
         messages.success(
@@ -215,6 +241,26 @@ def OrdersView(request, pk):
         order = Order.objects.get(id=pk)
         # get the order items
         items = OrderItem.objects.filter(order=pk)
+
+        if request.POST:
+            status = request.POST['shipping_status']
+            # check if true or false
+            if status == "true":
+                # get the order
+                order = Order.objects.filter(id=pk)
+                # update the status
+                now = datetime.datetime.now()
+                order.update(shipped=True, date_shipped=now)
+                messages.success(request, "Shipping Status Updated")
+                return redirect('not-shipped-dashboard')
+            else:
+                # get the order
+                order = Order.objects.filter(id=pk)
+                # update the status
+                order.update(shipped=False)
+            messages.success(request, "Shipping Status Updated")
+            return redirect('shipped-dashboard')
+
         return render(request, 'payment/orders_template.html', {"order": order, "items": items})
 
     else:
