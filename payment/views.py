@@ -186,3 +186,24 @@ def ProcessOrderView(request):
     else:
         messages.success(request, "Access Denied")
         return redirect('home')
+
+
+def NotShippedDashboardView(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        orders = Order.objects.filter(shipped=False).order_by('-date_ordered')
+
+        return render(request, "payment/not_shipped_dashboard_template.html", {"orders": orders})
+    else:
+        messages.success(
+            request, "Access Denied! only authorized users can view this page.")
+        return redirect('home')
+
+
+def ShippedDashboardView(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        orders = Order.objects.filter(shipped=True).order_by('-date_shipped')
+        return render(request, "payment/shipped_dashboard_template.html", {"orders": orders})
+    else:
+        messages.success(
+            request, "Access Denied! only authorized users can view this page.")
+        return redirect('home')

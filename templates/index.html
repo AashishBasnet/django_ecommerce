@@ -64,7 +64,24 @@
                   {% endfor %}
                 </ul>
               </li>
+              {% if user.is_superuser %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Orders</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                      <a class="dropdown-item" href=" {% url 'shipped-dashboard' %} ">Shipped Orders</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href=" {% url 'not-shipped-dashboard' %} ">Unshipped Orders</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item text-danger" href=" {% url 'logout' %} ">Logout</a>
+                    </li>
+                  </ul>
+                </li>
+              {% endif %}
             </ul>
+
             <a href="{% url 'cart-summary' %}">
               <button class="btn btn-outline-dark" type="submit">
                 <i class="bi-cart-fill me-1"></i>
