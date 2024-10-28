@@ -4,7 +4,7 @@ from .forms import ShippingForm, PaymentForm
 from .models import ShippingAddress, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
-from Home.models import Product
+from Home.models import Product, Profile
 import datetime
 # Create your views here.
 
@@ -145,6 +145,10 @@ def ProcessOrderView(request):
                 if key == 'session_key':
                     # delete the key
                     del request.session[key]
+            # delete cart from database (old_cart_field)
+            current_user = Profile.objects.filter(user__id=request.user.id)
+            # delete shopping cart in db (old_cart field)
+            current_user.update(old_cart="")
 
             messages.success(request, "Order Placed!")
             return redirect('home')
