@@ -13,9 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -152,18 +149,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 
 
-cloudinary.config(
-    cloud_name='dhswjdcid',
-    api_key='995258942426642',
-    api_secret='EntDqa6HJmqEX_GgqF8mgraOMdQ'
-)
-
-CLOUDINARY_URL = 'cloudinary://995258942426642:EntDqa6HJmqEX_GgqF8mgraOMdQ@dhswjdcid'
-# Media settings
-MEDIA_URL = 'https://res.cloudinary.com/your_cloud_name/image/upload/'
-
 DEFAULT_FILE_STORAGE = 'storages.backends.fileystem.FileSystemStorage'
-# MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
