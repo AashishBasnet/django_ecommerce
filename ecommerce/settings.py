@@ -32,6 +32,7 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = []
 
 
 # Application definition
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "Home",
     "cart",
     "payment",
+    "whitenoise.runserver_nostatic",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +58,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
 ]
 
 ROOT_URLCONF = "ecommerce.urls"
@@ -96,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
+        'PASSWORD': os.environ.get('DB_PASSWORD_RAILWAY'),
         'HOST': 'junction.proxy.rlwy.net',
         'PORT': '14588',
     }
@@ -138,7 +142,11 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
+
+# white noise static file stuff
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.fileystem.FileSystemStorage'
