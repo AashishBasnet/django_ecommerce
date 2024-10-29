@@ -31,8 +31,10 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = []
+ALLOWED_HOSTS = ['djangoecommerce-production-cc30.up.railway.app',
+                 'https://djangoecommerce-production-cc30.up.railway.app', '.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = ['djangoecommerce-production-cc30.up.railway.app',
+                        'https://djangoecommerce-production-cc30.up.railway.app']
 
 
 # Application definition
