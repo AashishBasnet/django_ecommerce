@@ -4,6 +4,8 @@ import datetime
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+import cloudinary
+import cloudinary.uploader
 # Create your models here.
 
 
@@ -90,7 +92,8 @@ class Product(models.Model):
         Categories, on_delete=models.CASCADE, default='')
     product_description = models.CharField(
         max_length=1000, default='', blank=True, null=True)
-    product_image = models.ImageField(upload_to='uploads/product/')
+    # product_image = models.ImageField(upload_to='uploads/product/')
+    product_image = models.URLField(blank=True, null=True)
 
     product_tag = models.ManyToManyField(Tag, blank=True)
 
@@ -113,6 +116,11 @@ class Product(models.Model):
         if not self.slug:
             self.slug = slugify(self.product_name)
         super().save(*args, **kwargs)
+
+    def upload_image(self, image_file):
+        # Upload image to Cloudinary and set the product_image URL.
+        response = cloudinary.uploader.upload(image_file)
+        self.product_image = response['secure_url']
 
     def __str__(self):
         return f'{self.product_name}'
