@@ -31,10 +31,7 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['djangoecommerce-production-cc30.up.railway.app',
-                 'https://djangoecommerce-production-cc30.up.railway.app', '.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['djangoecommerce-production-cc30.up.railway.app',
-                        'https://djangoecommerce-production-cc30.up.railway.app']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -49,7 +46,6 @@ INSTALLED_APPS = [
     "Home",
     "cart",
     "payment",
-    "whitenoise.runserver_nostatic",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +56,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 
 ]
 
@@ -102,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': os.environ.get('DB_PASSWORD_RAILWAY'),
+        'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
         'HOST': 'junction.proxy.rlwy.net',
         'PORT': '14588',
     }
@@ -147,8 +142,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 
 
 # white noise static file stuff
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.fileystem.FileSystemStorage'
