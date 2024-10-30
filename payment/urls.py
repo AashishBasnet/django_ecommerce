@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -9,5 +9,7 @@ urlpatterns = [
     path("shipped-dashboard", views.ShippedDashboardView, name='shipped-dashboard'),
     path("not-shipped-dashboard", views.NotShippedDashboardView,
          name='not-shipped-dashboard'),
-    path("orders/<int:pk>", views.OrdersView, name="orders")
+    path("orders/<int:pk>", views.OrdersView, name="orders"),
+    path('paypal', include("paypal.standard.ipn.urls")),
+    path("payment-failed", views.PaymentFailedView, name="payment-failed")
 ]
