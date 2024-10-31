@@ -21,10 +21,10 @@
             <h5 class="card-title">{{ products.product_name }}</h5>
 
             {% if products.product_sale_price is None %}
-              <span class="card-title">${{ products.product_price }}</span>
+              <span class="card-title">Rs. {{ products.product_price }}</span>
             {% else %}
-              <span class="card-title text-muted text-decoration-line-through">${{ products.product_price }}</span>
-              (${{ products.product_sale_price }})
+              <span class="card-title text-muted text-decoration-line-through">Rs. {{ products.product_price }}</span>
+              (Rs. {{ products.product_sale_price }})
             {% endif %}
             <p class="card-text">{{ products.product_description }}</p>
             <p class="card-text">

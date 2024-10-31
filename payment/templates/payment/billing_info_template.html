@@ -11,7 +11,7 @@
           <div class="card-header">Order Summary</div>
           <div class="card-body">
             {% for products in cart_products %}
-              {{ products.product_name }}: ${% if products.product_sale_price is not None %}
+              {{ products.product_name }}: Rs.{% if products.product_sale_price is not None %}
                 {{ products.product_sale_price }}
               {% else %}
                 {{ products.product_price }}
@@ -25,7 +25,7 @@
                 {% endfor %}
               </small>
               <br /> <br /><br />
-            {% endfor %} <strong>Total: ${{ totals }}</strong>
+            {% endfor %} <strong>Total: Rs. {{ totals }}</strong>
             <br /><br />
             <a href="{% url 'cart-summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
             <br />

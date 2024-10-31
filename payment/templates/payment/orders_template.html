@@ -49,7 +49,7 @@
                     <tr>
                       <td>{{ item.product }}</td>
                       <td>{{ item.quantity }}</td>
-                      <td>${{ item.price }}</td>
+                      <td>Rs. {{ item.price }}</td>
                     </tr>
                   {% endfor %}
                   <tr>
@@ -58,7 +58,7 @@
                     </td>
                     <td colspan="1"></td>
                     <td>
-                      <strong>${{ order.amount_paid }}</strong>
+                      <strong>Rs. {{ order.amount_paid }}</strong>
                     </td>
                   </tr>
                 </tbody>

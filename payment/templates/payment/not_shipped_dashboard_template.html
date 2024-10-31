@@ -27,7 +27,7 @@
                   <td>
                     <a href="{% url 'orders' order.id %}">{{ order.id }}</a>
                   </td>
-                  <td>${{ order.amount_paid }}</td>
+                  <td>Rs. {{ order.amount_paid }}</td>
                   <td>
                     {% if order.email %}
                       {{ order.email }}

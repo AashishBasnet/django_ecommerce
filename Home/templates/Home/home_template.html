@@ -35,10 +35,10 @@
                   </div>
                   <!-- Product price -->
                   {% if product.product_sale_price is None %}
-                    <span>${{ product.product_price }}</span>
+                    <span>Rs. {{ product.product_price }}</span>
                   {% else %}
-                    <span class="text-muted text-decoration-line-through">${{ product.product_price }}</span>
-                    ${{ product.product_sale_price }}
+                    <span class="text-muted text-decoration-line-through">Rs. {{ product.product_price }}</span>
+                    Rs. {{ product.product_sale_price }}
                   {% endif %}
                 </div>
               </div>

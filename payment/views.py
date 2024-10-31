@@ -12,6 +12,20 @@ from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 import uuid  # unique user id for duplicate orders
+import requests
+from decimal import Decimal
+
+
+def get_exchange_rate():
+    url = "https://open.er-api.com/v6/latest/NPR"  # API endpoint
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        # Fetch the USD rate from the response
+        return Decimal(data['rates']['USD'])
+    else:
+        raise Exception("Error fetching exchange rate")
 
 
 def BillingInfoView(request):
@@ -20,18 +34,36 @@ def BillingInfoView(request):
         cart_products = cart.get_prods
         quantities = cart.get_quants
         totals = cart.cart_total()
+        exchange_rate = get_exchange_rate()
+
+        # Convert totals from NPR to USD
+        amount_in_usd = (totals * exchange_rate)
+        amount_in_usd = format(amount_in_usd, '.2f')
+        print(f"amount in usd: {amount_in_usd}")
         # create a session with shipping info
         my_shipping = request.POST
         request.session['my_shipping'] = my_shipping
+
+        # Gather order info
+        full_name = my_shipping['shipping_full_name']
+        email = my_shipping['shipping_email']
+
+        # create shipping address from session info
+        shipping_address = f"{my_shipping['shipping_address1']}\n{my_shipping['shipping_address2']}\n{my_shipping['shipping_city']}\n{
+            my_shipping['shipping_state']}\n{my_shipping['shipping_zipcode']}\n{my_shipping['shipping_country']}"
+        amount_paid = totals
+
         # Get the Host
         host = request.get_host()
+        # Create an invoice no
+        my_Invoice = str(uuid.uuid4())
         # Create a PayPal Form Dictionary
         paypal_dict = {
             'business': settings.PAYPAL_RECEIVER_EMAIL,
-            'amount': totals,
+            'amount': amount_in_usd,
             'item_name': 'ecommerce Orders',
             'no_shipping': '2',
-            'invoice': str(uuid.uuid4()),
+            'invoice': my_Invoice,
             'currency_code': 'USD',
             'notify_url': 'https://{}{}'.format(host, reverse("paypal-ipn")),
             'return_url': 'https://{}{}'.format(host, reverse("payment-success")),
@@ -43,6 +75,39 @@ def BillingInfoView(request):
         if request.user.is_authenticated:
             # Get the billing form
             billing_form = PaymentForm()
+
+            # logged in
+            user = request.user
+            # create Order
+            create_order = Order(user=user, full_name=full_name, email=email,
+                                 shipping_address=shipping_address, amount_paid=amount_paid, invoice=my_Invoice)
+            create_order.save()
+
+            # Add order items
+            # get the order id
+            order_id = create_order.pk
+            # get product Info
+            for product in cart_products():
+                # get id
+                product_id = product.id
+                # get price
+                if product.product_sale_price and product.product_sale_price > 0:
+                    price = product.product_sale_price
+                else:
+                    price = product.product_price
+                # get quantity
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        # create order item
+                        create_order_item = OrderItem(
+                            order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
+                        create_order_item.save()
+
+            # delete cart from database (old_cart_field)
+            current_user = Profile.objects.filter(user__id=request.user.id)
+            # delete shopping cart in db (old_cart field)
+            current_user.update(old_cart="")
+
             return render(request, "payment/billing_info_template.html", {
                 "paypal_form": paypal_form,
                 "cart_products": cart_products,
@@ -51,9 +116,34 @@ def BillingInfoView(request):
                 "shipping_info": request.POST,
                 "billing_form": billing_form
             })
+
         else:
             # not logged in
-            # Get the billing form
+            # create Order
+            create_order = Order(full_name=full_name, email=email,
+                                 shipping_address=shipping_address, amount_paid=amount_paid, invoice=my_Invoice)
+            create_order.save()
+
+            # Add order items
+            # get the order id
+            order_id = create_order.pk
+            # get product Info
+            for product in cart_products():
+                # get id
+                product_id = product.id
+                # get price
+                if product.product_sale_price and product.product_sale_price > 0:
+                    price = product.product_sale_price
+                else:
+                    price = product.product_price
+                # get quantity
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        # create order item
+                        create_order_item = OrderItem(
+                            order_id=order_id, product_id=product_id, quantity=value, price=price)
+                        create_order_item.save()
+
             billing_form = PaymentForm()
 
             return render(request, "payment/billing_info_template.html", {
@@ -64,13 +154,7 @@ def BillingInfoView(request):
                 "shipping_info": request.POST,
                 "billing_form": billing_form
             })
-        shipping_form = request.POST
-        return render(request, "payment/billing_info_template.html", {
-            "cart_products": cart_products,
-            "quantities": quantities,
-            "totals": totals,
-            "shipping_form": shipping_form
-        })
+
     else:
         messages.success(request, "Access Denied")
         return redirect('home')
