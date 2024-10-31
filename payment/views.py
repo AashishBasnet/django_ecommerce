@@ -161,6 +161,19 @@ def BillingInfoView(request):
 
 
 def PaymentSuccessView(request):
+    # Delete the browser cart
+    # get the cart
+    cart = Cart(request)
+    cart_products = cart.get_prods
+    quantities = cart.get_quants
+    totals = cart.cart_total()
+
+  # delete cart
+    for key in list(request.session.keys()):
+        if key == 'session_key':
+            # delete the key
+            del request.session[key]
+
     return render(request, "payment/payment_success_template.html", {})
 
 

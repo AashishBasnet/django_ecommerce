@@ -48,21 +48,13 @@
           </div>
         </div>
         <br /><br />
-        <center>{{ paypal_form.render }}</center>
-        <br /><br />
-
-        <div class="card">
-          <div class="card-header">Billing Info</div>
-          <div class="card-body">
-            <form method="POST" action="{% url 'process-order' %}">
-              {% csrf_token %}
-              {{ billing_form.as_p }}
-
-              <br /><br />
-              <button type="submit" class="btn btn-secondary">Pay Now</button>
-            </form>
+        <center>
+          <div style="transform: scale(1.5);">
+            <!-- Adjust scale as needed -->
+            {{ paypal_form.render }}
           </div>
-        </div>
+        </center>
+        <br /><br />
       </div>
     </div>
   </div>
