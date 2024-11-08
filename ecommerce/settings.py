@@ -147,8 +147,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 
 # white noise static file stuff
 
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
-STATIC_ROOT = os.path.join(BASE_DIR, 'public/static')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.fileystem.FileSystemStorage'
