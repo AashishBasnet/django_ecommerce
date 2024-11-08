@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "cart",
     "payment",
     'paypal.standard.ipn',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

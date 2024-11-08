@@ -3,26 +3,8 @@
   Search Products
 {% endblock %}
 {% block content %}
-  <div class="container d-flex justify-content-center align-items-center" style="height: 7vh;">
-    <div class="input-group" style="max-width: 2000px;">
-      <form method="POST" action="{% url 'search' %}" class="d-flex w-100">
-        {% csrf_token %}
-        <input type="text" class="form-control rounded-0" placeholder="Search for Products" name="searched" />
-        <button type="button" onclick="location.href='{% url 'home' %}'" class="btn btn-outline-secondary rounded-0" id="clearButton"><i class="fas fa-times"></i></button>
-        <button class="btn btn-secondary rounded-0" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-
   <!-- Header -->
-  <header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-      <div class="text-center text-white">
-        <h1 class="display-4 fw-bolder">Shop in style</h1>
-        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-      </div>
-    </div>
-  </header>
+
   <!-- Section -->
   {% if searched %}
     <h3 class="mt-4 text-dark text-center">

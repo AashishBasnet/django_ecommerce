@@ -3,49 +3,58 @@
   Checkout
 {% endblock %}
 {% block content %}
-  <br /><br /><br /><br />
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <div class="card">
-          <div class="card-header">Order Summary</div>
-          <div class="card-body">
-            {% for products in cart_products %}
-              {{ products.product_name }}: Rs.{% if products.product_sale_price is not None %}
-                {{ products.product_sale_price }}
-              {% else %}
-                {{ products.product_price }}
-              {% endif %}
-              <br />
-              <small>
-                Quantity:{% for key, value in quantities.items %}
-                  {% if key == products.id|slugify %}
-                    {{ value }}
-                  {% endif %}
-                {% endfor %}
-              </small>
-              <br /> <br /><br />
-            {% endfor %} <strong>Total: Rs. {{ totals }}</strong>
-            <br /><br />
-            <a href="{% url 'cart-summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
-            <br />
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Checkout</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Checkout</span>
+            </div>
           </div>
         </div>
-        <br /><br />
-        <div class="card">
-          <div class="card-header">Shipping Info</div>
-          <div class="card-body">
-            <form method="POST" action="{% url 'billing-info' %}">
-              {% csrf_token %}
-              {{ shipping_form.as_p }}
-              <br /><br />
-              <button type="submit" class="btn btn-secondary">Continue To Billing</button>
-            </form>
-          </div>
-        </div>
-        <br /><br />
       </div>
     </div>
-  </div>
-  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+  </section>
+
+  <section class="shopify-cart checkout-wrap padding-large">
+    <div class="container">
+      <form method="POST" action="{% url 'billing-info' %}" class="form-group">
+        {% csrf_token %}
+        <div class="row d-flex flex-wrap">
+          <div class="col-lg-6">
+            <h2 class="display-7 text-uppercase text-dark pb-4">Billing Details</h2>
+            <div class="billing-details">{{ shipping_form.as_p }}</div>
+          </div>
+
+          <div class="col-lg-6">
+            <h2 class="display-7 text-uppercase text-dark pb-4">Cart Totals</h2>
+            <div class="your-order">
+              <table cellspacing="0" class="table">
+                <tbody>
+                  <tr class="subtotal border-top border-bottom pt-2 pb-2 text-uppercase">
+                    <th>Subtotal</th>
+                    <td data-title="Subtotal">
+                      <span class="price-amount amount text-primary ps-5"><bdi>Rs. {{ subtotal }}</bdi></span>
+                    </td>
+                  </tr>
+                  <tr class="order-total border-bottom pt-2 pb-2 text-uppercase">
+                    <th>Total</th>
+                    <td data-title="Total">
+                      <span class="price-amount amount text-primary ps-5"><bdi>Rs. {{ totals }}</bdi></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Remove payment methods section -->
+              <button type="submit" class="btn btn-dark btn-medium text-uppercase btn-rounded-none mt-4">Place an order</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
 {% endblock %}

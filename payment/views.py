@@ -186,6 +186,7 @@ def CheckoutView(request):
     cart_products = cart.get_prods
     quantities = cart.get_quants
     totals = cart.cart_total()
+    sub_total = cart.cart_sub_total()
 
     if request.user.is_authenticated:
         # Checkout as logged in user
@@ -199,6 +200,7 @@ def CheckoutView(request):
             "cart_products": cart_products,
             "quantities": quantities,
             "totals": totals,
+            "subtotal": sub_total,
             "shipping_form": shipping_form
         })
     else:
@@ -209,6 +211,7 @@ def CheckoutView(request):
             "cart_products": cart_products,
             "quantities": quantities,
             "totals": totals,
+            "subtotal": sub_total,
             "shipping_form": shipping_form
         })
 

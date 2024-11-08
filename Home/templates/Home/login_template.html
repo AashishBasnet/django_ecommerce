@@ -1,25 +1,116 @@
 {% extends 'index.html' %}
 
 {% block title %}
+  Django Ecommerce - Login
+{% endblock %}
 
+{% block links %}
+  <style>
+    /* Background and font settings */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Gradient animation */
+    
+    /* Form container */
+    .login-wrapper {
+      max-width: 500px;
+      width: 100%;
+      padding: 40px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    
+      text-align: center;
+    }
+    
+    .form-control {
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
+    .form-control:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+      border-color: #667eea;
+    }
+    
+    /* Login button */
+    .btn-login {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Style for links */
+    .auth-links {
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+    
+    .auth-links a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}
+
+{% block navigation %}
+  <!-- Navigation links if needed -->
 {% endblock %}
 
 {% block content %}
   <div class="container">
-    <div class="row">
-      <center>
-        <div class="col-8">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="login-wrapper">
+          <h2 class="mb-4">Welcome Back</h2>
+          <p class="text-muted mb-4">Login to your account to continue</p>
           <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
-            <input type="text" class="form-control" name="username" class="form-control" placeholder="Enter Your Username" />
-            <br />
-            <input type="password" name="password" class="form-control" class="form-control" placeholder="Enter Your Password" />
-            <br /><br />
-            <button type="submit" class="btn btn-secondary">Login</button>
+            <input type="text" name="username" class="form-control" placeholder="Enter Your Username" required />
+            <input type="password" name="password" class="form-control" placeholder="Enter Your Password" required />
+            <button type="submit" class="btn btn-login">Login</button>
           </form>
+
+          <!-- Auth Links (Register and Go Back buttons) -->
+          <div class="auth-links">
+            <p>
+              No account? <a href="{% url 'register' %}">Register here</a>
+            </p>
+            <p>
+              <a href="{% url 'home' %}">Go back to Home</a>
+            </p>
+          </div>
         </div>
-      </center>
+      </div>
     </div>
   </div>
-  <br><br><br><br><br><br><br><br><br>
+{% endblock %}
+
+{% block subscribe %}
+  <!-- Subscription section can be added if needed -->
+{% endblock %}
+
+{% block footer %}
+  <!-- Footer section -->
 {% endblock %}

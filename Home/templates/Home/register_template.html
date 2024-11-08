@@ -1,24 +1,181 @@
 {% extends 'index.html' %}
+{% load widget_tweaks %}
+{% load static %}
 
 {% block title %}
-  Django Ecommerce- Register
+  Django Ecommerce - Register
+{% endblock %}
+{% block navigation %}
+
+{% endblock %}
+{% block links %}
+  <style>
+    /* Overall background and font */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    /* Form container styling */
+    .form-wrapper {
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      justify-content: center;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      width: 100%;
+      max-width: 1500px;
+      display: flex;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+    /* Image styling */
+    .signup-image {
+      background-image: url('https://source.unsplash.com/random/800x600?nature');
+      background-size: cover;
+      background-position: center;
+      width: 50%;
+      display: none; /* Hide on mobile */
+    }
+    @media (min-width: 768px) {
+      .signup-image {
+        display: block;
+      }
+    }
+    /* Form section styling */
+    .form-container {
+      padding: 40px;
+      width: 100%;
+    }
+    .form-control {
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    .form-control:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+      border-color: #667eea;
+    }
+    .btn-signup {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+    .btn-signup:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    .form-label {
+      font-weight: 500;
+      color: #333;
+    }
+    .signup-title {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    .signup-subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .decorative-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    }
+    .circle-1 {
+      width: 100px;
+      height: 100px;
+      top: -50px;
+      left: -50px;
+    }
+    .circle-2 {
+      width: 150px;
+      height: 150px;
+      bottom: -75px;
+      right: -75px;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <center>
-        <div class="col-8">
-          <form method="POST" action="{% url 'register' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <br /><br />
-            <button type="submit" class="btn btn-secondary">Register</button>
-          </form>
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Register</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Register</span>
+            </div>
+          </div>
         </div>
-      </center>
+      </div>
+    </div>
+  </section>
+  <div class="form-wrapper">
+    <div class="signup-image">
+      <img src="{% static 'images/sign-up.png' %}" alt="" />
+    </div>
+
+    <div class="form-container position-relative">
+      <div class="decorative-circle circle-1"></div>
+      <div class="decorative-circle circle-2"></div>
+      <h2 class="signup-title">Create an Account</h2>
+      <p class="signup-subtitle">Join us today and start your journey!</p>
+      <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <strong>{{ form.username.label_tag }}</strong>
+          {{ form.username|add_class:'form-control' }}
+          <span class="form-text text-muted"><small>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</small></span>
+        </div>
+        <div class="mb-3">
+          <strong>{{ form.first_name.label_tag }}</strong>
+          {{ form.first_name|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <strong>{{ form.last_name.label_tag }}</strong>
+          {{ form.last_name|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <strong>{{ form.email.label_tag }}</strong>
+          {{ form.email|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ form.password1.label_tag }}</strong>
+          {{ form.password1|add_class:'form-control' }}
+          <ul class="form-text text-muted small list-unstyled p-0">
+            <li>Your password can't be too similar to your other personal information.</li>
+            <li>Your password must contain at least 8 characters.</li>
+            <li>Your password can't be a commonly used password.</li>
+            <li>Your password can't be entirely numeric.</li>
+          </ul>
+        </div>
+        <div class="mb-3">
+          <strong>{{ form.password2.label_tag }}</strong>
+          {{ form.password2|add_class:'form-control' }}
+          <span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>
+        </div>
+        <button type="submit" class="btn btn-signup w-100">Register</button>
+      </form>
     </div>
   </div>
-  <br><br><br><br><br><br><br><br><br>
 {% endblock %}
 
+{% block subscribe %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

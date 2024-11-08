@@ -1,34 +1,170 @@
 {% extends 'index.html' %}
+{% load widget_tweaks %}
+{% load static %}
 
 {% block title %}
-  Update Info
+  Shipping Information
+{% endblock %}
+
+{% block navigation %}
+
+{% endblock %}
+
+{% block links %}
+  <style>
+    /* Overall background and font */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    /* Form container styling */
+    .form-wrapper {
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      justify-content: center;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      width: 100%;
+      max-width: 1500px;
+      display: flex;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+    
+    /* Form section styling */
+    .form-container {
+      padding: 40px;
+      width: 100%;
+    }
+    
+    .form-control {
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .form-control:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+      border-color: #667eea;
+    }
+    
+    .btn-shipping {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-shipping:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .form-label {
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .signup-title {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    
+    .signup-subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <center>
-        <div class="col-8">
-          <br /><br />
-          <strong>Billing Information</strong>
-          <br /><br />
-          <form method="POST" action="{% url 'update-info' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <br /><br />
-            <strong>Shipping Information</strong>
-            <br /><br />
-            {{ shipping_form.as_p }}
-            <br /><br />
-            <button type="submit" class="btn btn-primary">Update Profile</button>
-          </form>
-          <br />
-          or
-          <br />
-          <a href="{% url 'home' %}"><button type="submit" class="btn btn-success">Maybe Later</button></a>
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Shipping Information</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Shipping Information</span>
+            </div>
+          </div>
         </div>
-      </center>
+      </div>
+    </div>
+  </section>
+
+  <div class="form-wrapper">
+    <div class="form-container position-relative">
+      <h2 class="signup-title">Enter Shipping Information</h2>
+      <p class="signup-subtitle">Fill in your shipping details below</p>
+
+      <form method="POST" action="{% url 'update-info' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_full_name.label_tag }}</strong>
+          {{ shipping_form.shipping_full_name|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_address1.label_tag }}</strong>
+          {{ shipping_form.shipping_address1|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_address2.label_tag }}</strong>
+          {{ shipping_form.shipping_address2|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_city.label_tag }}</strong>
+          {{ shipping_form.shipping_city|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_state.label_tag }}</strong>
+          {{ shipping_form.shipping_state|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_zipcode.label_tag }}</strong>
+          {{ shipping_form.shipping_zipcode|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_country.label_tag }}</strong>
+          {{ shipping_form.shipping_country|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_email.label_tag }}</strong>
+          {{ shipping_form.shipping_email|add_class:'form-control' }}
+        </div>
+
+        <div class="mb-3">
+          <strong>{{ shipping_form.shipping_phone.label_tag }}</strong>
+          {{ shipping_form.shipping_phone|add_class:'form-control' }}
+        </div>
+
+        <button type="submit" class="btn btn-shipping">Update Shipping Info</button>
+        <a href="{% url 'home' %}"><button type="button" class="btn btn-shipping">Maybe Later</button></a>
+      </form>
     </div>
   </div>
-  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
+{% block subscribe %}
+
+{% endblock %}
+
+{% block footer %}
+
 {% endblock %}

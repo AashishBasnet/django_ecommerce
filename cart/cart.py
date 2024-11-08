@@ -1,5 +1,6 @@
 
 from Home.models import Product, Profile
+from decimal import Decimal
 
 
 class Cart():
@@ -67,6 +68,10 @@ class Cart():
         quantities = self.cart
         # start counting at 0
         total = 0
+        vat_total = 0
+        vat = 0
+        # vat
+        vat_rate = Decimal('0.13')
         for key, value in quantities.items():
             # convert key string into int so we can do math
             key = int(key)
@@ -74,9 +79,36 @@ class Cart():
                 if product.id == key:
                     if product.product_sale_price is not None:
                         total = total + (product.product_sale_price * value)
+                        vat = total * vat_rate
+                        vat_total = total + vat
+                        vat_total = round(vat_total, 2)
+
                     else:
                         total = total + (product.product_price * value)
-        return total
+                        vat = total * vat_rate
+                        vat_total = total + vat
+                        vat_total = round(vat_total, 2)
+        return vat_total
+
+    def cart_sub_total(self):
+        # Get Product IDs
+        product_ids = self.cart.keys()
+        # lookup these keys in your product database model
+        products = Product.objects.filter(id__in=product_ids)
+        quantities = self.cart
+        # start counting at 0
+        sub_total = 0
+        for key, value in quantities.items():
+            # convert key string into int so we can do math
+            key = int(key)
+            for product in products:
+                if product.id == key:
+                    if product.product_sale_price is not None:
+                        sub_total = sub_total + \
+                            (product.product_sale_price * value)
+                    else:
+                        sub_total = sub_total + (product.product_price * value)
+        return sub_total
 
     def __len__(self):
         return len(self.cart)

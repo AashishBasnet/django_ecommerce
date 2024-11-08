@@ -25,8 +25,22 @@ def HomeView(request):
                   })
 
 
+def ShopView(request):
+    products = Product.objects.all()
+    categories = Categories.objects.all()
+    return render(request, "Home/shop_template.html",
+                  {
+                      'products': products,
+                      'categories': categories,
+                  })
+
+
 def AboutView(request):
-    return render(request, "Home/about_template.html")
+    categories = Categories.objects.all()
+
+    return render(request, "Home/about_template.html", {
+        'categories': categories,
+    })
 
 
 def UserLoginView(request):
@@ -89,10 +103,16 @@ def UserRegisterView(request):
 
 
 def SingleProductView(request, slug):
+    categories = Categories.objects.all()
+
     product = Product.objects.get(slug=slug)
+    all_products = Product.objects.all().order_by('-id')[:4]
+
     return render(request, "Home/single_product_template.html",
                   {
-                      'products': product
+                      'products': product,
+                      'all_products': all_products,
+                      'categories': categories,
                   })
 
 
@@ -188,29 +208,62 @@ def UpdateUserInfoView(request):
         return redirect('home')
 
 
+# def SearchView(request):
+#     products = Product.objects.all()
+#     categories = Categories.objects.all()
+#     # see if they fill out the form
+#     if request.method == "POST":
+#         searched = request.POST['searched']
+#         # Query the products database model
+#         search_key = searched
+#         searched = Product.objects.filter(Q(product_name__icontains=searched) | Q(
+#             product_description__icontains=searched) |
+#             Q(product_category__category_name__icontains=searched))
+#         # test for null
+#         if not searched:
+#             messages.success(
+#                 request, "That product doesn't exist. Please try again")
+#         return render(request, "Home/search_template.html",    {
+#             'search_key': search_key,
+#             'searched': searched,
+#             'products': products,
+#             'categories': categories,
+#         })
+#     else:
+#         return render(request, "Home/search_template.html",    {
+#             'products': products,
+#             'categories': categories,
+#         })
+
 def SearchView(request):
     products = Product.objects.all()
     categories = Categories.objects.all()
-    # see if they fill out the form
-    if request.method == "POST":
-        searched = request.POST['searched']
-        # Query the products database model
-        search_key = searched
-        searched = Product.objects.filter(Q(product_name__icontains=searched) | Q(
-            product_description__icontains=searched) |
-            Q(product_category__category_name__icontains=searched))
-        # test for null
-        if not searched:
-            messages.success(
-                request, "That product doesn't exist. Please try again")
-        return render(request, "Home/search_template.html",    {
+
+    # Checking if there's a search term in the GET parameters
+    # Using 's' to match the form input name
+    search_key = request.GET.get('s', '')
+
+    if search_key:
+        # Perform a search on the Product model
+        searched = Product.objects.filter(
+            Q(product_name__icontains=search_key) |
+            Q(product_description__icontains=search_key) |
+            Q(product_category__category_name__icontains=search_key)
+        )
+
+        # Show a message if no products were found
+        if not searched.exists():
+            messages.warning(
+                request, "That product doesn't exist. Please try again.")
+
+        return render(request, "Home/search_template.html", {
             'search_key': search_key,
             'searched': searched,
             'products': products,
             'categories': categories,
         })
-    else:
-        return render(request, "Home/search_template.html",    {
-            'products': products,
-            'categories': categories,
-        })
+
+    return render(request, "Home/search_template.html", {
+        'products': products,
+        'categories': categories,
+    })
