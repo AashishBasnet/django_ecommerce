@@ -17,16 +17,19 @@ import json
 
 def HomeView(request):
     products = Product.objects.all()
+
     categories = Categories.objects.all()
     return render(request, "Home/home_template.html",
                   {
                       'products': products,
                       'categories': categories,
+
                   })
 
 
 def ShopView(request):
     products = Product.objects.all()
+    latest_products = Product.objects.all().order_by('-id')[:3]
     categories = Categories.objects.all()
     category_count = 0
     for category in products:
@@ -35,7 +38,8 @@ def ShopView(request):
                   {
                       'products': products,
                       'categories': categories,
-                      'category_count': category_count
+                      'category_count': category_count,
+                      'latest_products': latest_products
                   })
 
 

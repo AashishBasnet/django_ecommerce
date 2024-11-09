@@ -36,8 +36,8 @@
       }
     </style>
 
-    <!--                                                                                          script
-    ==================================================                                                                                          -->
+    <!--                                                                                              script
+    ==================================================                                                                                              -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/modernizr.js' %}"></script>
@@ -178,35 +178,18 @@
                   </li>
                   <li class="nav-item">
                     <div class="user-items ps-5">
-                      <ul class="d-flex justify-content-end list-unstyled">
-                        <li class="pe-3 nav-item dropdown">
-                          <a href="nav-link me-4 dropdown-toggle link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                            <svg class="user">
-                              <use xlink:href="#user"></use>
+                      <ul class="d-flex align-items-center justify-content-end list-unstyled">
+                        <!-- Cart icon -->
+                        <li class="pe-3">
+                          <a href="{% url 'cart-summary' %}" class="cart-container position-relative">
+                            <svg class="cart">
+                              <use xlink:href="#cart"></use>
                             </svg>
+                            <span class="badge bg-dark text-white rounded-pill position-absolute top-0 start-100 translate-middle" id="cart_quantity">{{ cart|length }}</span>
                           </a>
-                          <ul class="dropdown-menu">
-                            {% if user.is_authenticated %}
-                              <li>
-                                <a class="dropdown-item" href=" {% url 'update-user' %} ">Edit Profile</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" href=" {% url 'update-info' %} ">Edit Your Info</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item text-danger" href=" {% url 'logout' %} ">Logout</a>
-                              </li>
-                            {% else %}
-                              <li>
-                                <a class="dropdown-item" href=" {% url 'login' %} ">Login</a>
-                              </li>
-
-                              <li>
-                                <a class="dropdown-item" href=" {% url 'register' %} ">Register</a>
-                              </li>
-                            {% endif %}
-                          </ul>
                         </li>
+
+                        <!-- Search icon -->
                         <li class="search-item pe-3">
                           <a href="#" class="search-button">
                             <svg class="search">
@@ -215,13 +198,33 @@
                           </a>
                         </li>
 
-                        <li>
-                          <a href="{% url 'cart-summary' %}" class="cart-container position-relative">
-                            <svg class="cart">
-                              <use xlink:href="#cart"></use>
+                        <!-- User dropdown icon without caret -->
+                        <li class="nav-item dropdown">
+                          <a href="#" class="nav-link me-4 link-dark" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                            <svg class="user">
+                              <use xlink:href="#user"></use>
                             </svg>
-                            <span class="badge bg-dark text-white rounded-pill position-absolute top-0 start-100 translate-middle" id="cart_quantity">{{ cart|length }}</span>
                           </a>
+                          <ul class="dropdown-menu dropdown-menu-end">
+                            {% if user.is_authenticated %}
+                              <li>
+                                <a class="dropdown-item" href="{% url 'update-user' %}">Edit Profile</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="{% url 'update-info' %}">Edit Your Info</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+                              </li>
+                            {% else %}
+                              <li>
+                                <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                              </li>
+                            {% endif %}
+                          </ul>
                         </li>
                       </ul>
                     </div>

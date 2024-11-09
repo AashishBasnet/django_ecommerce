@@ -35,6 +35,18 @@
               {% endif %}
             </div>
             <p>{{ products.product_description }}</p>
+            {% if products.product_tag.all %}
+              <ul class="list-inline">
+                {% for tag in products.product_tag.all %}
+                  <li class="list-inline-item">
+                    <span class="badge rounded-pill px-3 py-2 
+                        {% cycle 'bg-primary' 'bg-secondary' 'bg-success' 'bg-danger' 'bg-warning text-dark' 'bg-info' 'bg-dark text-light' %}">{{ tag.tag }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>No tags available.</p>
+            {% endif %}
             <div class="cart-wrap padding-small">
               <div class="color-options product-select">
                 <div class="color-toggle" data-option-index="0">
