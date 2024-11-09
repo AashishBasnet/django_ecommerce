@@ -2,7 +2,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ministore</title>
+    <title>
+      {% block title %}
+
+      {% endblock %}
+    </title>
+
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,8 +36,8 @@
       }
     </style>
 
-    <!--                                                                                    script
-    ==================================================                                                                                    -->
+    <!--                                                                                          script
+    ==================================================                                                                                          -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/modernizr.js' %}"></script>
@@ -129,24 +134,6 @@
                 <a href="{% url 'category' category.slug %}" title="{{ category.category_name }}">{{ category.category_name }}</a>
               </li>
             {% endfor %}
-            {% comment %} <li class="cat-list-item">
-              <a href="#" title="Smart Watches">Smart Watches</a>
-            </li>
-            <li class="cat-list-item">
-              <a href="#" title="Headphones">Headphones</a>
-            </li>
-            <li class="cat-list-item">
-              <a href="#" title="Accessories">Accessories</a>
-            </li>
-            <li class="cat-list-item">
-              <a href="#" title="Monitors">Monitors</a>
-            </li>
-            <li class="cat-list-item">
-              <a href="#" title="Speakers">Speakers</a>
-            </li>
-            <li class="cat-list-item">
-              <a href="#" title="Memory Cards">Memory Cards</a>
-            </li> {% endcomment %}
           </ul>
         </div>
       </div>

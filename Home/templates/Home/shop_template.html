@@ -25,20 +25,7 @@
         <main class="col-md-9">
           <div class="filter-shop d-flex justify-content-between">
             <div class="showing-product">
-              <p>Showing 1–9 of 55 results</p>
-            </div>
-            <div class="sort-by">
-              <select id="input-sort" class="form-control" data-filter-sort="" data-filter-order="">
-                <option value="">Default sorting</option>
-                <option value="">Name (A - Z)</option>
-                <option value="">Name (Z - A)</option>
-                <option value="">Price (Low-High)</option>
-                <option value="">Price (High-Low)</option>
-                <option value="">Rating (Highest)</option>
-                <option value="">Rating (Lowest)</option>
-                <option value="">Model (A - Z)</option>
-                <option value="">Model (Z - A)</option>
-              </select>
+              <p>{{ category_count }} items in shop</p>
             </div>
           </div>
           <div class="product-content product-store d-flex justify-content-between flex-wrap">
@@ -85,87 +72,27 @@
           <div class="sidebar">
             <div class="widget-menu">
               <div class="widget-search-bar">
-                <form role="search" method="get" class="d-flex">
-                  <input class="search-field" placeholder="Search" type="search" />
-                  <div class="search-icon bg-dark">
-                    <a href="#">
-                      <svg class="search text-light">
-                        <use xlink:href="#search"></use>
-                      </svg>
-                    </a>
-                  </div>
+                <form role="search" method="get" method="get" class="d-flex" action="{% url 'search' %}">
+                  <input class="search-field" placeholder="Search" type="search" value="" name="s" id="search-form" />
+                  <button type="submit" class="search-submit search-icon bg-dark">
+                    <svg class="search text-light">
+                      <use xlink:href="#search"></use>
+                    </svg>
+                  </button>
                 </form>
               </div>
             </div>
             <div class="widget-product-categories pt-5">
-              <h5 class="widget-title text-decoration-underline text-uppercase">Categories</h5>
+              <h5 class="widget-title text-decoration-underline text-uppercase">Filter by Categories</h5>
               <ul class="product-categories sidebar-list list-unstyled">
                 <li class="cat-item">
-                  <a href="/collections/categories">All</a>
+                  <a href="{% url 'shop' %}">All</a>
                 </li>
-                <li class="cat-item">
-                  <a href="">Phones</a>
-                </li>
-                <li class="cat-item">
-                  <a href="">Accessories</a>
-                </li>
-                <li class="cat-item">
-                  <a href="">Tablets</a>
-                </li>
-                <li class="cat-item">
-                  <a href="">Watches</a>
-                </li>
-              </ul>
-            </div>
-            <div class="widget-product-tags pt-3">
-              <h5 class="widget-title text-decoration-underline text-uppercase">Tags</h5>
-              <ul class="product-tags sidebar-list list-unstyled">
-                <li class="tags-item">
-                  <a href="">White</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">Cheap</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">Mobile</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">Modern</a>
-                </li>
-              </ul>
-            </div>
-            <div class="widget-product-brands pt-3">
-              <h5 class="widget-title text-decoration-underline text-uppercase">Brands</h5>
-              <ul class="product-tags sidebar-list list-unstyled">
-                <li class="tags-item">
-                  <a href="">Apple</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">Samsung</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">Huwai</a>
-                </li>
-              </ul>
-            </div>
-            <div class="widget-price-filter pt-3">
-              <h5 class="widget-titlewidget-title text-decoration-underline text-uppercase">Filter By Price</h5>
-              <ul class="product-tags sidebar-list list-unstyled">
-                <li class="tags-item">
-                  <a href="">Less than $10</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">$10- $20</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">$20- $30</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">$30- $40</a>
-                </li>
-                <li class="tags-item">
-                  <a href="">$40- $50</a>
-                </li>
+                {% for category in categories %}
+                  <li class="cat-list-item">
+                    <a href="{% url 'category' category.slug %}" title="{{ category.category_name }}">{{ category.category_name }}</a>
+                  </li>
+                {% endfor %}
               </ul>
             </div>
           </div>

@@ -1,58 +1,115 @@
 {% extends 'index.html' %}
+{% load static %}
 {% block title %}
-  Browse Categories - {{ product_categories }}
+  {{ product_categories }}
 {% endblock %}
 {% block content %}
-  <!-- Header -->
-  <header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-      <div class="text-center text-white">
-        <h1 class="display-4 fw-bolder">Shop in style</h1>
-        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-      </div>
-    </div>
-  </header>
-  <!-- Section -->
-  <section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-        {% for product in products %}
-          <div class="col mb-5">
-            <div class="card h-100">
-              <!-- Sale badge -->
-              <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">{{ product.product_tag }}</div>
-              <!-- Product image -->
-              <img class="card-img-top" src="{{ product.product_image.url }}" alt="{{ product.product_image.url }}" />
-              <!-- Product details -->
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Product name -->
-                  <h5 class="fw-bolder">{{ product.product_name }}</h5>
-                  <!-- Product reviews -->
-                  <div class="d-flex justify-content-center small text-warning mb-2 fw-bold">
-                    Rated {{ product.product_rating }}
-                    <div class="bi-star-fill"></div>
-                  </div>
-                  <!-- Product price -->
-                  {% if product.product_sale_price is None %}
-                    <span>Rs. {{ product.product_price }}</span>
-                  {% else %}
-                    <span class="text-muted text-decoration-line-through">Rs. {{ product.product_price }}</span>
-                    Rs. {{ product.product_sale_price }}
-                  {% endif %}
-                </div>
-              </div>
-              <!-- Product actions -->
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.slug %}">View Product</a>
-                </div>
-              </div>
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Shop</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="index.html">Home ></a></span>
+              <span class="item">Shop</span>
             </div>
           </div>
-        {% endfor %}
+        </div>
       </div>
     </div>
   </section>
-  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <div class="shopify-grid padding-large">
+    <div class="container">
+      <div class="row">
+        <main class="col-md-9">
+          <div class="filter-shop d-flex justify-content-between">
+            <div class="showing-product">
+              {% if category_count != 0 %}
+                <p>
+                  Found
+                  {{ category_count }}
+                  {% if category_count == 1 %}
+                     item
+                  {% else %}
+                    items
+                  {% endif %}in "{{ product_categories }}"
+                </p>
+              {% else %}
+                <h1 class="display-2 text-uppercase text-dark">There is No item in This category</h1>
+              {% endif %}
+            </div>
+          </div>
+          <div class="product-content product-store d-flex justify-content-between flex-wrap">
+            {% for product in products %}
+              <div class="col-lg-4 col-md-6">
+                <div class="product-card position-relative pe-3 pb-3">
+                  <div class="image-holder">
+                    <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
+                  </div>
+
+                  <div class="card-detail d-flex justify-content-between pt-3 pb-3">
+                    <h3 class="card-title text-uppercase"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
+                    {% if product.product_sale_price is None %}
+                      <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
+                    {% else %}
+                      <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+            <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+              <a href="#">
+                <svg class="chevron-left pe-3">
+                  <use xlink:href="#chevron-left"></use>
+                </svg>
+              </a>
+              <span aria-current="page" class="page-numbers current pe-3">1</span>
+              <a class="page-numbers pe-3" href="#">2</a>
+              <a class="page-numbers pe-3" href="#">3</a>
+              <a class="page-numbers pe-3" href="#">4</a>
+              <a class="page-numbers" href="#">5</a>
+              <a href="#">
+                <svg class="chevron-right ps-3">
+                  <use xlink:href="#chevron-right"></use>
+                </svg>
+              </a>
+            </div>
+          </nav>
+        </main>
+        <aside class="col-md-3">
+          <div class="sidebar">
+            <div class="widget-menu">
+              <div class="widget-search-bar">
+                <form role="search" method="get" method="get" class="d-flex" action="{% url 'search' %}">
+                  <input class="search-field" placeholder="Search" type="search" value="" name="s" id="search-form" />
+                  <button type="submit" class="search-submit search-icon bg-dark">
+                    <svg class="search text-light">
+                      <use xlink:href="#search"></use>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div class="widget-product-categories pt-5">
+              <h5 class="widget-title text-decoration-underline text-uppercase">Filter by Categories</h5>
+              <ul class="product-categories sidebar-list list-unstyled">
+                <li class="cat-item">
+                  <a href="{% url 'shop' %}">All</a>
+                </li>
+                {% for category in categories %}
+                  <li class="cat-list-item">
+                    <a href="{% url 'category' category.slug %}" title="{{ category.category_name }}">{{ category.category_name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
 {% endblock %}

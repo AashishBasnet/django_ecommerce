@@ -28,10 +28,14 @@ def HomeView(request):
 def ShopView(request):
     products = Product.objects.all()
     categories = Categories.objects.all()
+    category_count = 0
+    for category in products:
+        category_count += 1
     return render(request, "Home/shop_template.html",
                   {
                       'products': products,
                       'categories': categories,
+                      'category_count': category_count
                   })
 
 
@@ -119,14 +123,20 @@ def SingleProductView(request, slug):
 def ProductCategoryView(request, slug):
 
     try:
+        all_products = Product.objects.all()
         product_categories = Categories.objects.get(slug=slug)
         products = Product.objects.filter(product_category=product_categories)
         categories = Categories.objects.all()
+        category_count = 0
+        for categories_counter in products:
+            category_count += 1
         return render(request, 'Home/product_category_template.html',
                       {
                           'products': products,
                           'product_categories': product_categories,
-                          'categories': categories
+                          'categories': categories,
+                          'all_products': all_products,
+                          'category_count': category_count
                       })
 
     except:
@@ -208,36 +218,12 @@ def UpdateUserInfoView(request):
         return redirect('home')
 
 
-# def SearchView(request):
-#     products = Product.objects.all()
-#     categories = Categories.objects.all()
-#     # see if they fill out the form
-#     if request.method == "POST":
-#         searched = request.POST['searched']
-#         # Query the products database model
-#         search_key = searched
-#         searched = Product.objects.filter(Q(product_name__icontains=searched) | Q(
-#             product_description__icontains=searched) |
-#             Q(product_category__category_name__icontains=searched))
-#         # test for null
-#         if not searched:
-#             messages.success(
-#                 request, "That product doesn't exist. Please try again")
-#         return render(request, "Home/search_template.html",    {
-#             'search_key': search_key,
-#             'searched': searched,
-#             'products': products,
-#             'categories': categories,
-#         })
-#     else:
-#         return render(request, "Home/search_template.html",    {
-#             'products': products,
-#             'categories': categories,
-#         })
-
 def SearchView(request):
     products = Product.objects.all()
     categories = Categories.objects.all()
+    category_count = 0
+    for category in products:
+        category_count += 1
 
     # Checking if there's a search term in the GET parameters
     # Using 's' to match the form input name
@@ -261,9 +247,12 @@ def SearchView(request):
             'searched': searched,
             'products': products,
             'categories': categories,
+            'category_count': category_count
         })
 
     return render(request, "Home/search_template.html", {
         'products': products,
         'categories': categories,
+
+
     })
