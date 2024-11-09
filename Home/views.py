@@ -132,6 +132,8 @@ def ProductCategoryView(request, slug):
         products = Product.objects.filter(product_category=product_categories)
         categories = Categories.objects.all()
         category_count = 0
+        latest_products = Product.objects.all().order_by('-id')[:3]
+
         for categories_counter in products:
             category_count += 1
         return render(request, 'Home/product_category_template.html',
@@ -140,7 +142,8 @@ def ProductCategoryView(request, slug):
                           'product_categories': product_categories,
                           'categories': categories,
                           'all_products': all_products,
-                          'category_count': category_count
+                          'category_count': category_count,
+                          'latest_products': latest_products
                       })
 
     except:
@@ -226,8 +229,7 @@ def SearchView(request):
     products = Product.objects.all()
     categories = Categories.objects.all()
     category_count = 0
-    for category in products:
-        category_count += 1
+    latest_products = Product.objects.all().order_by('-id')[:3]
 
     # Checking if there's a search term in the GET parameters
     # Using 's' to match the form input name
@@ -245,18 +247,22 @@ def SearchView(request):
         if not searched.exists():
             messages.warning(
                 request, "That product doesn't exist. Please try again.")
+        for category in searched:
+            category_count += 1
 
         return render(request, "Home/search_template.html", {
             'search_key': search_key,
             'searched': searched,
             'products': products,
             'categories': categories,
-            'category_count': category_count
+            'category_count': category_count,
+            'latest_products': latest_products
         })
 
     return render(request, "Home/search_template.html", {
         'products': products,
         'categories': categories,
-
+        'category_count': category_count,
+        'latest_products': latest_products,
 
     })
