@@ -84,30 +84,21 @@
                   </li>
                 </ul>
               </div>
+
               <div class="product-quantity">
                 <div class="stock-number text-dark">2 in stock</div>
                 <div class="stock-button-wrap pt-3">
                   <div class="card-body">
-                    {% comment %} <span class="input-group-btn"><button type="button" class="quantity-left-minus btn btn-number" data-type="minus" data-field="">-</button></span>
-                    <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100" />
-                    <span class="input-group-btn"><button type="button" class="quantity-right-plus btn btn-number" data-type="plus" data-field="">+</button></span> {% endcomment %}
                     <div class="row">
                       <div class="col-md-3">Quantity:</div>
-                      <div class="col-md-3">
-                        <select class="form-select form-select-sm" id="qty-cart">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
+                      <div class="col-md-3 d-flex">
+                        <button type="button" class="btn btn-number" id="quantity-decrease">-</button>
+                        <input type="text" id="qty-cart" name="quantity" class="form-control input-number text-center" value="1" min="1" max="5" style="width: 60px;" />
+                        <button type="button" class="btn btn-number" id="quantity-increase">+</button>
                       </div>
                     </div>
-                    {% comment %} <br /><br />
-                    <button class="btn btn-dark m-1" type="">Buy Now</button> {% endcomment %}
                   </div>
                   <div class="qty-button d-flex flex-wrap pt-3">
-                    {% comment %} <button type="submit" class="btn btn-primary btn-medium text-uppercase me-3 mt-3">Buy now</button> {% endcomment %}
                     <button name="add-to-cart" value="{{ products.id }}" id="addCart" type="button" class="btn btn-black btn-medium text-uppercase mt-3">Add to cart</button>
                   </div>
                 </div>
@@ -339,23 +330,43 @@
     </div>
   </section> {% endcomment %}
   <script>
-    $(document).on('click', '#addCart', function (e) {
-      e.preventDefault()
-      $.ajax({
-        type: 'POST',
-        url: '{% url "cart-add" %}',
-        data: {
-          product_id: $('#addCart').val(),
-          product_qty: $('#qty-cart option:selected').text(),
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-          action: 'post'
-        },
-        success: function (json) {
-          console.log(json)
-          document.getElementById('cart_quantity').textContent = json.qty
-          location.reload()
-        },
-        error: function (xhr, errmsg, err) {}
+    $(document).ready(function () {
+      // Decrease quantity
+      $('#quantity-decrease').on('click', function () {
+        let qty = parseInt($('#qty-cart').val())
+        if (qty > 1) {
+          $('#qty-cart').val(qty - 1)
+        }
+      })
+    
+      // Increase quantity
+      $('#quantity-increase').on('click', function () {
+        let qty = parseInt($('#qty-cart').val())
+        let maxQty = parseInt($('#qty-cart').attr('max'))
+        if (qty < maxQty) {
+          $('#qty-cart').val(qty + 1)
+        }
+      })
+    
+      // Add to cart with the selected quantity
+      $(document).on('click', '#addCart', function (e) {
+        e.preventDefault()
+        $.ajax({
+          type: 'POST',
+          url: '{% url "cart-add" %}',
+          data: {
+            product_id: $('#addCart').val(),
+            product_qty: $('#qty-cart').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+          },
+          success: function (json) {
+            console.log(json)
+            document.getElementById('cart_quantity').textContent = json.qty
+            location.reload()
+          },
+          error: function (xhr, errmsg, err) {}
+        })
       })
     })
   </script>
