@@ -68,22 +68,45 @@
         <div class="inquiry-item col-lg-6">
           <h2 class="display-7 text-uppercase text-dark">Any questions?</h2>
           <p>Use the form below to get in touch with us.</p>
-          <form id="form" class="form-group flex-wrap">
+
+          <form id="form" class="form-group flex-wrap" method="post" action="">
+            {% csrf_token %}
+
             <div class="form-input col-lg-12 d-flex mb-3">
-              <input type="text" name="email" placeholder="Write Your Name Here" class="form-control ps-3 me-3 mb-3" />
-              <input type="text" name="email" placeholder="Write Your Email Here" class="form-control ps-3 mb-3" />
+              {{ form.name }}
+              {% if form.name.errors %}
+                <div class="text-danger">{{ form.name.errors.0 }}</div>
+              {% endif %}
+
+              {{ form.email }}
+              {% if form.email.errors %}
+                <div class="text-danger">{{ form.email.errors.0 }}</div>
+              {% endif %}
             </div>
+
             <div class="col-lg-12 mb-3">
-              <input type="text" name="email" placeholder="Phone Number" class="form-control ps-3" />
+              {{ form.phone_number }}
+              {% if form.phone_number.errors %}
+                <div class="text-danger">{{ form.phone_number.errors.0 }}</div>
+              {% endif %}
             </div>
+
             <div class="col-lg-12 mb-3">
-              <input type="text" name="email" placeholder="Write Your Subject Here" class="form-control ps-3" />
+              {{ form.subject }}
+              {% if form.subject.errors %}
+                <div class="text-danger">{{ form.subject.errors.0 }}</div>
+              {% endif %}
             </div>
+
             <div class="col-lg-12 mb-3">
-              <textarea placeholder="Write Your Message Here" class="form-control ps-3" style="height:150px;"></textarea>
+              {{ form.message }}
+              {% if form.message.errors %}
+                <div class="text-danger">{{ form.message.errors.0 }}</div>
+              {% endif %}
             </div>
+
+            <button class="btn btn-dark btn-medium text-uppercase btn-rounded-none" type="submit">Submit</button>
           </form>
-          <button class="btn btn-dark btn-medium text-uppercase btn-rounded-none">Submit</button>
         </div>
       </div>
     </div>

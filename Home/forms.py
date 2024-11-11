@@ -1,8 +1,9 @@
+from .models import Inquiry
+from django.core.validators import RegexValidator, EmailValidator, MinLengthValidator
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
-from django.core.validators import RegexValidator
 from django import forms
-from .models import Profile
+from .models import Profile, Inquiry
 
 
 class UserInfoForm(forms.ModelForm):
@@ -147,3 +148,78 @@ class SignUpForm(UserCreationForm):
             'id': 'confirmPassword',
             'required': True
         })
+
+
+class InquiryForm(forms.ModelForm):
+    name = forms.CharField(
+        max_length=100,
+        validators=[
+            RegexValidator(
+                regex=r'^[a-zA-Z\s]+$',
+                message="Name can only contain letters and spaces."
+            ),
+            MinLengthValidator(2, "Name should be at least 2 characters long.")
+        ],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control ps-3 me-3 mb-3',
+            'placeholder': 'Write Your Name Here'
+        })
+    )
+
+    email = forms.EmailField(
+        validators=[EmailValidator(message="Enter a valid email address.")],
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control ps-3 mb-3',
+            'placeholder': 'Write Your Email Here'
+        })
+    )
+
+    phone_number = forms.CharField(
+        max_length=10,
+        validators=[
+            RegexValidator(
+                regex=r'^\d{10}$',
+                message="Phone number must be exactly 10 digits."
+            )
+        ],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control ps-3',
+            'placeholder': 'Phone Number'
+        })
+    )
+
+    subject = forms.CharField(
+        max_length=150,
+        validators=[MinLengthValidator(
+            5, "Subject should be at least 5 characters long.")],
+        widget=forms.TextInput(attrs={
+            'class': 'form-control ps-3',
+            'placeholder': 'Write Your Subject Here'
+        })
+    )
+
+    message = forms.CharField(
+        validators=[MinLengthValidator(
+            10, "Message should be at least 10 characters long.")],
+        widget=forms.Textarea(attrs={
+            'class': 'form-control ps-3',
+            'placeholder': 'Write Your Message Here',
+            'style': 'height:150px;'
+        })
+    )
+
+    class Meta:
+        model = Inquiry
+        fields = ['name', 'email', 'phone_number', 'subject', 'message']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Get user from view
+        super().__init__(*args, **kwargs)
+
+        # Prepopulate fields if user is authenticated
+        if user and user.is_authenticated:
+            self.fields['name'].initial = user.get_full_name() or user.username
+            self.fields['email'].initial = user.email
+            # Prepopulate phone number if available in user profile
+            if hasattr(user, 'profile') and user.profile.phone:
+                self.fields['phone_number'].initial = user.profile.phone

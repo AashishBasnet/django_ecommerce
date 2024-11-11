@@ -1,3 +1,4 @@
+from .forms import InquiryForm
 from django.shortcuts import render, redirect
 from django.http import Http404
 from .models import Product, Categories, Profile
@@ -5,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, InquiryForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
@@ -75,7 +76,7 @@ def UserLoginView(request):
             messages.success(request, ("You Have Been Logged In"))
             return redirect("home")
         else:
-            messages.success(request, ("There was a error logging you in"))
+            messages.warning(request, ("There was a error logging you in"))
             return redirect("login")
     else:
         return render(request, "Home/login_template.html", {})
@@ -101,7 +102,7 @@ def UserRegisterView(request):
                 request, ("User Created successfully, Please Fill Out Your Info Below"))
             return redirect('update-info')
         else:
-            messages.success(
+            messages.warning(
                 request, ("OOPS! There Was a Problem Logging You in. Please Try Again!"))
             return redirect('register')
     else:
@@ -147,7 +148,7 @@ def ProductCategoryView(request, slug):
                       })
 
     except:
-        messages.success(request, ("The Category Doesn't exist"))
+        messages.warning(request, ("The Category Doesn't exist"))
         return redirect('home')
 
 
@@ -165,7 +166,7 @@ def UpdateUserView(request):
             'user_form': user_form})
 
     else:
-        messages.success(request, "You must be logged in to access the page")
+        messages.warning(request, "You must be logged in to access the page")
         return redirect('home')
 
     return render(request, "Home/update_user_template.html", {})
@@ -192,7 +193,7 @@ def UpdatePasswordView(request):
             form = ChangePasswordForm(current_user)
             return render(request, "Home/update_password_template.html", {"form": form})
     else:
-        messages.success(request, "You must be logged in to access the page")
+        messages.warning(request, "You must be logged in to access the page")
         return redirect('home')
 
 
@@ -221,7 +222,7 @@ def UpdateUserInfoView(request):
             'shipping_form': shipping_form})
 
     else:
-        messages.success(request, "You must be logged in to access the page")
+        messages.warning(request, "You must be logged in to access the page")
         return redirect('home')
 
 
@@ -269,4 +270,13 @@ def SearchView(request):
 
 
 def ContactView(request):
-    return render(request, "Home/contact_template.html", {})
+    if request.method == 'POST':
+        form = InquiryForm(request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            # Redirect or add success message here
+            messages.success(request, ("Your inquiry has been submitted"))
+            return redirect('contact')
+    else:
+        form = InquiryForm(user=request.user)
+    return render(request, 'Home/contact_template.html', {'form': form})

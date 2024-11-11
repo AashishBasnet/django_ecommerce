@@ -135,3 +135,17 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_product
+
+
+class Inquiry(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=15)
+    subject = models.CharField(max_length=150)
+    message = models.TextField()
+
+    def __str__(self):
+        return f"Inquiry from {self.name} - {self.subject}"
+
+    class Meta:
+        verbose_name = 'User Inquires'
