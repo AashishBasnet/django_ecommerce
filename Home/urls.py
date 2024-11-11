@@ -13,5 +13,6 @@ urlpatterns = [
     path("category/<slug>", views.ProductCategoryView, name='category'),
     path("update-user/", views.UpdateUserView, name='update-user'),
     path("update-info/", views.UpdateUserInfoView, name='update-info'),
-    path("search/", views.SearchView, name='search')
+    path("search/", views.SearchView, name='search'),
+    path("contact/", views.ContactView, name='contact')
 ]

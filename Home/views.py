@@ -266,3 +266,7 @@ def SearchView(request):
         'latest_products': latest_products,
 
     })
+
+
+def ContactView(request):
+    return render(request, "Home/contact_template.html", {})
