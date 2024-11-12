@@ -28,7 +28,7 @@
               <div class="showing-product">
                 <p>
                   {{ category_count }}{% if category_count == 1 %}
-                     Result
+                    Result
                   {% else %}
                     Results
                   {% endif %}Found for "{{ search_key }}"
@@ -100,26 +100,40 @@
                       <a href="{% url 'category' category.slug %}" title="{{ category.category_name }}">{{ category.category_name }}</a>
                     </li>
                   {% endfor %}
-                  <div class="widget sidebar-recent-post mb-5">
-                    <h5 class="widget-title text-uppercase text-decoration-underline">Latest Products</h5>
-                    {% for product in latest_products %}
-                      <div class="sidebar-post-item">
-                        <div class="d-flex flex-wrap align-items-center mb-3">
-                          <div class="col-lg-6">
-                            <div class="card-image pe-3 pb-2">
-                              <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
-                            </div>
-                          </div>
-                          <div class="col-lg-6">
-                            <div class="card-content">
-                              <h4 class="card-title"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h4>
-                            </div>
-                          </div>
+                </ul>
+              </div>
+              <div class="widget-product-categories pt-5">
+                <h5 class="widget-title text-decoration-underline text-uppercase">Filter by Tags</h5>
+                <ul class="product-categories sidebar-list list-unstyled">
+                  <li class="cat-item">
+                    <a href="{% url 'shop' %}">All</a>
+                  </li>
+                  {% for tag in tags %}
+                    <li class="cat-list-item">
+                      <a href="{% url 'tags' tag|slugify %}" title="{{ tag }}">{{ tag }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="widget sidebar-recent-post mb-5">
+                <h5 class="widget-title text-uppercase text-decoration-underline">Latest Products</h5>
+                {% for product in latest_products %}
+                  <div class="sidebar-post-item">
+                    <div class="d-flex flex-wrap align-items-center mb-3">
+                      <div class="col-lg-6">
+                        <div class="card-image pe-3 pb-2">
+                          <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
                         </div>
                       </div>
-                    {% endfor %}
+                      <div class="col-lg-6">
+                        <div class="card-content">
+                          <h4 class="card-title"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h4>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </ul>
+                {% endfor %}
               </div>
             </div>
           </aside>
@@ -201,26 +215,40 @@
                       <a href="{% url 'category' category.slug %}" title="{{ category.category_name }}">{{ category.category_name }}</a>
                     </li>
                   {% endfor %}
-                  <div class="widget sidebar-recent-post mb-5">
-                    <h5 class="widget-title text-uppercase text-decoration-underline">Latest Products</h5>
-                    {% for product in latest_products %}
-                      <div class="sidebar-post-item">
-                        <div class="d-flex flex-wrap align-items-center mb-3">
-                          <div class="col-lg-6">
-                            <div class="card-image pe-3 pb-2">
-                              <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
-                            </div>
-                          </div>
-                          <div class="col-lg-6">
-                            <div class="card-content">
-                              <h4 class="card-title"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h4>
-                            </div>
-                          </div>
+                </ul>
+              </div>
+              <div class="widget-product-categories pt-5">
+                <h5 class="widget-title text-decoration-underline text-uppercase">Filter by Tags</h5>
+                <ul class="product-categories sidebar-list list-unstyled">
+                  <li class="cat-item">
+                    <a href="{% url 'shop' %}">All</a>
+                  </li>
+                  {% for tag in tags %}
+                    <li class="cat-list-item">
+                      <a href="{% url 'tags' tag|slugify %}" title="{{ tag }}">{{ tag }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="widget sidebar-recent-post mb-5">
+                <h5 class="widget-title text-uppercase text-decoration-underline">Latest Products</h5>
+                {% for product in latest_products %}
+                  <div class="sidebar-post-item">
+                    <div class="d-flex flex-wrap align-items-center mb-3">
+                      <div class="col-lg-6">
+                        <div class="card-image pe-3 pb-2">
+                          <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
                         </div>
                       </div>
-                    {% endfor %}
+                      <div class="col-lg-6">
+                        <div class="card-content">
+                          <h4 class="card-title"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h4>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </ul>
+                {% endfor %}
               </div>
             </div>
           </aside>

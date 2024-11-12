@@ -46,6 +46,12 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.tag)
+        super().save(*args, **kwargs)
 # categories of Products
 
 

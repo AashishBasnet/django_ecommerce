@@ -130,6 +130,7 @@ def SingleProductView(request, slug):
 def ProductCategoryView(request, slug):
 
     try:
+        tags = Tag.objects.all()
         all_products = Product.objects.all()
         product_categories = Categories.objects.get(slug=slug)
         products = Product.objects.filter(product_category=product_categories)
@@ -146,7 +147,8 @@ def ProductCategoryView(request, slug):
                           'categories': categories,
                           'all_products': all_products,
                           'category_count': category_count,
-                          'latest_products': latest_products
+                          'latest_products': latest_products,
+                          'tags': tags
                       })
 
     except:
@@ -155,6 +157,27 @@ def ProductCategoryView(request, slug):
 
 
 def ProductTagView(request, slug):
+    all_products = Product.objects.all()
+    product_categories = Tag.objects.get(slug=slug)
+    products = Product.objects.filter(product_tag=product_categories)
+    categories = Categories.objects.all()
+    category_count = 0
+    latest_products = Product.objects.all().order_by('-id')[:3]
+    tags = Tag.objects.all()
+
+    for categories_counter in products:
+        category_count += 1
+    return render(request, 'Home/product_category_template.html',
+                  {
+                      'products': products,
+                      'product_categories': product_categories,
+                      'categories': categories,
+                      'all_products': all_products,
+                      'category_count': category_count,
+                      'latest_products': latest_products,
+                      'tags': tags
+                  })
+
     return render(request, 'Home/product_tags_template.html', {})
 
 
@@ -234,6 +257,7 @@ def UpdateUserInfoView(request):
 
 def SearchView(request):
     products = Product.objects.all()
+    tags = Tag.objects.all()
     categories = Categories.objects.all()
     category_count = 0
     latest_products = Product.objects.all().order_by('-id')[:3]
@@ -247,7 +271,8 @@ def SearchView(request):
         searched = Product.objects.filter(
             Q(product_name__icontains=search_key) |
             Q(product_description__icontains=search_key) |
-            Q(product_category__category_name__icontains=search_key)
+            Q(product_category__category_name__icontains=search_key) |
+            Q(product_tag__tag__icontains=search_key)
         )
 
         # Show a message if no products were found
@@ -263,7 +288,8 @@ def SearchView(request):
             'products': products,
             'categories': categories,
             'category_count': category_count,
-            'latest_products': latest_products
+            'latest_products': latest_products,
+            'tags': tags
         })
 
     return render(request, "Home/search_template.html", {
@@ -271,7 +297,7 @@ def SearchView(request):
         'categories': categories,
         'category_count': category_count,
         'latest_products': latest_products,
-
+        'tags': tags
     })
 
 

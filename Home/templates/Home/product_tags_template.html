@@ -1,5 +1,148 @@
 {% extends 'index.html' %}
-
+{% load static %}
+{% block title %}
+  {{ product_categories }}
+{% endblock %}
 {% block content %}
-  This is tag page
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Shop</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="index.html">Home ></a></span>
+              <span class="item">Shop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="shopify-grid padding-large">
+    <div class="container">
+      <div class="row">
+        <main class="col-md-9">
+          <div class="filter-shop d-flex justify-content-between">
+            <div class="showing-product">
+              {% if category_count != 0 %}
+                <p>
+                  Found
+                  {{ category_count }}
+                  {% if category_count == 1 %}
+                    item
+                  {% else %}
+                    items
+                  {% endif %}in "{{ product_categories }}"
+                </p>
+              {% else %}
+                <h1 class="display-2 text-uppercase text-dark">There is No item in This category</h1>
+              {% endif %}
+            </div>
+          </div>
+          <div class="product-content product-store d-flex justify-content-between flex-wrap">
+            {% for product in products %}
+              <div class="col-lg-4 col-md-6">
+                <div class="product-card position-relative pe-3 pb-3">
+                  <div class="image-holder">
+                    <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
+                  </div>
+
+                  <div class="card-detail d-flex justify-content-between pt-3 pb-3">
+                    <h3 class="card-title text-uppercase"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
+                    {% if product.product_sale_price is None %}
+                      <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
+                    {% else %}
+                      <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+            <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+              <a href="#">
+                <svg class="chevron-left pe-3">
+                  <use xlink:href="#chevron-left"></use>
+                </svg>
+              </a>
+              <span aria-current="page" class="page-numbers current pe-3">1</span>
+              <a class="page-numbers pe-3" href="#">2</a>
+              <a class="page-numbers pe-3" href="#">3</a>
+              <a class="page-numbers pe-3" href="#">4</a>
+              <a class="page-numbers" href="#">5</a>
+              <a href="#">
+                <svg class="chevron-right ps-3">
+                  <use xlink:href="#chevron-right"></use>
+                </svg>
+              </a>
+            </div>
+          </nav>
+        </main>
+        <aside class="col-md-3">
+          <div class="sidebar">
+            <div class="widget-menu">
+              <div class="widget-search-bar">
+                <form role="search" method="get" method="get" class="d-flex" action="{% url 'search' %}">
+                  <input class="search-field" placeholder="Search" type="search" value="" name="s" id="search-form" />
+                  <button type="submit" class="search-submit search-icon bg-dark">
+                    <svg class="search text-light">
+                      <use xlink:href="#search"></use>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div class="widget-product-categories pt-5">
+              <h5 class="widget-title text-decoration-underline text-uppercase">Filter by Categories</h5>
+              <ul class="product-categories sidebar-list list-unstyled">
+                <li class="cat-item">
+                  <a href="{% url 'shop' %}">All</a>
+                </li>
+                {% for category in categories %}
+                  <li class="cat-list-item">
+                    <a href="{% url 'category' category.slug %}" title="{{ category.category_name }}">{{ category.category_name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="widget-product-categories pt-5">
+              <h5 class="widget-title text-decoration-underline text-uppercase">Filter by Tags</h5>
+              <ul class="product-categories sidebar-list list-unstyled">
+                <li class="cat-item">
+                  <a href="{% url 'shop' %}">All</a>
+                </li>
+                {% for tag in tags %}
+                  <li class="cat-list-item">
+                    <a href="{% url 'tags' tag|slugify %}" title="{{ tag }}">{{ tag }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="widget sidebar-recent-post mb-5">
+              <h5 class="widget-title text-uppercase text-decoration-underline">Latest Products</h5>
+              {% for product in latest_products %}
+                <div class="sidebar-post-item">
+                  <div class="d-flex flex-wrap align-items-center mb-3">
+                    <div class="col-lg-6">
+                      <div class="card-image pe-3 pb-2">
+                        <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="card-content">
+                        <h4 class="card-title"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
 {% endblock %}
