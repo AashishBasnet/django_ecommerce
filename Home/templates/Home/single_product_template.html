@@ -283,7 +283,11 @@
                       </div>
                       <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
                         <h3 class="card-title text-uppercase"><a href="#">{{ product.product_name }}</a></h3>
-                        <span class="item-price text-primary">$980</span>
+                        {% if product.product_sale_price is None %}
+                          <span class="card-title text-primary display-6 fw-bold">Rs. {{ product.product_price }}</span>
+                        {% else %}
+                          <span class="card-title text-primary display-6 fw-bold">Rs. {{ product.product_sale_price }}</span>
+                        {% endif %}
                       </div>
                     </div>
                   </div>
@@ -296,55 +300,7 @@
     </div>
     <div class="swiper-pagination position-absolute text-center"></div>
   </section>
-  {% comment %} <section class="py-5">
-    <div class="container px-4 px-lg-5 my-5">
-      <div class="row gx-4 gx-lg-5 align-items-center">
-        <div class="col-md-6">
-          <img class="card-img-top mb-5 mb-md-0" src="{{ products.product_image.url }}" alt="{{ products.product_image.url }}" />
-        </div>
-        <div class="col-md-6">
-          <h1 class="display-5 fw-bolder">{{ products.product_name }}</h1>
-          <div class="fs-5 mb-5">
-            {% if products.product_sale_price is None %}
-              <span class="card-title">Rs. {{ products.product_price }}</span>
-            {% else %}
-              <span class="card-title text-muted text-decoration-line-through">Rs. {{ products.product_price }}</span>
-              (Rs. {{ products.product_sale_price }})
-            {% endif %}
-          </div>
-          <p class="lead">{{ products.product_description }}</p>
-          <div class="card-body">
-            <br /><br />
-            <div class="row">
-              <div class="col-md-3">Quantity:</div>
-              <div class="col-md-3">
-                <select class="form-select form-select-sm" id="qty-cart">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-              </div>
-            </div>
-            <br /><br />
-            <button class="btn btn-dark m-1" type="">Buy Now</button>
-            <button class="btn btn-outline-dark m-1" value="{{ products.id }}" id="addCart" type="button">
-              <i class="bi-cart-fill me-1"></i>
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="py-5 bg-light">
-    <div class="container px-4 px-lg-5 mt-5">
-      <h2 class="fw-bolder mb-4">Related products</h2>
-      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"></div>
-    </div>
-  </section> {% endcomment %}
   <script>
     $(document).ready(function () {
       // Decrease quantity

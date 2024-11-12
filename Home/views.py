@@ -276,7 +276,7 @@ def SearchView(request):
             Q(product_description__icontains=search_key) |
             Q(product_category__category_name__icontains=search_key) |
             Q(product_tag__tag__icontains=search_key)
-        )
+        ).distinct()
 
         # Show a message if no products were found
         if not searched.exists():
