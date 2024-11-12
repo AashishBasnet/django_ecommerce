@@ -11,6 +11,7 @@ urlpatterns = [
     path("update-password/", views.UpdatePasswordView, name='update-password'),
     path("product/<slug:slug>", views.SingleProductView, name='product'),
     path("category/<slug>", views.ProductCategoryView, name='category'),
+    path("tags/<slug>", views.ProductTagView, name='tags'),
     path("update-user/", views.UpdateUserView, name='update-user'),
     path("update-info/", views.UpdateUserInfoView, name='update-info'),
     path("search/", views.SearchView, name='search'),

@@ -1,7 +1,7 @@
 from .forms import InquiryForm
 from django.shortcuts import render, redirect
 from django.http import Http404
-from .models import Product, Categories, Profile
+from .models import Product, Categories, Profile, Tag
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -30,6 +30,7 @@ def HomeView(request):
 
 def ShopView(request):
     products = Product.objects.all()
+    tags = Tag.objects.all()
     latest_products = Product.objects.all().order_by('-id')[:3]
     categories = Categories.objects.all()
     category_count = 0
@@ -40,7 +41,8 @@ def ShopView(request):
                       'products': products,
                       'categories': categories,
                       'category_count': category_count,
-                      'latest_products': latest_products
+                      'latest_products': latest_products,
+                      'tags': tags
                   })
 
 
@@ -149,7 +151,11 @@ def ProductCategoryView(request, slug):
 
     except:
         messages.warning(request, ("The Category Doesn't exist"))
-        return redirect('home')
+        return redirect('shop')
+
+
+def ProductTagView(request, slug):
+    return render(request, 'Home/product_tags_template.html', {})
 
 
 def UpdateUserView(request):
