@@ -157,28 +157,31 @@ def ProductCategoryView(request, slug):
 
 
 def ProductTagView(request, slug):
-    all_products = Product.objects.all()
-    product_categories = Tag.objects.get(slug=slug)
-    products = Product.objects.filter(product_tag=product_categories)
-    categories = Categories.objects.all()
-    category_count = 0
-    latest_products = Product.objects.all().order_by('-id')[:3]
-    tags = Tag.objects.all()
+    try:
+        all_products = Product.objects.all()
+        product_categories = Tag.objects.get(slug=slug)
+        products = Product.objects.filter(product_tag=product_categories)
+        categories = Categories.objects.all()
+        category_count = 0
+        latest_products = Product.objects.all().order_by('-id')[:3]
+        tags = Tag.objects.all()
 
-    for categories_counter in products:
-        category_count += 1
-    return render(request, 'Home/product_category_template.html',
-                  {
-                      'products': products,
-                      'product_categories': product_categories,
-                      'categories': categories,
-                      'all_products': all_products,
-                      'category_count': category_count,
-                      'latest_products': latest_products,
-                      'tags': tags
-                  })
+        for categories_counter in products:
+            category_count += 1
+        return render(request, 'Home/product_tags_template.html',
+                      {
+                          'products': products,
+                          'product_categories': product_categories,
+                          'categories': categories,
+                          'all_products': all_products,
+                          'category_count': category_count,
+                          'latest_products': latest_products,
+                          'tags': tags
+                      })
 
-    return render(request, 'Home/product_tags_template.html', {})
+    except:
+        messages.warning(request, ("The Tag Doesn't exist"))
+        return redirect('shop')
 
 
 def UpdateUserView(request):
