@@ -25,7 +25,7 @@
         <main class="col-md-9">
           <div class="filter-shop d-flex justify-content-between">
             <div class="showing-product">
-              <p>{{ category_count }} items in shop</p>
+              <p>Showing ({{ products.start_index }} - {{ products.end_index }}) of {{ products.paginator.count }} results in Shop.</p>
             </div>
           </div>
           <div class="product-content product-store d-flex justify-content-between flex-wrap">

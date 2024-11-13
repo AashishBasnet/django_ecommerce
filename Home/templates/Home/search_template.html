@@ -57,21 +57,33 @@
             </div>
             <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
               <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-                <a href="#">
-                  <svg class="chevron-left pe-3">
-                    <use xlink:href="#chevron-left"></use>
-                  </svg>
-                </a>
-                <span aria-current="page" class="page-numbers current pe-3">1</span>
-                <a class="page-numbers pe-3" href="#">2</a>
-                <a class="page-numbers pe-3" href="#">3</a>
-                <a class="page-numbers pe-3" href="#">4</a>
-                <a class="page-numbers" href="#">5</a>
-                <a href="#">
-                  <svg class="chevron-right ps-3">
-                    <use xlink:href="#chevron-right"></use>
-                  </svg>
-                </a>
+                {% if searched.has_previous %}
+                  <a href="?s={{ search_key }}&page=1">
+                    <svg class="chevron-left pe-3">
+                      <use xlink:href="#chevron-left"></use>
+                    </svg>
+                  </a>
+                  <a href="?s={{ search_key }}&page={{ searched.previous_page_number }}">
+                    <svg class="chevron-left pe-3">
+                      <use xlink:href="#chevron-left"></use>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                <span aria-current="page" class="page-numbers current pe-3">{{ searched.number }}</span>
+
+                {% if searched.has_next %}
+                  <a href="?s={{ search_key }}&page={{ searched.next_page_number }}">
+                    <svg class="chevron-right ps-3">
+                      <use xlink:href="#chevron-right"></use>
+                    </svg>
+                  </a>
+                  <a href="?s={{ search_key }}&page={{ searched.paginator.num_pages }}">
+                    <svg class="chevron-right ps-3">
+                      <use xlink:href="#chevron-right"></use>
+                    </svg>
+                  </a>
+                {% endif %}
               </div>
             </nav>
           </main>
@@ -172,21 +184,33 @@
             </div>
             <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
               <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-                <a href="#">
-                  <svg class="chevron-left pe-3">
-                    <use xlink:href="#chevron-left"></use>
-                  </svg>
-                </a>
-                <span aria-current="page" class="page-numbers current pe-3">1</span>
-                <a class="page-numbers pe-3" href="#">2</a>
-                <a class="page-numbers pe-3" href="#">3</a>
-                <a class="page-numbers pe-3" href="#">4</a>
-                <a class="page-numbers" href="#">5</a>
-                <a href="#">
-                  <svg class="chevron-right ps-3">
-                    <use xlink:href="#chevron-right"></use>
-                  </svg>
-                </a>
+                {% if searched.has_previous %}
+                  <a href="?s={{ search_key }}&page=1">
+                    <svg class="chevron-left pe-3">
+                      <use xlink:href="#chevron-left"></use>
+                    </svg>
+                  </a>
+                  <a href="?s={{ search_key }}&page={{ searched.previous_page_number }}">
+                    <svg class="chevron-left pe-3">
+                      <use xlink:href="#chevron-left"></use>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                <span aria-current="page" class="page-numbers current pe-3">{{ searched.number }}</span>
+
+                {% if searched.has_next %}
+                  <a href="?s={{ search_key }}&page={{ searched.next_page_number }}">
+                    <svg class="chevron-right ps-3">
+                      <use xlink:href="#chevron-right"></use>
+                    </svg>
+                  </a>
+                  <a href="?s={{ search_key }}&page={{ searched.paginator.num_pages }}">
+                    <svg class="chevron-right ps-3">
+                      <use xlink:href="#chevron-right"></use>
+                    </svg>
+                  </a>
+                {% endif %}
               </div>
             </nav>
           </main>

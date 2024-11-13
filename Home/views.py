@@ -136,59 +136,62 @@ def SingleProductView(request, slug):
 
 
 def ProductCategoryView(request, slug):
-
     try:
         tags = Tag.objects.all()
         all_products = Product.objects.all()
         product_categories = Categories.objects.get(slug=slug)
         products = Product.objects.filter(product_category=product_categories)
         categories = Categories.objects.all()
-        category_count = 0
+        category_count = products.count()
         latest_products = Product.objects.all().order_by('-id')[:3]
 
-        for categories_counter in products:
-            category_count += 1
-        return render(request, 'Home/product_category_template.html',
-                      {
-                          'products': products,
-                          'product_categories': product_categories,
-                          'categories': categories,
-                          'all_products': all_products,
-                          'category_count': category_count,
-                          'latest_products': latest_products,
-                          'tags': tags
-                      })
+        # Pagination setup
+        paginator = Paginator(products, 9)  # Show 9 products per page
+        page_number = request.GET.get('page')
+        paginated_products = paginator.get_page(page_number)
 
-    except:
-        messages.warning(request, ("The Category Doesn't exist"))
+        return render(request, 'Home/product_category_template.html', {
+            'products': paginated_products,
+            'product_categories': product_categories,
+            'categories': categories,
+            'all_products': all_products,
+            'category_count': category_count,
+            'latest_products': latest_products,
+            'tags': tags,
+        })
+
+    except Categories.DoesNotExist:
+        messages.warning(request, "The Category Doesn't exist")
         return redirect('shop')
 
 
 def ProductTagView(request, slug):
     try:
-        all_products = Product.objects.all()
-        product_categories = Tag.objects.get(slug=slug)
-        products = Product.objects.filter(product_tag=product_categories)
-        categories = Categories.objects.all()
-        category_count = 0
-        latest_products = Product.objects.all().order_by('-id')[:3]
         tags = Tag.objects.all()
+        all_products = Product.objects.all()
+        product_tag = Tag.objects.get(slug=slug)
+        products = Product.objects.filter(product_tag=product_tag)
+        categories = Categories.objects.all()
+        category_count = products.count()
+        latest_products = Product.objects.all().order_by('-id')[:3]
 
-        for categories_counter in products:
-            category_count += 1
-        return render(request, 'Home/product_tags_template.html',
-                      {
-                          'products': products,
-                          'product_categories': product_categories,
-                          'categories': categories,
-                          'all_products': all_products,
-                          'category_count': category_count,
-                          'latest_products': latest_products,
-                          'tags': tags
-                      })
+        # Pagination setup
+        paginator = Paginator(products, 9)  # 9 products per page
+        page_number = request.GET.get('page')
+        paginated_products = paginator.get_page(page_number)
 
-    except:
-        messages.warning(request, ("The Tag Doesn't exist"))
+        return render(request, 'Home/product_tags_template.html', {
+            'products': paginated_products,
+            'product_categories': product_tag,
+            'categories': categories,
+            'all_products': all_products,
+            'category_count': category_count,
+            'latest_products': latest_products,
+            'tags': tags,
+        })
+
+    except Tag.DoesNotExist:
+        messages.warning(request, "The Tag Doesn't exist")
         return redirect('shop')
 
 
@@ -270,15 +273,11 @@ def SearchView(request):
     products = Product.objects.all()
     tags = Tag.objects.all()
     categories = Categories.objects.all()
-    category_count = 0
     latest_products = Product.objects.all().order_by('-id')[:3]
 
-    # Checking if there's a search term in the GET parameters
-    # Using 's' to match the form input name
     search_key = request.GET.get('s', '')
 
     if search_key:
-        # Perform a search on the Product model
         searched = Product.objects.filter(
             Q(product_name__icontains=search_key) |
             Q(product_description__icontains=search_key) |
@@ -286,27 +285,33 @@ def SearchView(request):
             Q(product_tag__tag__icontains=search_key)
         ).distinct()
 
+        # Paginate the results
+        paginator = Paginator(searched, 3)  # Show 9 products per page
+        page = request.GET.get('page')
+
+        try:
+            searched_products = paginator.page(page)
+        except PageNotAnInteger:
+            searched_products = paginator.page(1)
+        except EmptyPage:
+            searched_products = paginator.page(paginator.num_pages)
+
         # Show a message if no products were found
         if not searched.exists():
             messages.warning(
                 request, "That product doesn't exist. Please try again.")
-        for category in searched:
-            category_count += 1
 
         return render(request, "Home/search_template.html", {
             'search_key': search_key,
-            'searched': searched,
+            'searched': searched_products,  # Use paginated results
             'products': products,
             'categories': categories,
-            'category_count': category_count,
             'latest_products': latest_products,
             'tags': tags
         })
-
     return render(request, "Home/search_template.html", {
         'products': products,
         'categories': categories,
-        'category_count': category_count,
         'latest_products': latest_products,
         'tags': tags
     })
