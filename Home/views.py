@@ -13,12 +13,12 @@ from django import forms
 from django.db.models import Q
 from cart.cart import Cart
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
 def HomeView(request):
     products = Product.objects.all()
-
     categories = Categories.objects.all()
     return render(request, "Home/home_template.html",
                   {
@@ -29,21 +29,29 @@ def HomeView(request):
 
 
 def ShopView(request):
-    products = Product.objects.all()
+    products_list = Product.objects.all()
     tags = Tag.objects.all()
     latest_products = Product.objects.all().order_by('-id')[:3]
     categories = Categories.objects.all()
-    category_count = 0
-    for category in products:
-        category_count += 1
-    return render(request, "Home/shop_template.html",
-                  {
-                      'products': products,
-                      'categories': categories,
-                      'category_count': category_count,
-                      'latest_products': latest_products,
-                      'tags': tags
-                  })
+    category_count = products_list.count()
+
+    # Pagination setup
+    paginator = Paginator(products_list, 9)  # Show 9 products per page
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    return render(request, "Home/shop_template.html", {
+        'products': products,
+        'categories': categories,
+        'category_count': category_count,
+        'latest_products': latest_products,
+        'tags': tags,
+    })
 
 
 def AboutView(request):

@@ -50,21 +50,29 @@
           </div>
           <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
             <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-              <a href="#">
-                <svg class="chevron-left pe-3">
-                  <use xlink:href="#chevron-left"></use>
-                </svg>
-              </a>
-              <span aria-current="page" class="page-numbers current pe-3">1</span>
-              <a class="page-numbers pe-3" href="#">2</a>
-              <a class="page-numbers pe-3" href="#">3</a>
-              <a class="page-numbers pe-3" href="#">4</a>
-              <a class="page-numbers" href="#">5</a>
-              <a href="#">
-                <svg class="chevron-right ps-3">
-                  <use xlink:href="#chevron-right"></use>
-                </svg>
-              </a>
+              {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}">
+                  <svg class="chevron-left pe-3">
+                    <use xlink:href="#chevron-left"></use>
+                  </svg>
+                </a>
+              {% endif %}
+
+              {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                  <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+                {% else %}
+                  <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+              {% endfor %}
+
+              {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}">
+                  <svg class="chevron-right ps-3">
+                    <use xlink:href="#chevron-right"></use>
+                  </svg>
+                </a>
+              {% endif %}
             </div>
           </nav>
         </main>
