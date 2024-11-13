@@ -13,18 +13,37 @@ from django import forms
 from django.db.models import Q
 from cart.cart import Cart
 import json
+import math
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
 def HomeView(request):
     products = Product.objects.all()
+    tags = Tag.objects.all()
     categories = Categories.objects.all()
+    discount = []
+    for product in products:
+        if product.product_sale_price:
+            # Calculate discount percentage and format to two decimal places
+            discount_percentage = (
+                (product.product_price - product.product_sale_price) / product.product_price) * 100
+            discount.append(float(f"{discount_percentage:.2f}"))
+
+# Find the maximum discount percentage
+    if discount:
+        maximum_discount = max(discount)
+        if maximum_discount % 10 < 5:
+            round_max_discount = math.floor(maximum_discount / 5) * 5
+        else:
+            round_max_discount = math.ceil(maximum_discount / 10) * 10
+
     return render(request, "Home/home_template.html",
                   {
                       'products': products,
                       'categories': categories,
-
+                      'tags': tags,
+                      'discount_upto': round_max_discount
                   })
 
 
@@ -277,43 +296,44 @@ def SearchView(request):
 
     search_key = request.GET.get('s', '')
 
-    if search_key:
-        searched = Product.objects.filter(
-            Q(product_name__icontains=search_key) |
-            Q(product_description__icontains=search_key) |
-            Q(product_category__category_name__icontains=search_key) |
-            Q(product_tag__tag__icontains=search_key)
-        ).distinct()
+    # Redirect to shop if the search is empty
+    if search_key == '':
+        messages.warning(request, "Please enter a search term.")
+        return redirect('shop')
 
-        # Paginate the results
-        paginator = Paginator(searched, 3)  # Show 9 products per page
-        page = request.GET.get('page')
+    # Perform the search
+    searched = Product.objects.filter(
+        Q(product_name__icontains=search_key) |
+        Q(product_description__icontains=search_key) |
+        Q(product_category__category_name__icontains=search_key) |
+        Q(product_tag__tag__icontains=search_key)
+    ).distinct()
 
-        try:
-            searched_products = paginator.page(page)
-        except PageNotAnInteger:
-            searched_products = paginator.page(1)
-        except EmptyPage:
-            searched_products = paginator.page(paginator.num_pages)
+    # Redirect if no products were found
+    if not searched.exists():
+        messages.warning(
+            request, "That product doesn't exist. Please try again.")
+        return redirect('shop')
 
-        # Show a message if no products were found
-        if not searched.exists():
-            messages.warning(
-                request, "That product doesn't exist. Please try again.")
+    # Create the paginator
+    paginator = Paginator(searched, 9)  # Show 9 products per page
+    page = request.GET.get('page')
 
-        return render(request, "Home/search_template.html", {
-            'search_key': search_key,
-            'searched': searched_products,  # Use paginated results
-            'products': products,
-            'categories': categories,
-            'latest_products': latest_products,
-            'tags': tags
-        })
+    try:
+        paginated_results = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_results = paginator.page(1)
+    except EmptyPage:
+        paginated_results = paginator.page(paginator.num_pages)
+
     return render(request, "Home/search_template.html", {
+        'search_key': search_key,
+        'searched': paginated_results,  # Renamed here
         'products': products,
         'categories': categories,
         'latest_products': latest_products,
-        'tags': tags
+        'tags': tags,
+        'paginator': paginator
     })
 
 

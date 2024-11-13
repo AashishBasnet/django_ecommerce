@@ -65,8 +65,8 @@
               </svg>
             </div>
             <div class="icon-box-content">
-              <h3 class="card-title text-uppercase text-dark">Free delivery</h3>
-              <p>Consectetur adipi elit lorem ipsum dolor sit amet.</p>
+              <h3 class="card-title text-uppercase text-dark">Fast delivery</h3>
+              <p>Get your orders delivered swiftly and directly to your doorstep. We guarantee fast shipping, so you never have to wait long for your favorite products.</p>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="icon-box-content">
               <h3 class="card-title text-uppercase text-dark">Quality guarantee</h3>
-              <p>Dolor sit amet orem ipsu mcons ectetur adipi elit.</p>
+              <p>We take pride in offering only the highest quality products. Each item is carefully selected and rigorously tested to ensure it meets our standards.</p>
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@
             </div>
             <div class="icon-box-content">
               <h3 class="card-title text-uppercase text-dark">Daily offers</h3>
-              <p>Amet consectetur adipi elit loreme ipsum dolor sit.</p>
+              <p>Stay tuned for exclusive daily discounts. We offer unbeatable deals on your favorite products, ensuring you always get the best value.</p>
             </div>
           </div>
         </div>
@@ -105,20 +105,21 @@
             </div>
             <div class="icon-box-content">
               <h3 class="card-title text-uppercase text-dark">100% secure payment</h3>
-              <p>Rem Lopsum dolor sit amet, consectetur adipi elit.</p>
+              <p>Shop with peace of mind. We use the latest security measures to protect your payment information, ensuring a safe and smooth transaction every time.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
   <section id="mobile-products" class="product-store position-relative padding-large no-padding-top">
     <div class="container">
       <div class="row">
         <div class="display-header d-flex justify-content-between pb-3">
           <h2 class="display-7 text-dark text-uppercase">Mobile Products</h2>
           <div class="btn-right">
-            <a href="{% url 'shop' %}" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
+            <a href="{% url 'category' 'phones' %}" class="btn btn-medium btn-normal text-uppercase">Buy Mobile Products</a>
           </div>
         </div>
         <div class="swiper product-swiper">
@@ -163,7 +164,7 @@
         <div class="display-header d-flex justify-content-between pb-3">
           <h2 class="display-7 text-dark text-uppercase">Smart Watches</h2>
           <div class="btn-right">
-            <a href="{% url 'shop' %}" class="btn btn-medium btn-normal text-uppercase">Go to Shop</a>
+            <a href="{% url 'category' 'smart-watches' %}" class="btn btn-medium btn-normal text-uppercase">Buy Smart Watches</a>
           </div>
         </div>
         <div class="swiper product-watch-swiper">
@@ -210,9 +211,9 @@
     <div class="row d-flex flex-wrap align-items-center">
       <div class="col-md-6 col-sm-12">
         <div class="text-content offset-4 padding-medium">
-          <h3>10% off</h3>
+          <h3>Upto {{ discount_upto }}% off</h3>
           <h2 class="display-2 pb-5 text-uppercase text-dark">New year sale</h2>
-          <a href="{% url 'shop' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Sale</a>
+          <a href="{% url 'tags' 'sale' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Sale</a>
         </div>
       </div>
       <div class="col-md-6 col-sm-12"></div>
