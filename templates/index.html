@@ -5,7 +5,7 @@
     <title>
       {% block title %}
 
-      {% endblock %}
+      {% endblock %}- Infinity Store
     </title>
 
     <meta charset="utf-8" />
@@ -35,9 +35,21 @@
         transition: opacity 1s ease-out;
       }
     </style>
+    <style>
+      /* Add zoom effect on hover */
+      .image-holder {
+        overflow: hidden; /* Hide overflow for the zoom effect */
+      }
+      .image-holder img {
+        transition: transform 0.3s ease; /* Smooth transition for the zoom effect */
+      }
+      .image-holder:hover img {
+        transform: scale(1.1); /* Zoom image by 10% */
+      }
+    </style>
 
-    <!--                                                                                               script
-    ==================================================                                                                                               -->
+    <!--                                                                                                 script
+    ==================================================                                                                                                 -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/modernizr.js' %}"></script>

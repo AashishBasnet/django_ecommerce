@@ -1,8 +1,9 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block title %}
-  Home - Infinity Store
+  Home
 {% endblock %}
+
 {% block content %}
   <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
     <div class="swiper main-swiper">
@@ -17,7 +18,7 @@
                 </div>
               </div>
               <div class="col-md-5">
-                <div class="image-holder">
+                <div>
                   <img src="{% static 'images/banner-image.png' %}" alt="banner" />
                 </div>
               </div>
@@ -34,7 +35,7 @@
                 </div>
               </div>
               <div class="col-md-5">
-                <div class="image-holder">
+                <div>
                   <img src="{% static 'images/banner-image.png' %}" alt="banner" />
                 </div>
               </div>
@@ -132,11 +133,7 @@
                       <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
                       <div class="cart-concern position-absolute">
                         <div class="cart-button d-flex">
-                          <a href="#" class="btn btn-medium btn-black">
-                            Add to Cart<svg class="cart-outline">
-                              <use xlink:href="#cart-outline"></use>
-                            </svg>
-                          </a>
+                          <a href="{% url 'product' product.slug %}" class="btn btn-medium btn-black">View Product<svg class="cart-outline"></svg></a>
                         </div>
                       </div>
                     </div>
@@ -177,11 +174,7 @@
                       <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
                       <div class="cart-concern position-absolute">
                         <div class="cart-button d-flex">
-                          <a href="#" class="btn btn-medium btn-black">
-                            Add to Cart<svg class="cart-outline">
-                              <use xlink:href="#cart-outline"></use>
-                            </svg>
-                          </a>
+                          <a href="{% url 'product' product.slug %}" class="btn btn-medium btn-black">View Product<svg class="cart-outline"></svg></a>
                         </div>
                       </div>
                     </div>
@@ -356,61 +349,3 @@
     <div class="swiper-pagination"></div>
   </section>
 {% endblock %}
-
-{% comment %} {% extends 'index.html' %}
-{% block title %}
-  Django Shop
-{% endblock %}
-{% block content %}
-  <!-- Header -->
-  <header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-      <div class="text-center text-white">
-        <h1 class="display-4 fw-bolder">Shop in style</h1>
-        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-      </div>
-    </div>
-  </header>
-  <!-- Section -->
-  <section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-      <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-        {% for product in products %}
-          <div class="col mb-5">
-            <div class="card h-100">
-              <!-- Sale badge -->
-              <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">{{ product.product_tag }}</div>
-              <!-- Product image -->
-              <img class="card-img-top" src="{{ product.product_image.url }}" alt="..." />
-              <!-- Product details -->
-              <div class="card-body p-4">
-                <div class="text-center">
-                  <!-- Product name -->
-                  <h5 class="fw-bolder">{{ product.product_name }}</h5>
-                  <!-- Product reviews -->
-                  <div class="d-flex justify-content-center small text-warning mb-2 fw-bold">
-                    Rated {{ product.product_rating }}
-                    <div class="bi-star-fill"></div>
-                  </div>
-                  <!-- Product price -->
-                  {% if product.product_sale_price is None %}
-                    <span>Rs. {{ product.product_price }}</span>
-                  {% else %}
-                    <span class="text-muted text-decoration-line-through">Rs. {{ product.product_price }}</span>
-                    Rs. {{ product.product_sale_price }}
-                  {% endif %}
-                </div>
-              </div>
-              <!-- Product actions -->
-              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.slug %}">View Product</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-{% endblock %} {% endcomment %}

@@ -1,5 +1,7 @@
 {% extends 'index.html' %}
-{% load static %}
+{% load static %} {% block title %}
+  Shopping Cart[{{ cart_products|length }}]
+{% endblock %}
 
 {% block content %}
   <section class="hero-section position-relative bg-light-blue padding-medium">
@@ -36,7 +38,7 @@
                   <div class="col-lg-4 col-md-3">
                     <div class="cart-info d-flex flex-wrap align-items-center mb-4">
                       <div class="col-lg-5">
-                        <div class="card-image">
+                        <div class="card-image image-holder">
                           <img src="{{ products.product_image.url }}" alt="cloth" class="img-fluid" />
                         </div>
                       </div>
