@@ -48,8 +48,8 @@
       }
     </style>
 
-    <!--                                                                                                 script
-    ==================================================                                                                                                 -->
+    <!--                                                                                                    script
+    ==================================================                                                                                                    -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/modernizr.js' %}"></script>
@@ -181,6 +181,19 @@
                   <li class="nav-item">
                     <a class="nav-link me-4" href="{% url 'contact' %}">Contact Us</a>
                   </li>
+                  {% if user.is_superuser %}
+                    <li class="nav-item dropdown">
+                      <a class="nav-link me-4 dropdown-toggle link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Orders</a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" href=" {% url 'shipped-dashboard' %}">Shipped Orders</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href=" {% url 'not-shipped-dashboard' %}">Unshipped Orders</a>
+                        </li>
+                      </ul>
+                    </li>
+                  {% endif %}
                   <li class="nav-item dropdown">
                     <a class="nav-link me-4 dropdown-toggle link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Categories</a>
                     <ul class="dropdown-menu">

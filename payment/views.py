@@ -205,15 +205,8 @@ def CheckoutView(request):
         })
     else:
         # Checkout as guest
-        shipping_form = ShippingForm(
-            request.POST or None,)
-        return render(request, "payment/checkout_template.html", {
-            "cart_products": cart_products,
-            "quantities": quantities,
-            "totals": totals,
-            "subtotal": sub_total,
-            "shipping_form": shipping_form
-        })
+        messages.warning(request, 'please login or register to continue')
+        return redirect('login')
 
     return render(request, "payment/checkout_template.html", {})
 
@@ -314,7 +307,7 @@ def ProcessOrderView(request):
             messages.success(request, "Order Placed!")
             return redirect('home')
     else:
-        messages.success(request, "Access Denied")
+        messages.warning(request, "Access Denied")
         return redirect('home')
 
 

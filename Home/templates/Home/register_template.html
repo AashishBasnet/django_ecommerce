@@ -102,6 +102,21 @@
       bottom: -75px;
       right: -75px;
     }
+    /* Style for links */
+    .auth-links {
+      margin-top: 20px;
+      font-size: 1rem;
+    }
+    
+    .auth-links a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
   </style>
 {% endblock %}
 
@@ -168,6 +183,11 @@
         </div>
         <button type="submit" class="btn btn-signup w-100">Register</button>
       </form>
+      <div class="auth-links">
+        <p>
+          Already have an Account? <a href="{% url 'login' %}">Login</a>
+        </p>
+      </div>
     </div>
   </div>
 {% endblock %}
