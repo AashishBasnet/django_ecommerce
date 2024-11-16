@@ -20,6 +20,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def HomeView(request):
     products = Product.objects.all()
+    new_products = Product.objects.all().order_by('-id')[:5]
     tags = Tag.objects.all()
     categories = Categories.objects.all()
     discount = []
@@ -43,7 +44,8 @@ def HomeView(request):
                       'products': products,
                       'categories': categories,
                       'tags': tags,
-                      'discount_upto': round_max_discount
+                      'discount_upto': round_max_discount,
+                      'new_products': new_products
                   })
 
 
