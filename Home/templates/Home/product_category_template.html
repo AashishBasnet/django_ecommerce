@@ -23,66 +23,6 @@
   <div class="shopify-grid padding-large">
     <div class="container">
       <div class="row">
-        <main class="col-md-9">
-          <div class="filter-shop d-flex justify-content-between">
-            <div class="showing-product">
-              {% if category_count != 0 %}
-                <p>Showing ({{ products.start_index }} - {{ products.end_index }}) of {{ products.paginator.count }} results found in "{{ product_categories }}"</p>
-              {% else %}
-                <h1 class="display-2 text-uppercase text-dark">There is No item in This category</h1>
-              {% endif %}
-            </div>
-          </div>
-          <div class="product-content product-store d-flex justify-content-start flex-wrap">
-            {% for product in products %}
-              <div class="col-lg-4 col-md-6">
-                <div class="product-card position-relative pe-3 pb-3">
-                  <div class="image-holder">
-                    <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
-                  </div>
-
-                  <div class="card-detail d-flex justify-content-between pt-3 pb-3">
-                    <h3 class="card-title text-uppercase"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
-                    {% if product.product_sale_price is None %}
-                      <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
-                    {% else %}
-                      <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
-            {% if products.has_other_pages %}
-              <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-                {% if products.has_previous %}
-                  <a href="?page={{ products.previous_page_number }}" class="page-numbers">
-                    <svg class="chevron-left pe-3">
-                      <use xlink:href="#chevron-left"></use>
-                    </svg>
-                  </a>
-                {% endif %}
-
-                {% for num in products.paginator.page_range %}
-                  {% if products.number == num %}
-                    <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
-                  {% else %}
-                    <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
-                  {% endif %}
-                {% endfor %}
-
-                {% if products.has_next %}
-                  <a href="?page={{ products.next_page_number }}" class="page-numbers">
-                    <svg class="chevron-right ps-3">
-                      <use xlink:href="#chevron-right"></use>
-                    </svg>
-                  </a>
-                {% endif %}
-              </div>
-            {% endif %}
-          </nav>
-        </main>
         <aside class="col-md-3">
           <div class="sidebar">
             <div class="widget-menu">
@@ -145,6 +85,66 @@
             </div>
           </div>
         </aside>
+        <main class="col-md-9">
+          <div class="filter-shop d-flex justify-content-between">
+            <div class="showing-product">
+              {% if category_count != 0 %}
+                <p>Showing ({{ products.start_index }} - {{ products.end_index }}) of {{ products.paginator.count }} results found in "{{ product_categories }}"</p>
+              {% else %}
+                <h1 class="display-2 text-uppercase text-dark">There is No item in This category</h1>
+              {% endif %}
+            </div>
+          </div>
+          <div class="product-content product-store d-flex justify-content-start flex-wrap">
+            {% for product in products %}
+              <div class="col-lg-4 col-md-6">
+                <div class="product-card position-relative pe-3 pb-3">
+                  <div class="image-holder">
+                    <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid" /></a>
+                  </div>
+
+                  <div class="card-detail d-flex justify-content-between pt-3 pb-3">
+                    <h3 class="card-title text-uppercase"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
+                    {% if product.product_sale_price is None %}
+                      <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
+                    {% else %}
+                      <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+            {% if products.has_other_pages %}
+              <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+                {% if products.has_previous %}
+                  <a href="?page={{ products.previous_page_number }}" class="page-numbers">
+                    <svg class="chevron-left pe-3">
+                      <use xlink:href="#chevron-left"></use>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                {% for num in products.paginator.page_range %}
+                  {% if products.number == num %}
+                    <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+                  {% else %}
+                    <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+                  {% endif %}
+                {% endfor %}
+
+                {% if products.has_next %}
+                  <a href="?page={{ products.next_page_number }}" class="page-numbers">
+                    <svg class="chevron-right ps-3">
+                      <use xlink:href="#chevron-right"></use>
+                    </svg>
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+          </nav>
+        </main>
       </div>
     </div>
   </div>

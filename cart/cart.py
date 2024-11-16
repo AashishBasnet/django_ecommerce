@@ -110,9 +110,6 @@ class Cart():
                         sub_total = sub_total + (product.product_price * value)
         return sub_total
 
-    def __len__(self):
-        return len(self.cart)
-
     def get_prods(self):
         # get ids from cart
         product_ids = self.cart.keys()
@@ -124,6 +121,9 @@ class Cart():
     def get_quants(self):
         quantities = self.cart
         return quantities
+
+    def __len__(self):
+        return sum(self.cart.values())
 
     def update(self, product, quantity):
         product_id = str(product)

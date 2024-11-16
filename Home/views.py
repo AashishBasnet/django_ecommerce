@@ -22,7 +22,6 @@ def HomeView(request):
     products = Product.objects.all()
     new_products = Product.objects.all().order_by('-id')[:5]
     tags = Tag.objects.all()
-    categories = Categories.objects.all()
     discount = []
     for product in products:
         if product.product_sale_price:
@@ -42,7 +41,6 @@ def HomeView(request):
     return render(request, "Home/home_template.html",
                   {
                       'products': products,
-                      'categories': categories,
                       'tags': tags,
                       'discount_upto': round_max_discount,
                       'new_products': new_products
@@ -53,7 +51,6 @@ def ShopView(request):
     products_list = Product.objects.all()
     tags = Tag.objects.all()
     latest_products = Product.objects.all().order_by('-id')[:3]
-    categories = Categories.objects.all()
     category_count = products_list.count()
 
     # Pagination setup
@@ -68,7 +65,6 @@ def ShopView(request):
 
     return render(request, "Home/shop_template.html", {
         'products': products,
-        'categories': categories,
         'category_count': category_count,
         'latest_products': latest_products,
         'tags': tags,
@@ -76,10 +72,7 @@ def ShopView(request):
 
 
 def AboutView(request):
-    categories = Categories.objects.all()
-
     return render(request, "Home/about_template.html", {
-        'categories': categories,
     })
 
 
@@ -143,7 +136,6 @@ def UserRegisterView(request):
 
 
 def SingleProductView(request, slug):
-    categories = Categories.objects.all()
     tags = Tag.objects.all()
 
     product = Product.objects.get(slug=slug)
@@ -154,7 +146,6 @@ def SingleProductView(request, slug):
                   {
                       'products': product,
                       'all_products': all_products,
-                      'categories': categories,
                       'tags': tags
                   })
 
@@ -165,7 +156,6 @@ def ProductCategoryView(request, slug):
         all_products = Product.objects.all()
         product_categories = Categories.objects.get(slug=slug)
         products = Product.objects.filter(product_category=product_categories)
-        categories = Categories.objects.all()
         category_count = products.count()
         latest_products = Product.objects.all().order_by('-id')[:3]
 
@@ -177,7 +167,6 @@ def ProductCategoryView(request, slug):
         return render(request, 'Home/product_category_template.html', {
             'products': paginated_products,
             'product_categories': product_categories,
-            'categories': categories,
             'all_products': all_products,
             'category_count': category_count,
             'latest_products': latest_products,
@@ -195,7 +184,6 @@ def ProductTagView(request, slug):
         all_products = Product.objects.all()
         product_tag = Tag.objects.get(slug=slug)
         products = Product.objects.filter(product_tag=product_tag)
-        categories = Categories.objects.all()
         category_count = products.count()
         latest_products = Product.objects.all().order_by('-id')[:3]
 
@@ -207,7 +195,6 @@ def ProductTagView(request, slug):
         return render(request, 'Home/product_tags_template.html', {
             'products': paginated_products,
             'product_categories': product_tag,
-            'categories': categories,
             'all_products': all_products,
             'category_count': category_count,
             'latest_products': latest_products,
@@ -296,7 +283,6 @@ def UpdateUserInfoView(request):
 def SearchView(request):
     products = Product.objects.all()
     tags = Tag.objects.all()
-    categories = Categories.objects.all()
     latest_products = Product.objects.all().order_by('-id')[:3]
 
     search_key = request.GET.get('s', '')
@@ -335,7 +321,6 @@ def SearchView(request):
         'search_key': search_key,
         'searched': paginated_results,  # Renamed here
         'products': products,
-        'categories': categories,
         'latest_products': latest_products,
         'tags': tags,
         'paginator': paginator
@@ -343,7 +328,6 @@ def SearchView(request):
 
 
 def ContactView(request):
-    categories = Categories.objects.all()
     if request.method == 'POST':
         form = InquiryForm(request.POST, user=request.user)
         if form.is_valid():
@@ -353,4 +337,4 @@ def ContactView(request):
             return redirect('contact')
     else:
         form = InquiryForm(user=request.user)
-    return render(request, 'Home/contact_template.html', {'form': form, 'categories': categories})
+    return render(request, 'Home/contact_template.html', {'form': form})
