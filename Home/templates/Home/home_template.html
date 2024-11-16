@@ -131,11 +131,6 @@
                   <div class="product-card d-flex flex-column h-100">
                     <div class="image-holder position-relative flex-grow-1">
                       <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
-                      <div class="cart-concern position-absolute">
-                        <div class="cart-button d-flex">
-                          <a href="{% url 'product' product.slug %}" class="btn btn-medium btn-black">View Product<svg class="cart-outline"></svg></a>
-                        </div>
-                      </div>
                     </div>
                     <div class="card-detail d-flex justify-content-between align-items-center mt-3">
                       <h3 class="card-title text-uppercase mb-0"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
@@ -172,11 +167,6 @@
                   <div class="product-card d-flex flex-column h-100">
                     <div class="image-holder position-relative flex-grow-1">
                       <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
-                      <div class="cart-concern position-absolute">
-                        <div class="cart-button d-flex">
-                          <a href="{% url 'product' product.slug %}" class="btn btn-medium btn-black">View Product<svg class="cart-outline"></svg></a>
-                        </div>
-                      </div>
                     </div>
                     <div class="card-detail d-flex justify-content-between align-items-center mt-3">
                       <h3 class="card-title text-uppercase mb-0"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>

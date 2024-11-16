@@ -142,15 +142,18 @@ def UserRegisterView(request):
 
 def SingleProductView(request, slug):
     categories = Categories.objects.all()
+    tags = Tag.objects.all()
 
     product = Product.objects.get(slug=slug)
-    all_products = Product.objects.all().order_by('-id')[:4]
+    all_products = Product.objects.filter(
+        product_category=product.product_category).order_by('-id')[:5]
 
     return render(request, "Home/single_product_template.html",
                   {
                       'products': product,
                       'all_products': all_products,
                       'categories': categories,
+                      'tags': tags
                   })
 
 
@@ -338,6 +341,7 @@ def SearchView(request):
 
 
 def ContactView(request):
+    categories = Categories.objects.all()
     if request.method == 'POST':
         form = InquiryForm(request.POST, user=request.user)
         if form.is_valid():
@@ -347,4 +351,4 @@ def ContactView(request):
             return redirect('contact')
     else:
         form = InquiryForm(user=request.user)
-    return render(request, 'Home/contact_template.html', {'form': form})
+    return render(request, 'Home/contact_template.html', {'form': form, 'categories': categories})

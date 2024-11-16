@@ -70,18 +70,7 @@
               {% endif %}
             </div>
             <p>{{ products.product_description }}</p>
-            {% if products.product_tag.all %}
-              <ul class="list-inline">
-                {% for tag in products.product_tag.all %}
-                  <li class="list-inline-item">
-                    <span class="badge rounded-pill px-3 py-2 
-                        {% cycle 'bg-primary' 'bg-secondary' 'bg-success' 'bg-danger' 'bg-warning text-dark' 'bg-info' 'bg-dark text-light' %}">{{ tag.tag }}</span>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <p>No tags available.</p>
-            {% endif %}
+
             <div class="cart-wrap padding-small">
               <div class="color-options product-select">
                 <div class="color-toggle" data-option-index="0">
@@ -150,20 +139,26 @@
                 <h4 class="item-title no-margin pe-2">Category:</h4>
                 <ul class="select-list list-unstyled d-flex">
                   <li data-value="S" class="select-item">
-                    <a href="#">{{ products.product_category }}</a>,
+                    <a href="{% url 'category' products.product_category|slugify %}">{{ products.product_category }}</a>,
                   </li>
                 </ul>
               </div>
               <div class="meta-item d-flex align-items-baseline">
                 <h4 class="item-title no-margin pe-2">Tags:</h4>
-                <ul class="select-list list-unstyled d-flex">
-                  <li data-value="S" class="select-item">
-                    <a href="#">Classic</a>,
-                  </li>
-                  <li data-value="S" class="select-item">
-                    <a href="#">Modern</a>
-                  </li>
-                </ul>
+                {% if products.product_tag.all %}
+                  <ul class="list-inline">
+                    {% for tag in products.product_tag.all %}
+                      <a href="{% url 'tags' tag.tag|slugify %}">
+                        <li class="list-inline-item">
+                          <span class="badge rounded-pill px-3 py-2 
+                          {% cycle 'bg-primary' 'bg-secondary' 'bg-success' 'bg-danger' 'bg-warning text-dark' 'bg-info' 'bg-dark text-light' %}">{{ tag.tag }}</span>
+                        </li>
+                      </a>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p>No tags available.</p>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -293,13 +288,7 @@
                       <div class="image-holder">
                         <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="product-item" class="img-fluid" /></a>
                       </div>
-                      <div class="cart-concern position-absolute">
-                        <div class="cart-button d-flex">
-                          <div class="btn-left">
-                            <a href="{% url 'product' product.slug %}" class="btn btn-medium btn-black">View Product</a>
-                          </div>
-                        </div>
-                      </div>
+
                       <div class="card-detail d-flex justify-content-between align-items-baseline pt-3">
                         <h3 class="card-title text-uppercase"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
                         {% if product.product_sale_price is None %}
