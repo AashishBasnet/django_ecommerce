@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "payment",
     'paypal.standard.ipn',
     'widget_tweaks',
+    'markdownify'
 ]
 
 MIDDLEWARE = [
@@ -169,3 +170,37 @@ PAYPAL_TEST = True
 
 # business sandbox acc of paypal...
 PAYPAL_RECEIVER_EMAIL = 'django-ecommerce@business.com'
+
+# Enable stripping of disallowed tags
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": ['a',
+                           'abbr',
+                           'acronym',
+                           'b',
+                           'blockquote',
+                           'em',
+                           'i',
+                           'li',
+                           'ol',
+                           'p',
+                           'strong',
+                           'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', ]
+    },
+
+    "alternative": {
+        "WHITELIST_TAGS": ['a',
+                           'abbr',
+                           'acronym',
+                           'b',
+                           'blockquote',
+                           'em',
+                           'i',
+                           'li',
+                           'ol',
+                           'p',
+                           'strong',
+                           'ul'],
+        "MARKDOWN_EXTENSIONS": ["markdown.extensions.fenced_code", ]
+    }
+}
