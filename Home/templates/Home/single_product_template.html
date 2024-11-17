@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
-{% load markdownify %}
+{% comment %} {% load markdownify %} {% endcomment %}
 
 {% block title %}
   Buy {{ products.product_name }}
@@ -182,14 +182,14 @@
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active border-top border-bottom padding-small" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
               {% if products.product_long_description %}
-                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #AEAEB6;">{{ products.product_long_description|markdownify }}</pre>
+                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #AEAEB6;">{{ products.product_long_description }}</pre>
               {% else %}
                 <p style="font-family: Arial, sans-serif; font-size: 26px; color: #AEAEB6;">There is no Long Description for this product</p>
               {% endif %}
             </div>
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
               {% if products.product_additional_information %}
-                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #AEAEB6;">{{ products.product_additional_information|markdownify }}</pre>
+                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #AEAEB6;">{{ products.product_additional_information }}</pre>
               {% else %}
                 <p style="font-family: Arial, sans-serif; font-size: 26px; color: #AEAEB6;">There is no Additional Information for this product</p>
               {% endif %}
