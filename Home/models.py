@@ -66,6 +66,8 @@ class Tag(models.Model):
 
 class Categories(models.Model):
     category_name = models.CharField(max_length=50)
+    category_display_image = models.ImageField(
+        upload_to='uploads/product/', null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     def __str__(self):
