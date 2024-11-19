@@ -72,64 +72,68 @@
               {% endif %}
             </div>
             <p>{{ products.product_description }}</p>
-
-            <div class="cart-wrap padding-small">
-              <div class="color-options product-select">
-                <div class="color-toggle" data-option-index="0">
-                  <h4 class="item-title text-uppercase text-dark text-decoration-underline">Color:</h4>
+            {% if products.stock %}
+              <div class="cart-wrap padding-small">
+                <div class="color-options product-select">
+                  <div class="color-toggle" data-option-index="0">
+                    <h4 class="item-title text-uppercase text-dark text-decoration-underline">Color:</h4>
+                    <ul class="select-list list-unstyled d-flex">
+                      <li class="select-item pe-3" data-val="Green" title="Green">
+                        <a href="#">Green</a>
+                      </li>
+                      <li class="select-item pe-3" data-val="Orange" title="Orange">
+                        <a href="#">Orange</a>
+                      </li>
+                      <li class="select-item pe-3" data-val="Red" title="Red">
+                        <a href="#">Red</a>
+                      </li>
+                      <li class="select-item" data-val="Black" title="Black">
+                        <a href="#">Black</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="swatch product-select" data-option-index="1">
+                  <h4 class="item-title text-uppercase text-dark text-decoration-underline">Size:</h4>
                   <ul class="select-list list-unstyled d-flex">
-                    <li class="select-item pe-3" data-val="Green" title="Green">
-                      <a href="#">Green</a>
+                    <li data-value="S" class="select-item pe-3">
+                      <a href="#">XL</a>
                     </li>
-                    <li class="select-item pe-3" data-val="Orange" title="Orange">
-                      <a href="#">Orange</a>
+                    <li data-value="M" class="select-item pe-3">
+                      <a href="#">L</a>
                     </li>
-                    <li class="select-item pe-3" data-val="Red" title="Red">
-                      <a href="#">Red</a>
+                    <li data-value="L" class="select-item pe-3">
+                      <a href="#">M</a>
                     </li>
-                    <li class="select-item" data-val="Black" title="Black">
-                      <a href="#">Black</a>
+                    <li data-value="L" class="select-item">
+                      <a href="#">S</a>
                     </li>
                   </ul>
                 </div>
-              </div>
-              <div class="swatch product-select" data-option-index="1">
-                <h4 class="item-title text-uppercase text-dark text-decoration-underline">Size:</h4>
-                <ul class="select-list list-unstyled d-flex">
-                  <li data-value="S" class="select-item pe-3">
-                    <a href="#">XL</a>
-                  </li>
-                  <li data-value="M" class="select-item pe-3">
-                    <a href="#">L</a>
-                  </li>
-                  <li data-value="L" class="select-item pe-3">
-                    <a href="#">M</a>
-                  </li>
-                  <li data-value="L" class="select-item">
-                    <a href="#">S</a>
-                  </li>
-                </ul>
-              </div>
 
-              <div class="product-quantity">
-                <div class="stock-number text-dark">2 in stock</div>
-                <div class="stock-button-wrap pt-3">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-3">Quantity:</div>
-                      <div class="col-md-3 d-flex">
-                        <button type="button" class="btn btn-number" id="quantity-decrease">-</button>
-                        <input type="text" id="qty-cart" name="quantity" class="form-control input-number text-center" value="1" min="1" max="5" style="width: 60px;" />
-                        <button type="button" class="btn btn-number" id="quantity-increase">+</button>
+                <div class="product-quantity">
+                  <div class="stock-number text-dark">{{ products.stock }} in stock</div>
+                  <div class="stock-button-wrap pt-3">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-3">Quantity:</div>
+                        <div class="col-md-3 d-flex">
+                          <button type="button" class="btn btn-number" id="quantity-decrease">-</button>
+                          <input type="text" id="qty-cart" name="quantity" class="form-control input-number text-center" value="1" min="1" max="5" style="width: 60px;" />
+                          <button type="button" class="btn btn-number" id="quantity-increase">+</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="qty-button d-flex flex-wrap pt-3">
-                    <button name="add-to-cart" value="{{ products.id }}" id="addCart" type="button" class="btn btn-black btn-medium text-uppercase mt-3">Add to cart</button>
+                    <div class="qty-button d-flex flex-wrap pt-3">
+                      <button name="add-to-cart" value="{{ products.id }}" id="addCart" type="button" class="btn btn-black btn-medium text-uppercase mt-3">Add to cart</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            {% else %}
+              <span class="card-title text-muted display-6 fw-bold">Out of Stock!</span>
+            {% endif %}
+
             <div class="meta-product py-2">
               <div class="meta-item d-flex align-items-baseline">
                 <h4 class="item-title no-margin pe-2">SKU:</h4>

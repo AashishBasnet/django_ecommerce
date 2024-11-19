@@ -1,3 +1,5 @@
+from Home.models import Product
+from django.shortcuts import render
 from django.shortcuts import render, redirect
 from cart.cart import Cart
 from .forms import ShippingForm, PaymentForm
@@ -161,19 +163,32 @@ def BillingInfoView(request):
 
 
 def PaymentSuccessView(request):
-    # Delete the browser cart
-    # get the cart
+    # Check the cart
     cart = Cart(request)
     cart_products = cart.get_prods
     quantities = cart.get_quants
-    totals = cart.cart_total()
 
-  # delete cart
+    # Decrease stock for purchased products
+    for product in cart_products():
+        product_id = product.id
+        quantity = quantities().get(str(product_id), 0)
+
+        # Check and update stock
+        if product.stock >= quantity:
+            product.stock -= quantity
+            product.save()
+        else:
+            messages.warning(request, f"Not enough stock for {
+                             product.product_name}.")
+            return redirect('cart')  # Redirect to cart in case of stock issue
+
+    # Clear the cart
     for key in list(request.session.keys()):
         if key == 'session_key':
-            # delete the key
             del request.session[key]
 
+    messages.success(
+        request, "Payment successful! Your order has been placed.")
     return render(request, "payment/payment_success_template.html", {})
 
 

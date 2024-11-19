@@ -123,6 +123,7 @@ class Product(models.Model):
         default=0, decimal_places=2, max_digits=8, null=True, blank=True)
 
     slug = models.SlugField(unique=True, blank=True, null=True)
+    stock = models.PositiveIntegerField(default=0)
 
     def clean(self):
         if self.product_sale_price is not None:

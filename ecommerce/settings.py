@@ -32,8 +32,9 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1',
-                 'localhost', 'ace2-103-177-52-247.ngrok-free.app']
-CSRF_TRUSTED_ORIGINS = ['https://ace2-103-177-52-247.ngrok-free.app']
+                 'localhost', '53bc-2400-1a00-b060-1b87-a019-8bb1-92c4-e15b.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = [
+    'https://53bc-2400-1a00-b060-1b87-a019-8bb1-92c4-e15b.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [
