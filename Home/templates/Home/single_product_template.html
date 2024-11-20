@@ -1,4 +1,5 @@
 {% extends 'index.html' %}
+{% load markdownify %}
 {% load static %}
 {% comment %} {% load markdownify %} {% endcomment %}
 
@@ -74,43 +75,6 @@
             <p>{{ products.product_description }}</p>
             {% if products.stock %}
               <div class="cart-wrap padding-small">
-                <div class="color-options product-select">
-                  <div class="color-toggle" data-option-index="0">
-                    <h4 class="item-title text-uppercase text-dark text-decoration-underline">Color:</h4>
-                    <ul class="select-list list-unstyled d-flex">
-                      <li class="select-item pe-3" data-val="Green" title="Green">
-                        <a href="#">Green</a>
-                      </li>
-                      <li class="select-item pe-3" data-val="Orange" title="Orange">
-                        <a href="#">Orange</a>
-                      </li>
-                      <li class="select-item pe-3" data-val="Red" title="Red">
-                        <a href="#">Red</a>
-                      </li>
-                      <li class="select-item" data-val="Black" title="Black">
-                        <a href="#">Black</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="swatch product-select" data-option-index="1">
-                  <h4 class="item-title text-uppercase text-dark text-decoration-underline">Size:</h4>
-                  <ul class="select-list list-unstyled d-flex">
-                    <li data-value="S" class="select-item pe-3">
-                      <a href="#">XL</a>
-                    </li>
-                    <li data-value="M" class="select-item pe-3">
-                      <a href="#">L</a>
-                    </li>
-                    <li data-value="L" class="select-item pe-3">
-                      <a href="#">M</a>
-                    </li>
-                    <li data-value="L" class="select-item">
-                      <a href="#">S</a>
-                    </li>
-                  </ul>
-                </div>
-
                 <div class="product-quantity">
                   <div class="stock-number text-dark">{{ products.stock }} in stock</div>
                   <div class="stock-button-wrap pt-3">
@@ -186,16 +150,16 @@
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active border-top border-bottom padding-small" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
               {% if products.product_long_description %}
-                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #AEAEB6;">{{ products.product_long_description }}</pre>
+                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #191919;">{{ products.product_long_description|markdownify }}</pre>
               {% else %}
-                <p style="font-family: Arial, sans-serif; font-size: 26px; color: #AEAEB6;">There is no Long Description for this product</p>
+                <p style="font-family: Arial, sans-serif; font-size: 26px; color: #191919;">There is no Long Description for this product</p>
               {% endif %}
             </div>
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
               {% if products.product_additional_information %}
-                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #AEAEB6;">{{ products.product_additional_information }}</pre>
+                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #191919;">{{ products.product_additional_information|markdownify }}</pre>
               {% else %}
-                <p style="font-family: Arial, sans-serif; font-size: 26px; color: #AEAEB6;">There is no Additional Information for this product</p>
+                <p style="font-family: Arial, sans-serif; font-size: 26px; color: #191919;">There is no Additional Information for this product</p>
               {% endif %}
             </div>
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
