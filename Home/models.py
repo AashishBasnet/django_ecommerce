@@ -4,17 +4,6 @@ import datetime
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-# Create your models here.
-
-'''About this item 
-    6.1-inch (15.5 cm diagonal) Super Retina XDR display Ceramic Shield, tougher than any smartphone 
-    glass A14 Bionic chip, the fastest chip ever in a smartphone.
-    Advanced dual-camera system with 12MP Ultra Wide and Wide cameras; Night mode, Deep Fusion, 
-    Smart HDR 3, 4K Dolby Vision HDR recording 12MP TrueDepth front camera with Night mode, 4K Dolby 
-    Vision HDR recording Industry-leading IP68 water resistance Supports MagSafe accessories for easy 
-    attach and faster wireless charging iOS with redesigned widgets on the Home screen, all-new App 
-    Library, App Clips and more'''
-# create customer profile
 
 
 class Profile(models.Model):

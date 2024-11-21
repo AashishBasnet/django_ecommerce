@@ -1,0 +1,121 @@
+{% extends 'index.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+  Add Product
+{% endblock %}
+
+{% block links %}
+  <style>
+    /* General Styling */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
+      min-height: 100vh;
+    }
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px auto;
+      max-width: 900px;
+      padding: 30px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-container {
+      width: 100%;
+    }
+    .form-control {
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+    .form-control:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 4px rgba(118, 75, 162, 0.3);
+    }
+    .btn-shipping {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .btn-shipping:hover {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      box-shadow: 0px 4px 10px rgba(118, 75, 162, 0.4);
+    }
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="form-wrapper">
+    <div class="form-container">
+      <h2 class="text-center mb-4">Add New Product</h2>
+      <form method="POST" enctype="multipart/form-data" action="{% url 'add-product' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_name.label }}</label>
+          {{ form.product_name|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_price.label }}</label>
+          {{ form.product_price|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_category.label }}</label>
+          {{ form.product_category|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_description.label }}</label>
+          {{ form.product_description|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_long_description.label }}</label>
+          {{ form.product_long_description|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_additional_information.label }}</label>
+          {{ form.product_additional_information|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_image.label }}</label>
+          {{ form.product_image|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_tag.label }}</label>
+          {{ form.product_tag|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_rating.label }}</label>
+          {{ form.product_rating|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_sale_price.label }}</label>
+          {{ form.product_sale_price|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.slug.label }}</label>
+          {{ form.slug|add_class:'form-control' }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.stock.label }}</label>
+          {{ form.stock|add_class:'form-control' }}
+        </div>
+        <button type="submit" class="btn-shipping">Submit Product</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

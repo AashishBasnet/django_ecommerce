@@ -1,0 +1,20 @@
+from django import forms
+from Home.models import Product
+
+
+class AddProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = [
+            'product_name',
+            'product_price',
+            'product_category',
+            'product_description',
+            'product_long_description',
+            'product_additional_information',
+            'product_image',
+            'product_tag',
+            'product_rating',
+            'product_sale_price',
+            'slug',
+            'stock',]

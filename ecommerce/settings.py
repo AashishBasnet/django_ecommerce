@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     "payment",
     'paypal.standard.ipn',
     'widget_tweaks',
-    'markdownify'
+    'markdownify',
+    'administrator',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "cart.context_processors.cart",
-                "Home.context_processors.categories"
+                "Home.context_processors.categories",
             ],
         },
     },
