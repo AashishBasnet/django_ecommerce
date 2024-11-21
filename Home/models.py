@@ -4,6 +4,7 @@ import datetime
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from tinymce.models import HTMLField
 
 
 class Profile(models.Model):
@@ -96,8 +97,14 @@ class Product(models.Model):
         Categories, on_delete=models.CASCADE, default='')
     product_description = models.CharField(
         max_length=250, default='', blank=True, null=True)
-    product_long_description = models.TextField(
-        max_length=1500, default='', blank=True, null=True)
+    product_long_description = HTMLField(blank=True, null=True)
+
+    def clean(self):
+        super().clean()
+        if self.content and len(self.content) > 1500:
+            raise ValidationError("Content cannot exceed 1500 characters.")
+    # product_long_description = models.TextField(
+    #     max_length=1500, default='', blank=True, null=True)
     product_additional_information = models.TextField(
         max_length=500, default='', blank=True, null=True)
     product_image = models.ImageField(upload_to='uploads/product/', null=True)

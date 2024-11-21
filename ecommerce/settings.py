@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdownify',
     'administrator',
+    'tinymce',
+
+
 ]
 
 MIDDLEWARE = [
@@ -205,4 +208,13 @@ MARKDOWNIFY = {
                            'ul'],
         "MARKDOWN_EXTENSIONS": ["markdown.extensions.fenced_code", ]
     }
+}
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 360,
+    "width": 800,
+    "menubar": "file edit view insert format tools table help",
+    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount",
+    "toolbar": "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code",
+    "content_css": "default",
 }

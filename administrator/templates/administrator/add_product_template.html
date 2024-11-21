@@ -57,10 +57,63 @@
       color: #333;
       margin-bottom: 5px;
     }
+    .file-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 5px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: center;
+    }
+    
+    .custom-file-upload:hover {
+      background-color: #0056b3;
+    }
+    
+    .form-control.d-none {
+      display: none;
+    }
+    
+    .preview-container {
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
   </style>
 {% endblock %}
 
 {% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Add Product</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Add Product</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <div class="form-wrapper">
     <div class="form-container">
       <h2 class="text-center mb-4">Add New Product</h2>
@@ -84,15 +137,20 @@
         </div>
         <div class="mb-3">
           <label class="form-label">{{ form.product_long_description.label }}</label>
-          {{ form.product_long_description|add_class:'form-control' }}
+          {{ form.product_long_description|safe }}
         </div>
+
         <div class="mb-3">
           <label class="form-label">{{ form.product_additional_information.label }}</label>
           {{ form.product_additional_information|add_class:'form-control' }}
         </div>
-        <div class="mb-3">
+        <div class="mb-3 file-upload-container">
           <label class="form-label">{{ form.product_image.label }}</label>
-          {{ form.product_image|add_class:'form-control' }}
+          <label for="id_product_image" class="btn btn-black btn-medium text-uppercase">Choose Image</label>
+          {{ form.product_image|add_class:'form-control d-none' }}
+          <div id="preview-container" class="preview-container">
+            <img id="preview" class="preview-image" src="" alt="Image Preview" />
+          </div>
         </div>
         <div class="mb-3">
           <label class="form-label">{{ form.product_tag.label }}</label>
@@ -118,4 +176,39 @@
       </form>
     </div>
   </div>
+  <script>
+    document.getElementById('id_product_image').addEventListener('change', function (event) {
+      const previewContainer = document.getElementById('preview-container')
+      const preview = document.getElementById('preview')
+    
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+    
+        reader.onload = function (e) {
+          preview.src = e.target.result
+          previewContainer.style.display = 'block'
+        }
+    
+        reader.readAsDataURL(file)
+      } else {
+        preview.src = ''
+        previewContainer.style.display = 'none'
+      }
+    })
+  </script>
+  <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+
+  <script>
+    tinymce.init({
+      selector: 'textarea', // Your textarea selector
+      plugins: 'advlist autolink lists link charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime table paste help wordcount', // Removed 'image', 'media'
+      toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote code | link table | preview fullscreen | fontsizeselect', // Removed 'image', 'media'
+      menubar: 'file edit view insert format tools table help', // Optional, keeps the menubar
+      height: 500,
+      branding: false, // Remove the TinyMCE branding
+      contextmenu: 'link table', // Removed 'image'
+      apiKey: 'fva4wpw7mjhscxrf1w92i7k942j2jfvydq1j3ep2hgmulzg6'
+    })
+  </script>
 {% endblock %}

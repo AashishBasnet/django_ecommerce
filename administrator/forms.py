@@ -1,8 +1,10 @@
 from django import forms
 from Home.models import Product
+from tinymce.widgets import TinyMCE
 
 
 class AddProductForm(forms.ModelForm):
+
     class Meta:
         model = Product
         fields = [
@@ -16,5 +18,4 @@ class AddProductForm(forms.ModelForm):
             'product_tag',
             'product_rating',
             'product_sale_price',
-            'slug',
             'stock',]

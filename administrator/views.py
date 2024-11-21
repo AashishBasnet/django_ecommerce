@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from Home.models import Product
 from .forms import AddProductForm
+from django.contrib import messages
 
 
 def AddProductView(request):

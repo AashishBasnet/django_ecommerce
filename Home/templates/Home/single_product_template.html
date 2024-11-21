@@ -1,8 +1,6 @@
 {% extends 'index.html' %}
-{% load markdownify %}
-{% load static %}
-{% comment %} {% load markdownify %} {% endcomment %}
 
+{% load static %}
 {% block title %}
   Buy {{ products.product_name }}
 {% endblock %}
@@ -148,20 +146,24 @@
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
+            <!-- Long Description Tab -->
             <div class="tab-pane fade show active border-top border-bottom padding-small" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
               {% if products.product_long_description %}
-                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #191919;">{{ products.product_long_description|markdownify }}</pre>
+                <div class="product-description">{{ products.product_long_description|safe }}</div>
               {% else %}
-                <p style="font-family: Arial, sans-serif; font-size: 26px; color: #191919;">There is no Long Description for this product</p>
+                <p class="no-description">There is no Long Description for this product</p>
               {% endif %}
             </div>
+
+            <!-- Additional Information Tab -->
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-information" role="tabpanel" aria-labelledby="nav-information-tab">
               {% if products.product_additional_information %}
-                <pre style="font-family: Arial, sans-serif; font-size: 16px; color: #191919;">{{ products.product_additional_information|markdownify }}</pre>
+                <div class="additional-info">{{ products.product_additional_information|safe }}</div>
               {% else %}
-                <p style="font-family: Arial, sans-serif; font-size: 26px; color: #191919;">There is no Additional Information for this product</p>
+                <p class="no-description">There is no Additional Information for this product</p>
               {% endif %}
             </div>
+
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
               <div class="review-box d-flex flex-wrap">
                 <div class="col-lg-6 d-flex flex-wrap">
