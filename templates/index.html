@@ -31,6 +31,47 @@
     {% endblock %}
 
     <style>
+      /* Custom Scrollbar for Webkit-based browsers (Chrome, Edge, Safari) */
+      ::-webkit-scrollbar {
+        width: 10px; /* Width of the scrollbar */
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f8f9fa; /* Background color of the track */
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #72aec8; /* Scrollbar thumb color */
+        border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #72aec8; /* Scrollbar thumb color on hover */
+      }
+      
+      /* Custom Scrollbar for Firefox */
+      body {
+        scrollbar-width: thin; /* Thin scrollbar */
+        scrollbar-color: #72aec8 #f8f9fa; /* Thumb and track colors */
+      }
+      
+      /* Optional: Custom scrollbar for a specific scrollable element */
+      .my-scrollable-div {
+        overflow-y: auto; /* Ensure the element has a vertical scroll */
+      }
+      
+      .my-scrollable-div::-webkit-scrollbar {
+        width: 10px;
+      }
+      
+      .my-scrollable-div::-webkit-scrollbar-thumb {
+        background: #72aec8;
+      }
+      
+      .my-scrollable-div::-webkit-scrollbar-track {
+        background: #f8f9fa;
+      }
+      
       /* Add fade effect */
       #message-overlay.fade {
         opacity: 0;
@@ -62,8 +103,8 @@
       }
     </style>
 
-    <!--                                                                                                                                                      script
-    ==================================================                                                                                                                                                      -->
+    <!--                                                                                                                                                            script
+    ==================================================                                                                                                                                                            -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/modernizr.js' %}"></script>
@@ -206,6 +247,12 @@
                         </li>
                         <li>
                           <a class="dropdown-item" href=" {% url 'add-product' %}">Add Product</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href=" {% url 'all-products' %}">All Products</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href=" {% url 'add-category' %}">Add Category</a>
                         </li>
                       </ul>
                     </li>
