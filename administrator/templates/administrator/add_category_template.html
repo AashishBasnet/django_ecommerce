@@ -1,0 +1,161 @@
+{% extends 'index.html' %}
+{% block title %}
+  Add New Category
+{% endblock %}
+{% load widget_tweaks %}
+
+{% block links %}
+  <style>
+    /* General Styling */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
+      min-height: 100vh;
+    }
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px auto;
+      max-width: 900px;
+      padding: 30px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-container {
+      width: 100%;
+    }
+    .form-control {
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+    .form-control:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 4px rgba(118, 75, 162, 0.3);
+    }
+    .btn-shipping {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .btn-shipping:hover {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      box-shadow: 0px 4px 10px rgba(118, 75, 162, 0.4);
+    }
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    .file-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 5px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: center;
+    }
+    
+    .custom-file-upload:hover {
+      background-color: #0056b3;
+    }
+    
+    .form-control.d-none {
+      display: none;
+    }
+    
+    .preview-container {
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Add New Category</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Add Category</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="form-wrapper">
+    <div class="form-container">
+      <h2 class="text-center mb-4">Add New Product</h2>
+      <form method="POST" enctype="multipart/form-data" action="{% url 'add-category' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <div class="mb-3 file-upload-container">
+            <label class="form-label">{{ form.category_display_image.label }}</label>
+            <label for="id_category_display_image" class="btn btn-black btn-medium text-uppercase">Choose Image</label>
+            {{ form.category_display_image|add_class:'form-control d-none' }}
+            <div id="preview-container" class="preview-container">
+              <img id="preview" class="preview-image" src="" alt="Image Preview" />
+            </div>
+          </div>
+          <label class="form-label">{{ form.category_name.label }}</label>
+          {{ form.category_name|add_class:'form-control' }}
+        </div>
+        <button type="submit" class="btn-shipping">Add Category</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.getElementById('id_category_display_image').addEventListener('change', function (event) {
+      const previewContainer = document.getElementById('preview-container')
+      const preview = document.getElementById('preview')
+    
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+    
+        reader.onload = function (e) {
+          preview.src = e.target.result
+          previewContainer.style.display = 'block'
+        }
+    
+        reader.readAsDataURL(file)
+      } else {
+        preview.src = ''
+        previewContainer.style.display = 'none'
+      }
+    })
+  </script>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
+{% block subscribe %}
+
+{% endblock %}

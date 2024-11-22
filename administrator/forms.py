@@ -1,5 +1,5 @@
 from django import forms
-from Home.models import Product
+from Home.models import Product, Categories
 from tinymce.widgets import TinyMCE
 
 
@@ -19,3 +19,13 @@ class AddProductForm(forms.ModelForm):
             'product_rating',
             'product_sale_price',
             'stock',]
+
+
+class AddCategoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Categories
+        fields = [
+            'category_name',
+            'category_display_image',
+        ]
