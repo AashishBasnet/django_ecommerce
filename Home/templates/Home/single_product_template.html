@@ -81,7 +81,18 @@
                         <div class="col-md-3">Quantity:</div>
                         <div class="col-md-3 d-flex">
                           <button type="button" class="btn btn-number" id="quantity-decrease">-</button>
-                          <input type="text" id="qty-cart" name="quantity" class="form-control input-number text-center" value="1" min="1" max="5" style="width: 60px;" />
+                          <input type="text"
+                            id="qty-cart"
+                            name="quantity"
+                            class="form-control input-number text-center"
+                            value="1"
+                            min="1"
+                            max="{% if products.stock > 5 %}
+                              5
+                            {% else %}
+                              {{ products.stock }}
+                            {% endif %}"
+                            style="width: 60px;" />
                           <button type="button" class="btn btn-number" id="quantity-increase">+</button>
                         </div>
                       </div>
