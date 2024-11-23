@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from Home.models import Product
+from Home.models import Product, Categories
 from .forms import AddProductForm, AddCategoryForm
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -15,14 +15,35 @@ def AllProductsView(request):
     })
 
 
+def AllCategoriesView(request):
+    products_list = Categories.objects.all()
+    paginator = Paginator(products_list, 15)
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)
+    return render(request, "administrator/all_categories_template.html", {
+        'products': products,
+    })
+
+
 def DeleteProductsView(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
     # product deletion
     product.delete()
+    messages.success(request, "product successfully deleted")
 
     # redirecting to all-products
     return redirect('all-products')
+
+
+def DeleteCategoryView(request, category_id):
+    category = get_object_or_404(Categories, id=category_id)
+
+    # category deletion
+    category.delete()
+    messages.success(request, "Category successfully deleted")
+    # redirecting to all-categories
+    return redirect('all-categories')
 
 
 def AddProductView(request):
@@ -30,7 +51,8 @@ def AddProductView(request):
         form = AddProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            messages.success(request, "Product successfully added")
+            return redirect('all-products')
         else:
 
             messages.warning(
@@ -46,10 +68,24 @@ def EditProductView(request, product_id):
         form = AddProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
+            messages.success(request, "Product was successfully edited")
             return redirect('all-products')
     else:
         form = AddProductForm(instance=product)
     return render(request, 'administrator/edit_product_template.html', {'form': form, 'product': product})
+
+
+def EditCategoryView(request, category_id):
+    category = get_object_or_404(Categories, id=category_id)
+    if request.method == 'POST':
+        form = AddCategoryForm(request.POST, request.FILES, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Category was successfully edited")
+            return redirect('all-categories')
+    else:
+        form = AddCategoryForm(instance=category)
+    return render(request, 'administrator/edit_category_template.html', {'form': form, 'category': category})
 
 
 def AddCategoryView(request):
@@ -57,7 +93,8 @@ def AddCategoryView(request):
         form = AddCategoryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            messages.success(request, "Category successfully added")
+            return redirect('all-categories')
         else:
             messages.warning(
                 request, 'Please check the form for errors and try again.')
