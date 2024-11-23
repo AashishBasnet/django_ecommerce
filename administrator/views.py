@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product
 from .forms import AddProductForm, AddCategoryForm
 from django.contrib import messages
@@ -15,6 +15,16 @@ def AllProductsView(request):
     })
 
 
+def DeleteProductsView(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    # product deletion
+    product.delete()
+
+    # redirecting to all-products
+    return redirect('all-products')
+
+
 def AddProductView(request):
     if request.method == "POST":
         form = AddProductForm(request.POST, request.FILES)
@@ -28,6 +38,18 @@ def AddProductView(request):
     else:
         form = AddProductForm()
     return render(request, "administrator/add_product_template.html", {"form": form})
+
+
+def EditProductView(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.method == 'POST':
+        form = AddProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('all-products')
+    else:
+        form = AddProductForm(instance=product)
+    return render(request, 'administrator/edit_product_template.html', {'form': form, 'product': product})
 
 
 def AddCategoryView(request):

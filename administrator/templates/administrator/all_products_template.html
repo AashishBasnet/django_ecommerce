@@ -8,6 +8,36 @@
       padding: 40px 0;
       background-color: #f9f9f9;
     }
+    
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .product-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #333;
+    }
+    
+    .add-product-btn {
+      background-color: #72aec8;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    
+    .add-product-btn:hover {
+      background-color: #5a8f9f;
+      color: white;
+    }
+    
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -68,11 +98,14 @@
   </section>
   <section class="product-section">
     <div class="container">
-      <h1 class="text-center mb-4">All Products</h1>
+      <div class="product-header">
+        <h1>All Products</h1>
+        <a href="{% url 'add-product' %}" class="add-product-btn">Add Product <b>+</b></a>
+      </div>
       <div class="product-grid">
         {% for product in products %}
           <div class="product-card">
-            <a href="{% url 'product' product.slug %}">
+            <a href="{% url 'edit-product' product.id %}">
               <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" />
               <h3>{{ product.product_name }}</h3>
             </a>
