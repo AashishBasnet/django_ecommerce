@@ -234,12 +234,13 @@
   <script>
     tinymce.init({
       selector: 'textarea', // Your textarea selector
-      plugins: 'advlist autolink lists charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime table paste help wordcount', // Removed 'link'
+      plugins: 'advlist autolink lists charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime table paste help wordcount',
       toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote code | table | preview fullscreen | fontsizeselect', // Removed 'link'
       menubar: 'file edit view insert format tools table help', // Optional, keeps the menubar
       height: 500,
-      branding: false, // Remove the TinyMCE branding
-      contextmenu: 'table', // Removed 'link'
+      branding: false,
+      promotion: false,
+      contextmenu: 'table',
       apiKey: 'fva4wpw7mjhscxrf1w92i7k942j2jfvydq1j3ep2hgmulzg6'
     })
   </script>
