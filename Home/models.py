@@ -92,33 +92,23 @@ class Customer(models.Model):
 class Product(models.Model):
     product_name = models.CharField(max_length=50)
     product_price = models.DecimalField(
-        decimal_places=2, max_digits=8, blank=False, null=False
-    )
+        decimal_places=2, max_digits=8, blank=False, null=False)
     product_category = models.ForeignKey(
-        Categories, on_delete=models.CASCADE, default=''
-    )
+        Categories, on_delete=models.CASCADE, default='')
     product_description = models.CharField(
-        max_length=250, default='', blank=True, null=True
-    )
+        max_length=250, default='', blank=True, null=True)
     product_long_description = HTMLField(blank=True, null=True)
-
     product_additional_information = models.TextField(
-        max_length=500, default='', blank=True, null=True
-    )
+        max_length=500, default='', blank=True, null=True)
     product_image = models.ImageField(upload_to='uploads/product/', null=True)
-
     product_tag = models.ManyToManyField(Tag, blank=True)
-
     product_rating = models.DecimalField(
         decimal_places=1, max_digits=3,
         validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
         null=True, blank=False
     )
-
     product_sale_price = models.DecimalField(
-        decimal_places=2, max_digits=8, null=True, blank=True
-    )
-
+        decimal_places=2, max_digits=8, null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     stock = models.PositiveIntegerField(default=0)
 
@@ -126,13 +116,29 @@ class Product(models.Model):
         super().clean()
         if self.product_sale_price is not None and self.product_sale_price > self.product_price:
             raise ValidationError(
-                'Discount price cannot be greater than the actual price.'
-            )
+                'Discount price cannot be greater than the actual price.')
 
     def save(self, *args, **kwargs):
+        # Ensure slug is created
         if not self.slug:
             self.slug = slugify(self.product_name)
+
         super().save(*args, **kwargs)
+
+        # Sale Tag
+        sale_tag, _ = Tag.objects.get_or_create(tag='Sale')
+        if self.product_sale_price:
+            self.product_tag.add(sale_tag)
+        else:
+            self.product_tag.remove(sale_tag)
+
+        #  New Tag to the 5 most recent products
+        new_tag, _ = Tag.objects.get_or_create(tag='New')
+        recent_products = Product.objects.order_by('-id')[:5]
+        if self in recent_products:
+            self.product_tag.add(new_tag)
+        else:
+            self.product_tag.remove(new_tag)
 
     def __str__(self):
         return f'{self.product_name}'

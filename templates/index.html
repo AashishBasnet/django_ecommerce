@@ -103,8 +103,8 @@
       }
     </style>
 
-    <!--                                                                                                                                                              script
-    ==================================================                                                                                                                                                              -->
+    <!--                                                                                                                                                                script
+    ==================================================                                                                                                                                                                -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/modernizr.js' %}"></script>
@@ -237,7 +237,7 @@
                   </li>
                   {% if user.is_superuser %}
                     <li class="nav-item dropdown">
-                      <a class="nav-link me-4 dropdown-toggle link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Orders</a>
+                      <a class="nav-link me-4 dropdown-toggle link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Dashboard</a>
                       <ul class="dropdown-menu">
                         <li>
                           <a class="dropdown-item" href=" {% url 'shipped-dashboard' %}">Shipped Orders</a>
