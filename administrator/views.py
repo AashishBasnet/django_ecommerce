@@ -1,8 +1,13 @@
+from django.shortcuts import get_object_or_404, redirect
+from Home.models import Product  # Import Product from Home app
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
 from .forms import AddProductForm, AddCategoryForm, AddTagForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.sessions.models import Session
+from django.contrib.auth.models import User
+from Home.models import Profile
 
 
 def AllProductsView(request):
@@ -36,13 +41,51 @@ def AllTagsView(request):
 
 
 def DeleteProductsView(request, product_id):
+    # Fetch the product
     product = get_object_or_404(Product, id=product_id)
 
-    # product deletion
-    product.delete()
-    messages.success(request, "product successfully deleted")
+    # If the user is logged in, handle the cart for their session
+    if request.user.is_authenticated:
+        try:
+            # Get the current session's cart
+            cart = request.session.get('session_key', {})
 
-    # redirecting to all-products
+            # If the product exists in the cart, remove it
+            if str(product_id) in cart:
+                del cart[str(product_id)]  # Remove the product from the cart
+                request.session['session_key'] = cart  # Update the session
+                request.session.modified = True  # Mark session as modified
+                messages.success(request, "Product removed from your cart.")
+
+            # Also update the user's 'old_cart' field in the Profile model
+            user_profile = Profile.objects.get(user=request.user)
+            old_cart = user_profile.old_cart
+            if old_cart:
+                # Convert old_cart (which is a string) into a dictionary-like format
+                cart_dict = eval(old_cart)
+                if str(product_id) in cart_dict:
+                    # Remove the product from the old_cart
+                    del cart_dict[str(product_id)]
+
+                # Convert the cart_dict back to a string and save it
+                user_profile.old_cart = str(cart_dict)
+                user_profile.save()
+
+        except Exception as e:
+            # Handle any session-related errors
+            print(f"Error while updating cart: {e}")
+            messages.error(
+                request, "An error occurred while updating your cart.")
+
+    # Delete the product from the database
+    product.delete()
+
+    # Notify the admin
+    messages.success(
+        request, "Product successfully deleted and removed from your cart"
+    )
+
+    # Redirect to the product listing page (or any page you want)
     return redirect('all-products')
 
 
