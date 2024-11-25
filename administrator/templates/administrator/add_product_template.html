@@ -144,7 +144,7 @@
           {% endfor %}
         </div>
         <div class="mb-3">
-          <label class="form-label">{{ form.product_category.label }}</label>
+          <label class="form-label">{{ form.product_category.label }} &nbsp;<a href="{% url 'add-category' %}" class="text-primary">add new category</a></label>
           {{ form.product_category|add_class:'form-control' }}
           {% for error in form.product_category.errors %}
             <div class="text-danger small">{{ error }}</div>
@@ -193,6 +193,13 @@
         <div class="mb-3">
           <label class="form-label">{{ form.product_sale_price.label }}</label>
           {{ form.product_sale_price|add_class:'form-control' }}
+          {% for error in form.product_sale_price.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.product_tag.label }} &nbsp;<a href="{% url 'add-tag' %}" class="text-primary">add new tag</a></label>
+          {{ form.product_tag|add_class:'form-control' }}
           {% for error in form.product_sale_price.errors %}
             <div class="text-danger small">{{ error }}</div>
           {% endfor %}

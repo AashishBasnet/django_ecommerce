@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from Home.models import Product, Categories
-from .forms import AddProductForm, AddCategoryForm
+from Home.models import Product, Categories, Tag
+from .forms import AddProductForm, AddCategoryForm, AddTagForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 
@@ -25,6 +25,16 @@ def AllCategoriesView(request):
     })
 
 
+def AllTagsView(request):
+    products_list = Tag.objects.all()
+    paginator = Paginator(products_list, 15)
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)
+    return render(request, "administrator/all_tags_template.html", {
+        'products': products,
+    })
+
+
 def DeleteProductsView(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
@@ -44,6 +54,16 @@ def DeleteCategoryView(request, category_id):
     messages.success(request, "Category successfully deleted")
     # redirecting to all-categories
     return redirect('all-categories')
+
+
+def DeleteTagView(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+
+    # category deletion
+    tag.delete()
+    messages.success(request, "Tag successfully deleted")
+    # redirecting to all-categories
+    return redirect('all-tags')
 
 
 def AddProductView(request):
@@ -88,6 +108,19 @@ def EditCategoryView(request, category_id):
     return render(request, 'administrator/edit_category_template.html', {'form': form, 'category': category})
 
 
+def EditTagView(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    if request.method == 'POST':
+        form = AddTagForm(request.POST, request.FILES, instance=tag)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Tag was successfully edited")
+            return redirect('all-tags')
+    else:
+        form = AddTagForm(instance=tag)
+    return render(request, 'administrator/edit_tag_template.html', {'form': form, 'tag': tag})
+
+
 def AddCategoryView(request):
     if request.method == "POST":
         form = AddCategoryForm(request.POST, request.FILES)
@@ -101,3 +134,18 @@ def AddCategoryView(request):
     else:
         form = AddCategoryForm()
     return render(request, "administrator/add_category_template.html", {"form": form})
+
+
+def AddTagView(request):
+    if request.method == "POST":
+        form = AddTagForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Tag successfully added")
+            return redirect('all-tags')
+        else:
+            messages.warning(
+                request, 'Please check the form for errors and try again.')
+    else:
+        form = AddTagForm()
+    return render(request, "administrator/add_tag_template.html", {"form": form})

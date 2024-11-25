@@ -41,7 +41,7 @@ post_save.connect(create_profile, sender=User)
 
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=10)
+    tag = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
         return self.tag
@@ -55,7 +55,7 @@ class Tag(models.Model):
 
 
 class Categories(models.Model):
-    category_name = models.CharField(max_length=50)
+    category_name = models.CharField(max_length=50, unique=True)
     category_display_image = models.ImageField(
         upload_to='uploads/product/', null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
@@ -90,7 +90,7 @@ class Customer(models.Model):
 
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=50)
+    product_name = models.CharField(max_length=50, unique=True)
     product_price = models.DecimalField(
         decimal_places=2, max_digits=8, blank=False, null=False)
     product_category = models.ForeignKey(

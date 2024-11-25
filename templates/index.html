@@ -31,13 +31,12 @@
     {% endblock %}
 
     <style>
-      /* Custom Scrollbar for Webkit-based browsers (Chrome, Edge, Safari) */
       ::-webkit-scrollbar {
-        width: 10px; /* Width of the scrollbar */
+        width: 10px;
       }
       
       ::-webkit-scrollbar-track {
-        background: #f8f9fa; /* Background color of the track */
+        background: #f8f9fa;
       }
       
       ::-webkit-scrollbar-thumb {
@@ -248,6 +247,9 @@
                         </li>
                         <li>
                           <a class="dropdown-item" href=" {% url 'all-categories' %}">All Categories</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href=" {% url 'all-tags' %}">All Tags</a>
                         </li>
                       </ul>
                     </li>
