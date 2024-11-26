@@ -4,10 +4,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
 from .forms import AddProductForm, AddCategoryForm, AddTagForm
 from django.contrib import messages
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from Home.models import Profile
+from django.db.models import Q
 
 
 def AllProductsView(request):
@@ -192,3 +193,50 @@ def AddTagView(request):
     else:
         form = AddTagForm()
     return render(request, "administrator/add_tag_template.html", {"form": form})
+
+
+def AdminSearchView(request):
+    products = Product.objects.all()
+    tags = Tag.objects.all()
+    latest_products = Product.objects.all().order_by('-id')[:3]
+
+    search_key = request.GET.get('s', '')
+
+    # this redirects to shop if the search is empty
+    if search_key == '':
+        messages.warning(request, "Please enter a search term.")
+        return redirect('all-products')
+
+    # Perform the search
+    searched = Product.objects.filter(
+        Q(product_name__icontains=search_key) |
+        Q(product_description__icontains=search_key) |
+        Q(product_category__category_name__icontains=search_key) |
+        Q(product_tag__tag__icontains=search_key)
+    ).distinct()
+
+    # this redirects if no products were found
+    if not searched.exists():
+        messages.warning(
+            request, "That product doesn't exist. Please try again.")
+        return redirect('all-products')
+
+    # Create the paginator
+    paginator = Paginator(searched, 15)  # This shows 15 products per page
+    page = request.GET.get('page')
+
+    try:
+        paginated_results = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_results = paginator.page(1)
+    except EmptyPage:
+        paginated_results = paginator.page(paginator.num_pages)
+
+    return render(request, "administrator/admin_search_template.html", {
+        'search_key': search_key,
+        'searched': paginated_results,
+        'products': products,
+        'latest_products': latest_products,
+        'tags': tags,
+        'paginator': paginator
+    })

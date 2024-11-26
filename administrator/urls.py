@@ -21,4 +21,6 @@ urlpatterns = [
          views.DeleteTagView, name='delete-tag'),
     path('add-category', views.AddCategoryView, name='add-category'),
 
+    path("search/", views.AdminSearchView, name='search'),
+
 ]
