@@ -83,27 +83,59 @@ def UserLoginView(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # Do some Shopping Cart stuff
-            current_user = Profile.objects.get(user__id=request.user.id)
-            # Get their saved cart from database
-            saved_cart = current_user.old_cart
-            # convert database string to python dictionary
-            if saved_cart:
-                # convert to dictionary using JSON
-                converted_cart = json.loads(saved_cart)
-                # Add the loaded cart dictionary to our session
-                cart = Cart(request)
-                # Loop through the cart an add the items from database
-                for key, value in converted_cart.items():
-                    cart.db_add(product=key, quantity=value)
 
-            messages.success(request, ("You Have Been Logged In"))
+            try:
+                current_user = Profile.objects.get(user__id=request.user.id)
+                saved_cart = current_user.old_cart
+                if saved_cart:
+
+                    converted_cart = json.loads(saved_cart)
+
+                    cart = Cart(request)
+                    for product_key, quantity in converted_cart.items():
+                        cart.db_add(product=product_key, quantity=quantity)
+
+            except Profile.DoesNotExist:
+                pass
+
+            messages.success(request, "You Have Been Logged In")
+
             return redirect("home")
         else:
-            messages.warning(request, ("There was a error logging you in"))
+            messages.warning(request, "There was an error logging you in")
+
             return redirect("login")
     else:
         return render(request, "Home/login_template.html", {})
+
+# def UserLoginView(request):
+#     if request.method == "POST":
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             # Do some Shopping Cart stuff
+#             current_user = Profile.objects.get(user__id=request.user.id)
+#             # Get their saved cart from database
+#             saved_cart = current_user.old_cart
+#             # convert database string to python dictionary
+#             if saved_cart:
+#                 # convert to dictionary using JSON
+#                 converted_cart = json.loads(saved_cart)
+#                 # Add the loaded cart dictionary to our session
+#                 cart = Cart(request)
+#                 # Loop through the cart an add the items from database
+#                 for key, value in converted_cart.items():
+#                     cart.db_add(product=key, quantity=value)
+
+#             messages.success(request, ("You Have Been Logged In"))
+#             return redirect("home")
+#         else:
+#             messages.warning(request, ("There was a error logging you in"))
+#             return redirect("login")
+#     else:
+#         return render(request, "Home/login_template.html", {})
 
 
 def UserLogoutView(request):
