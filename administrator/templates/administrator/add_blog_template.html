@@ -1,0 +1,247 @@
+{% extends 'index.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+  Add Post
+{% endblock %}
+
+{% block links %}
+  <style>
+    /* General Styling */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
+      min-height: 100vh;
+    }
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px auto;
+      max-width: 900px;
+      padding: 30px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .form-container {
+      width: 100%;
+    }
+    .form-control {
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 12px;
+    }
+    .form-control:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 4px rgba(118, 75, 162, 0.3);
+    }
+    .btn-shipping {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .btn-shipping:hover {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      box-shadow: 0px 4px 10px rgba(118, 75, 162, 0.4);
+    }
+    .form-label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    .file-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .custom-file-upload {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 5px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: center;
+    }
+    
+    .custom-file-upload:hover {
+      background-color: #0056b3;
+    }
+    
+    .form-control.d-none {
+      display: none;
+    }
+    
+    .preview-container {
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Add Post</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Add Post</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="form-wrapper">
+    <div class="form-container">
+      <h2 class="text-center mb-4">Add New Post</h2>
+      <form method="POST" enctype="multipart/form-data" action="{% url 'add-post' %}">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            <ul>
+              {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label class="form-label">{{ form.title.label }} *</label>
+          {{ form.title|add_class:'form-control' }}
+          {% for error in form.title.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ form.author.label }} *</label>
+          {{ form.author|add_class:'form-control' }}
+          {% for error in form.author.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ form.category.label }} &nbsp;<a href="{% url 'add-category' %}" class="text-primary">add new category</a></label>
+          {{ form.category|add_class:'form-control' }}
+          {% for error in form.category.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ form.content.label }} *</label>
+          {{ form.content|add_class:'form-control tinymce' }} <!-- Added class 'tinymce' -->
+          {% for error in form.content.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ form.image.label }}</label>
+          <label for="id_image" class="btn btn-black btn-medium text-uppercase">Choose Image</label>
+          {{ form.image|add_class:'form-control d-none' }}
+          <div id="preview-container" class="preview-container">
+            <img id="preview" class="preview-image" src="" alt="Image Preview" />
+          </div>
+          {% for error in form.image.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ form.tags.label }} &nbsp;<a href="{% url 'add-tag' %}" class="text-primary">add new tag</a></label>
+          {{ form.tags|add_class:'form-control' }}
+          {% for error in form.tags.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <button type="submit" name="submit_post" class="btn-shipping">Submit Post</button>
+      </form>
+    </div>
+  </div>
+  <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+  <script>
+    tinymce.init({
+      selector: 'textarea', // Your textarea selector
+      plugins: 'advlist autolink lists charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime table paste help wordcount image', // Added 'image' plugin here
+      toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | blockquote code | table | image | preview fullscreen | fontsizeselect', // Added 'image' in the toolbar
+      menubar: 'file edit view insert format tools table help', // Optional, keeps the menubar
+      height: 500,
+      branding: false,
+      promotion: false,
+      contextmenu: 'table',
+      apiKey: 'fva4wpw7mjhscxrf1w92i7k942j2jfvydq1j3ep2hgmulzg6',
+      image_advtab: true,
+      file_picker_types: 'image', // Restrict file picker to only images
+      file_picker_callback: function (callback, value, meta) {
+        // Trigger a file input to open the file picker
+        var input = document.createElement('input')
+        input.setAttribute('type', 'file')
+        input.setAttribute('accept', 'image/*')
+        input.onchange = function () {
+          var file = input.files[0]
+          var reader = new FileReader()
+    
+          reader.onload = function (e) {
+            callback(e.target.result, { alt: file.name })
+          }
+    
+          reader.readAsDataURL(file)
+        }
+        input.click()
+      }
+    })
+  </script>
+
+  <script>
+    document.getElementById('id_image').addEventListener('change', function (event) {
+      const previewContainer = document.getElementById('preview-container')
+      const preview = document.getElementById('preview')
+    
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+    
+        reader.onload = function (e) {
+          preview.src = e.target.result
+          previewContainer.style.display = 'block'
+        }
+    
+        reader.readAsDataURL(file)
+      } else {
+        preview.src = ''
+        previewContainer.style.display = 'none'
+      }
+    })
+  </script>
+{% endblock %}
+{% block subscribe %}
+
+{% endblock %}

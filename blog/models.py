@@ -36,14 +36,13 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
     author = models.CharField(max_length=150)
-    content = models.TextField()
+    content = models.TextField(default='', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
     tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
-    is_published = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -36,18 +36,24 @@
                 <div class="hero-image col-lg-12 mt-5">
                   <img src="{{ post.image.url }}" alt="single-post" class="img-fluid" />
                 </div>
+                <hr />
                 <div class="post-description review-item padding-medium">
                   <br />
-                  <div class="post-content">{{ post.content }}</div>
+                  <div class="post-content">{{ post.content|safe }}</div>
                   <br />
+                  <hr />
                   <div class="post-bottom-link d-flex justify-content-between">
                     <div class="block-tag">
                       <ul class="list-unstyled d-flex">
-                        {% for tag in post.tags.all %}
-                          <li class="pe-3">
-                            <a href="#">{{ tag.name }}</a>
-                          </li>
-                        {% endfor %}
+                        tags:{% if post.tags.all %}
+                          &nbsp;{% for tag in post.tags.all %}
+                            <li class="pe-3">
+                              <a href="#">{{ tag.name }}</a>
+                            </li>
+                          {% endfor %}
+                        {% else %}
+                          No Tags Available
+                        {% endif %}
                       </ul>
                     </div>
                     <div class="social-links d-flex">
@@ -223,11 +229,11 @@
           <h2 class="display-7 text-dark text-uppercase">Related Posts</h2>
         </div>
         {% for one_post in all_posts %}
-          {% if one_post.is_published and one_post.category == post.category %}
+          {% if one_post.category == post.category %}
             <div class="col-lg-4">
               <div class="card border-none">
                 <div class="card-image">
-                  <a href="#"><img src="{{ one_post.image.url }}" alt="" class="img-fluid" /></a>
+                  <a href="{% url 'single-blog' one_post.slug %}"><img src="{{ one_post.image.url }}" alt="" class="img-fluid" /></a>
                 </div>
               </div>
               <div class="card-body text-uppercase">
@@ -235,7 +241,7 @@
                   <span class="meta-date">{{ one_post.created_at|date:'b d, Y' }}</span>
                   <span class="meta-category">- {{ one_post.category }}</span>
                 </div>
-                <h3 class="card-title"><a href="#">{{ one_post.title }}</a></h3>
+                <h3 class="card-title"><a href="{% url 'single-blog' one_post.slug %}">{{ one_post.title }}</a></h3>
               </div>
             </div>
           {% endif %}

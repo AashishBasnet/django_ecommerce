@@ -1,14 +1,55 @@
-from django.shortcuts import get_object_or_404, redirect
 from Home.models import Product  # Import Product from Home app
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
-from .forms import AddProductForm, AddCategoryForm, AddTagForm
+from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from Home.models import Profile
 from django.db.models import Q
+from blog.models import Post
+from django.http import HttpResponse
+
+# View for adding a new post
+
+
+def AddPostView(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            post = form.save()
+            post.save()
+
+            return redirect('admin-all-blogs')
+    else:
+        form = PostForm()
+    return render(request, 'administrator/add_blog_template.html', {'form': form})
+
+
+def EditBlogView(request, blog_id):
+    blog = get_object_or_404(Post, id=blog_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Blog post was successfully edited")
+            return redirect('admin-all-blogs')
+    else:
+        form = PostForm(instance=blog)
+    return render(request, 'administrator/edit_blog_template.html', {'form': form, 'blog': blog})
+
+
+def AllBlogsView(request):
+    # Assuming `created_at` is a field for ordering
+    blogs_list = Post.objects.all().order_by('-created_at')
+    paginator = Paginator(blogs_list, 10)  # Paginate 10 blogs per page
+    page_number = request.GET.get('page')
+    blogs = paginator.get_page(page_number)
+    return render(request, "administrator/all_blogs_template.html", {
+        'blogs': blogs,
+    })
 
 
 def AllProductsView(request):
@@ -108,6 +149,16 @@ def DeleteTagView(request, tag_id):
     messages.success(request, "Tag successfully deleted")
     # redirecting to all-categories
     return redirect('all-tags')
+
+
+def DeletePostView(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    # category deletion
+    post.delete()
+    messages.success(request, "Post successfully deleted")
+    # redirecting to all-posts
+    return redirect('admin-all-blogs')
 
 
 def AddProductView(request):

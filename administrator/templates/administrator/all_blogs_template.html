@@ -1,0 +1,159 @@
+{% extends 'index.html' %}
+{% block title %}
+  Blog
+{% endblock %}
+{% block links %}
+  <style>
+    .blog-section {
+      padding: 40px 0;
+      background-color: #f9f9f9;
+    }
+    
+    .blog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .blog-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #333;
+    }
+    
+    .add-blog-btn {
+      background-color: #72aec8;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    
+    .add-blog-btn:hover {
+      background-color: #5a8f9f;
+      color: white;
+    }
+    
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .blog-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.2s ease-in-out;
+    }
+    .blog-card:hover {
+      transform: translateY(-5px);
+    }
+    .blog-card img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    .blog-card h3 {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .blog-card p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .blog-card a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .blog-card a:hover {
+      color: #0056b3;
+    }
+    .navigation {
+      padding: 20px 0;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Blog</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Blog</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="blog-section">
+    <div class="container">
+      <div class="blog-header">
+        <h1>All Blog Posts</h1>
+        <!-- Search form -->
+        {% comment %} <form method="get" action="{% url 'blog-search' %}" class="d-flex" style="gap: 10px;">
+          <input type="text" name="s" placeholder="Search blog posts..." class="form-control" value="{{ search_key|default:'' }}" />
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form> {% endcomment %}
+        <a href="{% url 'add-post' %}" class="add-blog-btn">Add Blog Post <b>+</b></a>
+      </div>
+      <div class="blog-grid">
+        {% for blog in blogs %}
+          <div class="blog-card">
+            <a href="{% url 'edit-blog' blog.id %}">
+              <img src="{{ blog.image.url }}" alt="{{ blog.title }}" />
+              <h3>{{ blog.title }}</h3>
+              <p>{{ blog.excerpt }}</p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+        <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+          {% if blogs.has_previous %}
+            <a href="?page={{ blogs.previous_page_number }}">
+              <svg class="chevron-left pe-3">
+                <use xlink:href="#chevron-left"></use>
+              </svg>
+            </a>
+          {% endif %}
+
+          {% for num in blogs.paginator.page_range %}
+            {% if blogs.number == num %}
+              <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+            {% else %}
+              <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if blogs.has_next %}
+            <a href="?page={{ blogs.next_page_number }}">
+              <svg class="chevron-right ps-3">
+                <use xlink:href="#chevron-right"></use>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      </nav>
+    </div>
+  </section>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
+{% block subscribe %}
+
+{% endblock %}
