@@ -48,10 +48,11 @@ INSTALLED_APPS = [
     "Home",
     "cart",
     "payment",
+    'administrator',
+    'blog',
     'paypal.standard.ipn',
     'widget_tweaks',
     'markdownify',
-    'administrator',
     'tinymce',
 
 
