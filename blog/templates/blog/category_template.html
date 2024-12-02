@@ -1,24 +1,27 @@
 {% extends 'index.html' %}
 {% load static %}
 {% block title %}
-  Blog
+  {{ category.name }}
 {% endblock %}
+
 {% block content %}
   <section class="hero-section position-relative bg-light-blue padding-medium">
     <div class="hero-content">
       <div class="container">
         <div class="row">
           <div class="text-center padding-large no-padding-bottom">
-            <h1 class="display-2 text-uppercase text-dark">Blog</h1>
+            <h1 class="display-2 text-uppercase text-dark">{{ category.name }}</h1>
             <div class="breadcrumbs">
-              <span class="item"><a href="index.html">Home ></a></span>
-              <span class="item">Blog</span>
+              <span class="item"><a href="/">Home ></a></span>
+              <span class="item">Category ></span>
+              <span class="item">{{ category.name }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
   <section class="post-grid padding-large">
     <div class="container">
       <div class="row d-flex flex-wrap">
@@ -47,12 +50,13 @@
                   {% endfor %}
                 </ul>
               </div>
+
               <div class="widget sidebar-product-tags mb-5">
                 <h5 class="widget-title text-uppercase">Tags</h5>
                 <ul class="product-tags sidebar-list list-unstyled">
-                  {% for tag_item in tags %}
+                  {% for tag in tags %}
                     <li class="tags-item">
-                      <a href="{% url 'blog-tag' tag_item.slug %}">{{ tag_item.name }}</a>
+                      <a href="{% url 'blog-tag' tag.slug %}">{{ tag.name }}</a>
                     </li>
                   {% endfor %}
                 </ul>
@@ -79,24 +83,28 @@
             </div>
           </div>
         </aside>
+
         <main class="col-md-9">
           <div class="row">
-            {% for post in posts %}
-              <div class="col-lg-4">
-                <div class="card border-none">
-                  <div class="card-image">
-                    <a href="{% url 'single-blog' post.slug %}"><img src="{{ post.image.url }}" alt="" class="img-fluid" /></a>
+            {% if posts %}
+              {% for post in posts %}
+                <div class="col-lg-4">
+                  <div class="card border-none">
+                    <div class="card-image">
+                      <a href="{% url 'single-blog' post.slug %}"><img src="{{ post.image.url }}" alt="" class="img-fluid" /></a>
+                    </div>
+                  </div>
+                  <div class="card-body text-uppercase">
+                    <div class="card-meta text-muted">
+                      <span class="meta-date">{{ post.created_at|date:'b d, Y' }}</span>
+                    </div>
+                    <h3 class="card-title"><a href="{% url 'single-blog' post.slug %}">{{ post.title }}</a></h3>
                   </div>
                 </div>
-                <div class="card-body text-uppercase">
-                  <div class="card-meta text-muted">
-                    <span class="meta-date">{{ post.created_at|date:'b d, Y' }}</span>
-                    <span class="meta-category">- {{ post.category }}</span>
-                  </div>
-                  <h3 class="card-title"><a href="{% url 'single-blog' post.slug %}">{{ post.title }}</a></h3>
-                </div>
-              </div>
-            {% endfor %}
+              {% endfor %}
+            {% else %}
+              <p class="text-center">No posts available in this category.</p>
+            {% endif %}
           </div>
 
           <!-- Pagination Controls -->
