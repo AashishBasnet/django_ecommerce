@@ -41,6 +41,9 @@
               <div class="widget sidebar-product-categories mb-5">
                 <h5 class="widget-title text-uppercase">Categories</h5>
                 <ul class="product-categories sidebar-list list-unstyled">
+                  <li class="cat-item">
+                    <a href="{% url 'blog' %}">All</a>
+                  </li>
                   {% for cat in category %}
                     <li class="cat-item">
                       <a href="{% url 'blog-category' cat.slug %}">{{ cat.name }}</a>
@@ -51,6 +54,9 @@
               <div class="widget sidebar-product-tags mb-5">
                 <h5 class="widget-title text-uppercase">Tags</h5>
                 <ul class="product-tags sidebar-list list-unstyled">
+                  <li class="cat-item">
+                    <a href="{% url 'blog' %}">All</a>
+                  </li>
                   {% for tag_item in tags %}
                     <li class="tags-item">
                       <a href="{% url 'blog-tag' tag_item.slug %}">{{ tag_item.name }}</a>
@@ -85,6 +91,11 @@
           <div class="row">
             {% if searched %}
               {% for post in searched %}
+                <div class="filter-shop d-flex justify-content-between">
+                  <div class="showing-product">
+                    <p>Showing ({{ searched.start_index }} - {{ searched.end_index }}) of {{ searched.paginator.count }} results for "{{ search_key }}"</p>
+                  </div>
+                </div>
                 <div class="col-lg-4">
                   <div class="card border-none">
                     <div class="card-image">

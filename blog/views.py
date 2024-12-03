@@ -41,7 +41,7 @@ def BlogCategoryView(request, slug):
         category = get_object_or_404(Category, slug=slug)
         all_categories = Category.objects.all()
         posts = Post.objects.filter(category=category).order_by('-id')
-
+        category_count = posts.count()
         paginator = Paginator(posts, 9)
         page_number = request.GET.get('page')
         paginated_posts = paginator.get_page(page_number)
@@ -54,7 +54,8 @@ def BlogCategoryView(request, slug):
             'posts': paginated_posts,
             'tags': tags,
             'latest_posts': latest_posts,
-            'all_categories': all_categories
+            'all_categories': all_categories,
+            'category_count': category_count,
         })
     except Category.DoesNotExist:
         messages.warning(request, "The selected category does not exist.")
@@ -66,7 +67,7 @@ def BlogTagView(request, slug):
         tag = get_object_or_404(Tag, slug=slug)
         all_categories = Category.objects.all()
         posts = Post.objects.filter(tags=tag).order_by('-id')
-
+        tag_count = posts.count()
         paginator = Paginator(posts, 9)
         page_number = request.GET.get('page')
         paginated_posts = paginator.get_page(page_number)
@@ -79,7 +80,8 @@ def BlogTagView(request, slug):
             'posts': paginated_posts,
             'tags': tags,
             'latest_posts': latest_posts,
-            'all_categories': all_categories
+            'all_categories': all_categories,
+            'tag_count': tag_count
         })
     except Tag.DoesNotExist:
         messages.warning(request, "The selected tag does not exist.")

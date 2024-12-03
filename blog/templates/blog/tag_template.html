@@ -41,6 +41,9 @@
               <div class="widget sidebar-product-categories mb-5">
                 <h5 class="widget-title text-uppercase">Categories</h5>
                 <ul class="product-categories sidebar-list list-unstyled">
+                  <li class="cat-item">
+                    <a href="{% url 'blog' %}">All</a>
+                  </li>
                   {% for cat in all_categories %}
                     <li class="cat-item">
                       <a href="{% url 'blog-category' cat.slug %}">{{ cat.name }}</a>
@@ -52,6 +55,9 @@
               <div class="widget sidebar-product-tags mb-5">
                 <h5 class="widget-title text-uppercase">Tags</h5>
                 <ul class="product-tags sidebar-list list-unstyled">
+                  <li class="cat-item">
+                    <a href="{% url 'blog' %}">All</a>
+                  </li>
                   {% for tag_item in tags %}
                     <li class="tags-item">
                       <a href="{% url 'blog-tag' tag_item.slug %}">{{ tag_item.name }}</a>
@@ -83,6 +89,15 @@
         </aside>
 
         <main class="col-md-9">
+          <div class="filter-shop d-flex justify-content-between">
+            <div class="showing-product">
+              {% if tag_count != 0 %}
+                <p>Showing ({{ posts.start_index }} - {{ posts.end_index }}) of {{ posts.paginator.count }} results found in "{{ tag }}"</p>
+              {% else %}
+                <h1 class="display-2 text-uppercase text-dark">No posts available under this tag.</h1>
+              {% endif %}
+            </div>
+          </div>
           <div class="row">
             {% if posts %}
               {% for post in posts %}
@@ -101,7 +116,7 @@
                 </div>
               {% endfor %}
             {% else %}
-              <p class="text-center">No posts available under this tag.</p>
+
             {% endif %}
           </div>
 
