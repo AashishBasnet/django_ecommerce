@@ -1,0 +1,12 @@
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore local configuration
+*.log
+*.db.sqlite3
+
+# Ignore unnecessary files
+__pycache__/
+*.pyc
+tests/
