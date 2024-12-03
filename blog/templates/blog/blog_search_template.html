@@ -1,7 +1,8 @@
 {% extends 'index.html' %}
 {% load static %}
+
 {% block title %}
-  {{ tag.name }}
+  Blog Search
 {% endblock %}
 
 {% block content %}
@@ -10,11 +11,10 @@
       <div class="container">
         <div class="row">
           <div class="text-center padding-large no-padding-bottom">
-            <h1 class="display-2 text-uppercase text-dark">{{ tag.name }}</h1>
+            <h1 class="display-2 text-uppercase text-dark">Blog Search</h1>
             <div class="breadcrumbs">
-              <span class="item"><a href="/">Home ></a></span>
-              <span class="item">Tag ></span>
-              <span class="item">{{ tag.name }}</span>
+              <span class="item"><a href="{% url 'blog' %}">Home ></a></span>
+              <span class="item">Search Results</span>
             </div>
           </div>
         </div>
@@ -28,8 +28,8 @@
         <aside class="col-md-3">
           <div class="sidebar">
             <div class="widget-search-bar">
-              <form role="search" method="get" method="get" class="d-flex" action="{% url 'blog-search' %}">
-                <input class="search-field" placeholder="Search" type="search" value="" name="s" id="search-form" />
+              <form role="search" method="get" class="d-flex">
+                <input name="s" class="search-field" placeholder="Search" type="search" value="{{ search_key }}" />
                 <button type="submit" class="search-submit search-icon bg-dark">
                   <svg class="search text-light">
                     <use xlink:href="#search"></use>
@@ -41,14 +41,13 @@
               <div class="widget sidebar-product-categories mb-5">
                 <h5 class="widget-title text-uppercase">Categories</h5>
                 <ul class="product-categories sidebar-list list-unstyled">
-                  {% for cat in all_categories %}
+                  {% for cat in category %}
                     <li class="cat-item">
                       <a href="{% url 'blog-category' cat.slug %}">{{ cat.name }}</a>
                     </li>
                   {% endfor %}
                 </ul>
               </div>
-
               <div class="widget sidebar-product-tags mb-5">
                 <h5 class="widget-title text-uppercase">Tags</h5>
                 <ul class="product-tags sidebar-list list-unstyled">
@@ -84,8 +83,8 @@
 
         <main class="col-md-9">
           <div class="row">
-            {% if posts %}
-              {% for post in posts %}
+            {% if searched %}
+              {% for post in searched %}
                 <div class="col-lg-4">
                   <div class="card border-none">
                     <div class="card-image">
@@ -95,37 +94,40 @@
                   <div class="card-body text-uppercase">
                     <div class="card-meta text-muted">
                       <span class="meta-date">{{ post.created_at|date:'b d, Y' }}</span>
+                      <span class="meta-category">- {{ post.category }}</span>
                     </div>
                     <h3 class="card-title"><a href="{% url 'single-blog' post.slug %}">{{ post.title }}</a></h3>
                   </div>
                 </div>
               {% endfor %}
             {% else %}
-              <p class="text-center">No posts available under this tag.</p>
+              <div class="col-12">
+                <p class="text-center text-muted">No results found for "{{ search_key }}". Please try another search term.</p>
+              </div>
             {% endif %}
           </div>
 
           <!-- Pagination Controls -->
           <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
             <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-              {% if posts.has_previous %}
-                <a href="?page={{ posts.previous_page_number }}">
+              {% if searched.has_previous %}
+                <a href="?s={{ search_key }}&page={{ searched.previous_page_number }}">
                   <svg class="chevron-left pe-3">
                     <use xlink:href="#chevron-left"></use>
                   </svg>
                 </a>
               {% endif %}
 
-              {% for num in posts.paginator.page_range %}
-                {% if posts.number == num %}
+              {% for num in searched.paginator.page_range %}
+                {% if searched.number == num %}
                   <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
                 {% else %}
-                  <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+                  <a class="page-numbers pe-3" href="?s={{ search_key }}&page={{ num }}">{{ num }}</a>
                 {% endif %}
               {% endfor %}
 
-              {% if posts.has_next %}
-                <a href="?page={{ posts.next_page_number }}">
+              {% if searched.has_next %}
+                <a href="?s={{ search_key }}&page={{ searched.next_page_number }}">
                   <svg class="chevron-right ps-3">
                     <use xlink:href="#chevron-right"></use>
                   </svg>

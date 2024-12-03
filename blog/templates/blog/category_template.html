@@ -28,15 +28,13 @@
         <aside class="col-md-3">
           <div class="sidebar">
             <div class="widget-search-bar">
-              <form role="search" method="get" class="d-flex">
-                <input class="search-field" placeholder="Search" type="search" />
-                <div class="search-icon bg-dark">
-                  <a href="#">
-                    <svg class="search content-light">
-                      <use xlink:href="#search"></use>
-                    </svg>
-                  </a>
-                </div>
+              <form role="search" method="get" method="get" class="d-flex" action="{% url 'blog-search' %}">
+                <input class="search-field" placeholder="Search" type="search" value="" name="s" id="search-form" />
+                <button type="submit" class="search-submit search-icon bg-dark">
+                  <svg class="search text-light">
+                    <use xlink:href="#search"></use>
+                  </svg>
+                </button>
               </form>
             </div>
             <div class="sidebar-filter pt-5">

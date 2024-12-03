@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Category, Tag
 from django.core.paginator import Paginator, PageNotAnInteger
+from django.contrib import messages
+from django.db.models import Q
 
 
 def AllBlogsView(request):
@@ -82,3 +84,51 @@ def BlogTagView(request, slug):
     except Tag.DoesNotExist:
         messages.warning(request, "The selected tag does not exist.")
         return redirect('blog')
+
+
+def BlogSearchView(request):
+    posts = Post.objects.all()
+    tags = Tag.objects.all()
+    category = Category.objects.all()
+    latest_posts = Post.objects.all().order_by('-id')[:3]
+
+    search_key = request.GET.get('s', '')
+
+    # Redirect to shop if the search is empty
+    if search_key == '':
+        messages.warning(request, "Please enter a search term.")
+        return redirect('blog')
+
+    # Perform the search
+    searched = Post.objects.filter(
+        Q(title__icontains=search_key) |
+        Q(category__name__icontains=search_key) |
+        Q(tags__name__icontains=search_key)
+    ).distinct()
+
+    # Redirect if no products were found
+    if not searched.exists():
+        messages.warning(
+            request, "That product doesn't exist. Please try again.")
+        return redirect('blog')
+
+    # Create the paginator
+    paginator = Paginator(searched, 9)  # Show 9 products per page
+    page = request.GET.get('page')
+
+    try:
+        paginated_results = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_results = paginator.page(1)
+    except EmptyPage:
+        paginated_results = paginator.page(paginator.num_pages)
+
+    return render(request, "blog/blog_search_template.html", {
+        'search_key': search_key,
+        'searched': paginated_results,  # Renamed here
+        'posts': posts,
+        'latest_posts': latest_posts,
+        'tags': tags,
+        'paginator': paginator,
+        'category': category,
+    })
