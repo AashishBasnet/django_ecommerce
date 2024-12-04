@@ -10,3 +10,6 @@ env/
 __pycache__/
 *.pyc
 tests/
+media
+static
+staticfiles_build

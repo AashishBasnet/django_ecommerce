@@ -157,18 +157,18 @@ USE_TZ = True
 
 
 # Cloudinary Configuration
-# cloudinary.config(
-#     cloud_name='dhswjdcid',  # Replace with your Cloudinary cloud name
-#     api_key='995258942426642',        # Replace with your Cloudinary API key
-#     # Replace with your Cloudinary API secret
-#     api_secret='EntDqa6HJmqEX_GgqF8mgraOMdQ'
-# )
+cloudinary.config(
+    cloud_name='dhswjdcid',  # Replace with your Cloudinary cloud name
+    api_key='995258942426642',        # Replace with your Cloudinary API key
+    # Replace with your Cloudinary API secret
+    api_secret='EntDqa6HJmqEX_GgqF8mgraOMdQ'
+)
 
-# # Configure Django to use Cloudinary for media storage
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Configure Django to use Cloudinary for media storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# # Replace with your Cloudinary cloud name
-# MEDIA_URL = 'https://res.cloudinary.com/your-cloud-name/'
+# Replace with your Cloudinary cloud name
+MEDIA_URL = 'https://res.cloudinary.com/your-cloud-name/'
 
 
 STATIC_URL = "static/"
@@ -181,9 +181,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 
 
-DEFAULT_FILE_STORAGE = 'storages.backends.filesystem.FileSystemStorage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.filesystem.FileSystemStorage'
 
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 

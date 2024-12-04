@@ -101,6 +101,7 @@ class Product(models.Model):
     product_additional_information = models.TextField(
         max_length=500, default='', blank=True, null=True)
     product_image = models.ImageField(upload_to='uploads/product/', null=True)
+
     product_tag = models.ManyToManyField(Tag, blank=True)
     product_rating = models.DecimalField(
         decimal_places=1, max_digits=3,
