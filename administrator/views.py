@@ -203,7 +203,15 @@ def EditCategoryView(request, category_id):
     if request.method == 'POST':
         form = AddCategoryForm(request.POST, request.FILES, instance=category)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            try:
+                existing_category = Categories.objects.get(
+                    category_name=instance.category_name)
+                if (existing_category.id != instance.id):
+                    existing_category.delete()
+            except ObjectDoesNotExist:
+                return redirect('all-products')
+            instance.save()
             messages.success(request, "Category was successfully edited")
             return redirect('all-categories')
     else:

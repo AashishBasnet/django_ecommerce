@@ -3,7 +3,62 @@
 {% block title %}
   Shipping Dashboard
 {% endblock %}
-
+{% block links %}
+  <style>
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .custom-table thead {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      color: white;
+    }
+    
+    .custom-table th,
+    .custom-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .custom-table tbody tr {
+      transition: background-color 0.3s ease;
+    }
+    
+    .custom-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .custom-table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    .custom-table tbody tr td a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    
+    .custom-table tbody tr td a:hover {
+      text-decoration: underline;
+    }
+    
+    .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+  </style>
+{% endblock %}
 {% block content %}
   <section class="hero-section position-relative bg-light-blue padding-medium">
     <div class="hero-content">
@@ -22,12 +77,12 @@
   </section>
   <div class="container">
     <div class="row">
-      <center>
-        <div class="col-8">
-          <br /><br />
-          <h1>Shipped Items</h1>
-          <table class="table table-striped table-hover table-bordered">
-            <thead class="table-dark">
+      <div class="col-10 mx-auto">
+        <br /><br />
+        <h1 class="text-center mb-4">Shipped Items</h1>
+        <div class="table-responsive">
+          <table class="table custom-table">
+            <thead>
               <tr>
                 <th scope="col">Order Number</th>
                 <th scope="col">Price</th>
@@ -41,9 +96,9 @@
               {% for order in orders %}
                 <tr>
                   <td>
-                    <a href="{% url 'orders' order.id %}">{{ order.id }}</a>
+                    <a href="{% url 'orders' order.id %}" class="text-decoration-none text-dark">{{ order.id }}</a>
                   </td>
-                  <td>{{ order.amount_paid }}</td>
+                  <td>Rs. {{ order.amount_paid }}</td>
                   <td>
                     {% if order.email %}
                       {{ order.email }}
@@ -54,11 +109,11 @@
                   <td>{{ order.date_ordered }}</td>
                   <td>{{ order.date_shipped }}</td>
                   <td>
-                    <form method="POST">
+                    <form method="POST" class="d-inline">
                       {% csrf_token %}
                       <input type="hidden" name="shipping_status" value="false" />
                       <input type="hidden" name="num" value="{{ order.id }}" />
-                      <button type="submit" class="btn btn-dark btn-sm">Mark UnShipped</button>
+                      <button type="submit" class="btn btn-danger btn-sm">Mark UnShipped</button>
                     </form>
                   </td>
                 </tr>
@@ -66,9 +121,8 @@
             </tbody>
           </table>
         </div>
-      </center>
+      </div>
     </div>
   </div>
-
-  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <br /><br />
 {% endblock %}

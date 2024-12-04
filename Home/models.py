@@ -64,8 +64,17 @@ class Categories(models.Model):
         return self.category_name
 
     def save(self, *args, **kwargs):
+        # Generate slug if not already set
         if not self.slug:
-            self.slug = slugify(self.category_name)
+            base_slug = slugify(self.category_name)
+            unique_slug = base_slug
+            counter = 1
+            # Loop to ensure uniqueness of slug
+            while Categories.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = unique_slug
+
         super().save(*args, **kwargs)
 
     class Meta:
@@ -122,7 +131,14 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         # Ensure slug is created
         if not self.slug:
-            self.slug = slugify(self.product_name)
+            base_slug = slugify(self.product_name)
+            unique_slug = base_slug
+            counter = 1
+            # Loop to ensure uniqueness of slug
+            while Product.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = unique_slug
 
         super().save(*args, **kwargs)
 
@@ -133,7 +149,7 @@ class Product(models.Model):
         else:
             self.product_tag.remove(sale_tag)
 
-        #  New Tag to the 5 most recent products
+        # New Tag to the 5 most recent products
         new_tag, _ = Tag.objects.get_or_create(tag='New')
         recent_products = Product.objects.order_by('-id')[:5]
         if self in recent_products:

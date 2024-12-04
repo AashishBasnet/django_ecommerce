@@ -48,17 +48,17 @@ class AddCategoryForm(forms.ModelForm):
             'category_display_image',
         ]
 
-    def clean_category_name(self):
-        category_name = self.cleaned_data['category_name'].strip()
-        normalized_name = category_name.lower()
+    # def clean_category_name(self):
+    #     category_name = self.cleaned_data['category_name'].strip()
+    #     normalized_name = category_name.lower()
 
-        if Categories.objects.filter(category_name__iexact=category_name).exists():
-            raise ValidationError(f"A category with the name '{
-                                  category_name}' already exists.")
+    #     if Categories.objects.filter(category_name__iexact=category_name).exists():
+    #         raise ValidationError(f"A category with the name '{
+    #                               category_name}' already exists.")
 
-        # Normalize the name to lowercase
-        self.cleaned_data['category_name'] = normalized_name
-        return normalized_name
+    #     # Normalize the name to lowercase
+    #     self.cleaned_data['category_name'] = normalized_name
+    #     return normalized_name
 
 
 class AddTagForm(forms.ModelForm):
