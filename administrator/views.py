@@ -182,7 +182,15 @@ def EditProductView(request, product_id):
     if request.method == 'POST':
         form = AddProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            try:
+                existing_product = Product.objects.get(
+                    product_name=instance.product_name)
+                if (existing_product.id != instance.id):
+                    existing_product.delete()
+            except ObjectDoesNotExist:
+                return redirect('all-products')
+            instance.save()
             messages.success(request, "Product was successfully edited")
             return redirect('all-products')
     else:

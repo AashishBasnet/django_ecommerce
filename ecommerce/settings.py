@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import cloudinary.api
+import cloudinary.uploader
+import cloudinary
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -54,6 +57,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdownify',
     'tinymce',
+    'cloudinary_storage',
+    'cloudinary',
 
 
 ]
@@ -97,24 +102,24 @@ WSGI_APPLICATION = "ecommerce.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
-        'HOST': 'junction.proxy.rlwy.net',
-        'PORT': '14588',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
+#         'HOST': 'junction.proxy.rlwy.net',
+#         'PORT': '14588',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -149,6 +154,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+
+# Cloudinary Configuration
+# cloudinary.config(
+#     cloud_name='dhswjdcid',  # Replace with your Cloudinary cloud name
+#     api_key='995258942426642',        # Replace with your Cloudinary API key
+#     # Replace with your Cloudinary API secret
+#     api_secret='EntDqa6HJmqEX_GgqF8mgraOMdQ'
+# )
+
+# # Configure Django to use Cloudinary for media storage
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# # Replace with your Cloudinary cloud name
+# MEDIA_URL = 'https://res.cloudinary.com/your-cloud-name/'
+
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]

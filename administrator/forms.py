@@ -27,17 +27,17 @@ class AddProductForm(forms.ModelForm):
         self.fields['product_tag'].queryset = Tag.objects.exclude(tag__in=[
                                                                   'New', 'Sale'])
 
-    def clean_product_name(self):
-        product_name = self.cleaned_data['product_name'].strip()
-        normalized_name = product_name.lower()
+    # def clean_product_name(self):
+    #     product_name = self.cleaned_data['product_name'].strip()
+    #     normalized_name = product_name.lower()
 
-        if Product.objects.filter(product_name__iexact=product_name).exists():
-            raise ValidationError(f"A product with the name '{
-                                  product_name}' already exists.")
+    #     if Product.objects.filter(product_name__iexact=product_name).exists():
+    #         raise ValidationError(f"A product with the name '{
+    #                               product_name}' already exists.")
 
-        # Automatically normalize the name to lowercase to avoid slug conflicts
-        self.cleaned_data['product_name'] = normalized_name
-        return normalized_name
+    #     # Automatically normalize the name to lowercase to avoid slug conflicts
+    #     self.cleaned_data['product_name'] = normalized_name
+    #     return normalized_name
 
 
 class AddCategoryForm(forms.ModelForm):
