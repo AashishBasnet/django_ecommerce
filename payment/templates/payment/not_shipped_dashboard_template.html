@@ -12,9 +12,8 @@
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
-    
     .custom-table thead {
-      background: linear-gradient(90deg, #007bff, #0056b3);
+      background: linear-gradient(90deg, #71aec8, #4a9bbe);
       color: white;
     }
     
@@ -75,52 +74,139 @@
       </div>
     </div>
   </section>
-  <div class="container">
-    <div class="row">
-      <div class="col-10 mx-auto">
-        <br /><br />
-        <h1 class="text-center mb-4">Unshipped Items</h1>
-        <div class="table-responsive">
-          <table class="table custom-table">
-            <thead>
-              <tr>
-                <th scope="col">Order Number</th>
-                <th scope="col">Price</th>
-                <th scope="col">Customer Email</th>
-                <th scope="col">Date Ordered</th>
-                <th scope="col">Shipping Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for order in orders %}
+  <div class="side d-flex">
+    <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light" style="width: 280px;">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+          <use xlink:href="#bootstrap" />
+        </svg>
+        <span class="fs-4">Dashboard</span>
+      </a>
+      <hr />
+      <div class="nav flex-column mb-auto">
+        <li class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-expanded="false" aria-controls="navCollapse">
+          <span class="nav-link link-dark fw-bold" aria-current="page" style="margin-left: 24px;">Products</span>
+        </li>
+        <div class="collapse" id="navCollapse">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a href="{% url 'all-products' %}" class="nav-link link-dark" aria-current="page"><span style="margin-left: 24px;">All Products</span></a>
+            </li>
+            <li>
+              <a href="{% url 'all-categories' %}" class="nav-link link-dark"><span style="margin-left: 24px;">Product Categories</span></a>
+            </li>
+            <li>
+              <a href="{% url 'all-tags' %}" class="nav-link link-dark"><span style="margin-left: 24px;">Product Tags</span></a>
+            </li>
+          </ul>
+        </div>
+        <li class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false" aria-controls="categoriesCollapse">
+          <span class="nav-link link-dark fw-bold" aria-current="page" style="margin-left: 24px;">Blogs</span>
+        </li>
+        <div class="collapse" id="categoriesCollapse">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a href="{% url 'admin-all-blogs' %}" class="nav-link link-dark" aria-current="page"><span style="margin-left: 24px;">All Posts</span></a>
+            </li>
+            <li>
+              <a href="#" class="nav-link link-dark"><span style="margin-left: 24px;">Blog Categories</span></a>
+            </li>
+            <li>
+              <a href="#" class="nav-link link-dark"><span style="margin-left: 24px;">Blog Tags</span></a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Blog Section -->
+        <li class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#blogCollapse" aria-expanded="false" aria-controls="blogCollapse">
+          <span class="nav-link link-dark fw-bold" aria-current="page" style="margin-left: 24px;">Orders</span>
+        </li>
+        <div class="collapse" id="blogCollapse">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a href="{% url 'shipped-dashboard' %}" class="nav-link link-dark" aria-current="page"><span style="margin-left: 24px;">Shipped Orders</span></a>
+            </li>
+            <li>
+              <a href="{% url 'not-shipped-dashboard' %}" class="nav-link link-dark"><span style="margin-left: 24px;">Unshipped orders</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <hr />
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
+          <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+          <li>
+            <a class="dropdown-item" href="#">New project...</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Settings</a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Profile</a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">Sign out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-10 mx-auto">
+          <br /><br />
+          <h1 class="text-center mb-4">Unshipped Items</h1>
+          <div class="table-responsive">
+            <table class="table custom-table">
+              <thead>
                 <tr>
-                  <td>
-                    <a href="{% url 'orders' order.id %}" class="text-decoration-none text-dark">{{ order.id }}</a>
-                  </td>
-                  <td>Rs. {{ order.amount_paid }}</td>
-                  <td>
-                    {% if order.email %}
-                      {{ order.email }}
-                    {% else %}
-                      -
-                    {% endif %}
-                  </td>
-                  <td>{{ order.date_ordered }}</td>
-                  <td>
-                    <form method="POST" class="d-inline">
-                      {% csrf_token %}
-                      <input type="hidden" name="shipping_status" value="true" />
-                      <input type="hidden" name="num" value="{{ order.id }}" />
-                      <button type="submit" class="btn btn-primary btn-sm">Mark Shipped</button>
-                    </form>
-                  </td>
+                  <th scope="col">Order Number</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Customer Email</th>
+                  <th scope="col">Date Ordered</th>
+                  <th scope="col">Shipping Status</th>
                 </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                  <tr>
+                    <td>
+                      <a href="{% url 'orders' order.id %}" class="text-decoration-none text-dark">{{ order.id }}</a>
+                    </td>
+                    <td>Rs. {{ order.amount_paid }}</td>
+                    <td>
+                      {% if order.email %}
+                        {{ order.email }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td>{{ order.date_ordered }}</td>
+                    <td>
+                      <form method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="shipping_status" value="true" />
+                        <input type="hidden" name="num" value="{{ order.id }}" />
+                        <button type="submit" class="btn btn-primary btn-sm">Mark Shipped</button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
   <br /><br />
 {% endblock %}

@@ -211,7 +211,7 @@
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
               <div class="offcanvas-header px-4 pb-0">
-                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/main-logo.png' %}" class="logo" /></a>
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/store.png' %}" class="logo" /></a>
                 <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
               </div>
               <div class="offcanvas-body">
@@ -402,47 +402,8 @@
               <div class="row d-flex flex-wrap justify-content-between">
                 <div class="col-lg-3 col-sm-6 pb-3">
                   <div class="footer-menu">
-                    <img src="{% static 'images/main-logo.png' %}" alt="logo" />
-                    <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat aenean odio erat nullam fringilla.</p>
-                    <div class="social-links">
-                      <ul class="d-flex list-unstyled">
-                        <li>
-                          <a href="#">
-                            <svg class="facebook">
-                              <use xlink:href="#facebook" />
-                            </svg>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <svg class="instagram">
-                              <use xlink:href="#instagram" />
-                            </svg>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <svg class="twitter">
-                              <use xlink:href="#twitter" />
-                            </svg>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <svg class="linkedin">
-                              <use xlink:href="#linkedin" />
-                            </svg>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            <svg class="youtube">
-                              <use xlink:href="#youtube" />
-                            </svg>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
+                    <a href="{% url 'home' %}"><img src="{% static 'images/store.png' %}" alt="logo" /></a>
+                    <p>Welcome to Infinity Store, your ultimate destination for cutting-edge gadgets and innovative technology.</p>
                   </div>
                 </div>
                 <div class="col-lg-2 col-sm-6 pb-3">
@@ -450,19 +411,19 @@
                     <h5 class="widget-title pb-2">Quick Links</h5>
                     <ul class="menu-list list-unstyled text-uppercase">
                       <li class="menu-item pb-2">
-                        <a href="#">Home</a>
+                        <a href="{% url 'home' %}">Home</a>
                       </li>
                       <li class="menu-item pb-2">
-                        <a href="#">About</a>
+                        <a href="{% url 'about' %}">About</a>
                       </li>
                       <li class="menu-item pb-2">
-                        <a href="#">Shop</a>
+                        <a href="{% url 'shop' %}">Shop</a>
                       </li>
                       <li class="menu-item pb-2">
-                        <a href="#">Blogs</a>
+                        <a href="{% url 'blog' %}">Blogs</a>
                       </li>
                       <li class="menu-item pb-2">
-                        <a href="#">Contact</a>
+                        <a href="{% url 'contact' %}">Contact</a>
                       </li>
                     </ul>
                   </div>
@@ -494,11 +455,11 @@
                     <h5 class="widget-title text-uppercase pb-2">Contact Us</h5>
                     <p>
                       Do you have any queries or suggestions?
-                      <a href="mailto:">yourinfo@gmail.com</a>
+                      <a href="mailto:">infinity@gmail.com</a>
                     </p>
                     <p>
                       If you need support? Just give us a call.
-                      <a href="">+55 111 222 333 44</a>
+                      <span class="text-dark">9765269820</span>
                     </p>
                   </div>
                 </div>
@@ -532,11 +493,7 @@
             </div>
             <div class="col-md-4 col-sm-6">
               <div class="copyright">
-                <p>
-                  © Copyright 2023 MiniStore. Design by
-                  <a href="https://templatesjungle.com/">TemplatesJungle</a>
-                  Distribution by <a href="https://themewagon.com">ThemeWagon</a>
-                </p>
+                <p>© Copyright 2023 Infinity Store.</p>
               </div>
             </div>
           </div>
