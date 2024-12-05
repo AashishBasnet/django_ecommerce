@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block title %}
-  Shipping Dashboard
+  Dashboard
 {% endblock %}
 {% block links %}
   <style>
@@ -65,10 +65,10 @@
       <div class="container">
         <div class="row">
           <div class="text-center padding-large no-padding-bottom">
-            <h1 class="display-2 text-uppercase text-dark">Shipped Items</h1>
+            <h1 class="display-2 text-uppercase text-dark">Dashboard</h1>
             <div class="breadcrumbs">
               <span class="item"><a href="{% url 'home' %}">Home ></a></span>
-              <span class="item">Shipped Items</span>
+              <span class="item">Dashboard</span>
             </div>
           </div>
         </div>
@@ -159,56 +159,13 @@
         </ul>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-10 mx-auto">
-          <br /><br />
-          <h1 class="text-center mb-4">Shipped Items</h1>
-          <div class="table-responsive">
-            <table class="table custom-table">
-              <thead>
-                <tr>
-                  <th scope="col">Order Number</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Customer Email</th>
-                  <th scope="col">Date Ordered</th>
-                  <th scope="col">Date Shipped</th>
-                  <th scope="col">Shipping Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for order in orders %}
-                  <tr>
-                    <td>
-                      <a href="{% url 'orders' order.id %}" class="text-decoration-none text-dark">{{ order.id }}</a>
-                    </td>
-                    <td>Rs. {{ order.amount_paid }}</td>
-                    <td>
-                      {% if order.email %}
-                        {{ order.email }}
-                      {% else %}
-                        -
-                      {% endif %}
-                    </td>
-                    <td>{{ order.date_ordered }}</td>
-                    <td>{{ order.date_shipped }}</td>
-                    <td>
-                      <form method="POST" class="d-inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="shipping_status" value="false" />
-                        <input type="hidden" name="num" value="{{ order.id }}" />
-                        <button type="submit" class="btn btn-danger btn-sm">Mark UnShipped</button>
-                      </form>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-10 mx-auto">
+        <br /><br />
       </div>
     </div>
   </div>
-
   <br /><br />
 {% endblock %}

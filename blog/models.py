@@ -44,20 +44,19 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            unique_slug = base_slug
+            counter = 1
 
-def save(self, *args, **kwargs):
-    # Generate slug if not already set
-    if not self.slug:
-        base_slug = slugify(self.title)
-        unique_slug = base_slug
-        counter = 1
-        # Loop to ensure uniqueness
-        while Post.objects.filter(slug=unique_slug).exists():
-            unique_slug = f"{base_slug}-{counter}"
-            counter += 1
-        self.slug = unique_slug
+            while Post.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
 
-    super(Post, self).save(*args, **kwargs)
+            self.slug = unique_slug
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

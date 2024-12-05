@@ -14,6 +14,10 @@ from django.http import HttpResponse
 # View for adding a new post
 
 
+def DashboardView(request):
+    return render(request, "administrator/admin_dashboard_template.html", {})
+
+
 def AddPostView(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)

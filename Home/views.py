@@ -15,11 +15,13 @@ from cart.cart import Cart
 import json
 import math
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from blog.views import Post
 # Create your views here.
 
 
 def HomeView(request):
     products = Product.objects.all()
+    posts = Post.objects.all().order_by('-id')[:3]
     new_products = Product.objects.all().order_by('-id')[:5]
     tags = Tag.objects.all()
     discount = []
@@ -43,7 +45,8 @@ def HomeView(request):
                       'products': products,
                       'tags': tags,
                       'discount_upto': round_max_discount,
-                      'new_products': new_products
+                      'new_products': new_products,
+                      'posts': posts
                   })
 
 
