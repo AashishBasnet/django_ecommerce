@@ -10,7 +10,7 @@ from Home.models import Profile
 from django.db.models import Q
 from blog.models import Post
 from django.http import HttpResponse
-
+from django.core.exceptions import ObjectDoesNotExist
 # View for adding a new post
 
 
@@ -183,22 +183,31 @@ def AddProductView(request):
 
 def EditProductView(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+
     if request.method == 'POST':
         form = AddProductForm(request.POST, request.FILES, instance=product)
+
         if form.is_valid():
             instance = form.save(commit=False)
+
             try:
                 existing_product = Product.objects.get(
                     product_name=instance.product_name)
-                if (existing_product.id != instance.id):
+
+                if existing_product.id != instance.id:
                     existing_product.delete()
+
             except ObjectDoesNotExist:
-                return redirect('all-products')
+                pass
+
             instance.save()
+
             messages.success(request, "Product was successfully edited")
             return redirect('all-products')
+
     else:
         form = AddProductForm(instance=product)
+
     return render(request, 'administrator/edit_product_template.html', {'form': form, 'product': product})
 
 
