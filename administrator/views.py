@@ -219,11 +219,12 @@ def EditCategoryView(request, category_id):
             instance = form.save(commit=False)
             try:
                 existing_category = Categories.objects.get(
-                    category_name=instance.category_name)
-                if (existing_category.id != instance.id):
+                    category_name=instance.category_name
+                )
+                if existing_category.id != instance.id:
                     existing_category.delete()
             except ObjectDoesNotExist:
-                return redirect('all-products')
+                pass
             instance.save()
             messages.success(request, "Category was successfully edited")
             return redirect('all-categories')
