@@ -1,5 +1,5 @@
 {% extends 'index.html' %}
-
+{% load static %}
 {% block title %}
   Dashboard
 {% endblock %}
@@ -57,6 +57,47 @@
     .btn-danger:hover {
       background-color: #c82333;
     }
+    
+    .main-container {
+      margin-left: 280px; /* Adjust this to match the sidebar width */
+      padding: 20px; /* Add some padding for aesthetics */
+    }
+    
+    .stylish-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stylish-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 10px;
+      color: white;
+    }
+    
+    .numbers p {
+      margin: 0;
+    }
+    
+    /* Remove margin from the hero section */
+    .hero-section {
+      margin-bottom: 0; /* Remove bottom margin */
+    }
+    
+    /* Remove padding from the main container */
+    .main-container {
+      padding-top: 0; /* Remove top padding */
+    }
   </style>
 {% endblock %}
 {% block content %}
@@ -75,7 +116,7 @@
       </div>
     </div>
   </section>
-  <div class="side d-flex">
+  <div class="d-flex">
     <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light" style="width: 280px;">
       <a href="{% url 'admin-dashboard' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
@@ -136,11 +177,11 @@
 
       <hr />
       <div class="dropdown">
-        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser 1" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
           <strong>mdo</strong>
         </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser  1">
           <li>
             <a class="dropdown-item" href="#">New project...</a>
           </li>
@@ -159,13 +200,166 @@
         </ul>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-10 mx-auto">
-        <br /><br />
+    <div class="container">
+      <div class="row">
+        <div class="col-10 mx-auto">
+          <main class="main-content position-relative border-radius-lg">
+            <div class="py-4">
+              <div class="row">
+                <div class="col-xl-3 col-sm-6 mb-4">
+                  <div class="card stylish-card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="numbers">
+                            <p class="text-uppercase font-weight-bold">Today's Money</p>
+                            <h5 class="font-weight-bolder">$53,000</h5>
+                            <p>
+                              <span class="text-success font-weight-bolder">+55%</span> since yesterday
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-4 text-end">
+                          <div class="icon bg-gradient-primary text-center rounded-circle">
+                            <i class="ni ni-money-coins text-lg" aria-hidden="true"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-4">
+                  <div class="card stylish-card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="numbers">
+                            <p class="text-uppercase font-weight-bold">Today's Users</p>
+                            <h5 class="font-weight-bolder">2,300</h5>
+                            <p>
+                              <span class="text-success font-weight-bolder">+3%</span> since last week
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-4 text-end">
+                          <div class="icon bg-gradient-danger text-center rounded-circle">
+                            <i class="ni ni-world text-lg" aria-hidden="true"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-4">
+                  <div class="card stylish-card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="numbers">
+                            <p class="text-uppercase font-weight-bold">New Clients</p>
+                            <h5 class="font-weight-bolder">+3,462</h5>
+                            <p>
+                              <span class="text-danger font-weight-bolder">-2%</span> since last quarter
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-4 text-end">
+                          <div class="icon bg-gradient-success text-center rounded-circle">
+                            <i class="ni ni-paper-diploma text-lg" aria-hidden="true"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 mb-4">
+                  <div class="card stylish-card">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <div class="numbers">
+                            <p class="text-uppercase font-weight-bold">Sales</p>
+                            <h5 class="font-weight-bolder">$103,430</h5>
+                            <p>
+                              <span class="text-success font-weight-bolder">+5%</span> than last month
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-4 text-end">
+                          <div class="icon bg-gradient-warning text-center rounded-circle">
+                            <i class="ni ni-cart text-lg" aria-hidden="true"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="col-lg-7 mb-4">
+                  <div class="card h-100">
+                    <div class="card-header bg-transparent">
+                      <h6 class="text-capitalize">Sales overview</h6>
+                      <p class="text-sm mb-0">
+                        <i class="fa fa-arrow-up text-success"></i>
+                        <span class="font-weight-bold">4% more</span> in 2021
+                      </p>
+                    </div>
+                    <div class="card-body">
+                      <div class="chart">
+                        <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-5">
+                  <div class="card overflow-hidden h-100 p-0">
+                    <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
+                      <div class="carousel-inner h-100">
+                        <div class="carousel-item h-100 ```html active" style="background-image: url('../assets/img/carousel-1.jpg'); background-size: cover;">
+                          <div class="carousel-caption d-none d-md-block text-start start-0 ms-5">
+                            <div class="icon bg-white text-center rounded-circle mb-3">
+                              <i class="ni ni-camera-compact text-dark"></i>
+                            </div>
+                            <h5 class="text-white mb-1">Get started with Argon</h5>
+                            <p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
+                          </div>
+                        </div>
+                        <div class="carousel-item h-100" style="background-image: url('../assets/img/carousel-2.jpg'); background-size: cover;">
+                          <div class="carousel-caption d-none d-md-block text-start start-0 ms-5">
+                            <div class="icon bg-white text-center rounded-circle mb-3">
+                              <i class="ni ni-bulb-61 text-dark"></i>
+                            </div>
+                            <h5 class="text-white mb-1">Faster way to create web pages</h5>
+                            <p>That’s my skill. I’m not really specifically talented at anything except for the ability to learn.</p>
+                          </div>
+                        </div>
+                        <div class="carousel-item h-100" style="background-image: url('../assets/img/carousel-3.jpg'); background-size: cover;">
+                          <div class="carousel-caption d-none d-md-block text-start start-0 ms-5">
+                            <div class="icon bg-white text-center rounded-circle mb-3">
+                              <i class="ni ni-trophy text-dark"></i>
+                            </div>
+                            <h5 class="text-white mb-1">Share with us your design tips!</h5>
+                            <p>Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   </div>
-  <br /><br />
 {% endblock %}
