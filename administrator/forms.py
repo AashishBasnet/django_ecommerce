@@ -22,11 +22,6 @@ class AddProductForm(forms.ModelForm):
             'stock',
         ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['product_tag'].queryset = Tag.objects.exclude(tag__in=[
-                                                                  'New', 'Sale'])
-
 
 class AddCategoryForm(forms.ModelForm):
     class Meta:

@@ -6,16 +6,25 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
-from Home.models import Profile
+from Home.models import Profile, Inquiry
 from django.db.models import Q
 from blog.models import Post
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+
 # View for adding a new post
 
 
 def DashboardView(request):
-    return render(request, "administrator/admin_dashboard_template.html", {})
+    users = User.objects.filter(is_superuser=False)
+    user_inquiry = Inquiry.objects.filter(is_reviewed=False)
+    inquiry_count = 0
+    user_count = 0
+    for user in users:
+        user_count += 1
+    for inquiry in user_inquiry:
+        inquiry_count += 1
+    return render(request, "administrator/admin_dashboard_template.html", {'user_count': user_count, 'inquiry_count': inquiry_count})
 
 
 def AddPostView(request):
@@ -201,7 +210,7 @@ def EditProductView(request, product_id):
                 pass
 
             instance.save()
-
+            form.save_m2m()
             messages.success(request, "Product was successfully edited")
             return redirect('all-products')
 

@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from tinymce.models import HTMLField
+from django.db import transaction
 
 
 class Profile(models.Model):
@@ -140,22 +141,8 @@ class Product(models.Model):
                 counter += 1
             self.slug = unique_slug
 
+        # Save the product
         super().save(*args, **kwargs)
-
-        # Sale Tag
-        sale_tag, _ = Tag.objects.get_or_create(tag='Sale')
-        if self.product_sale_price:
-            self.product_tag.add(sale_tag)
-        else:
-            self.product_tag.remove(sale_tag)
-
-        # New Tag to the 5 most recent products
-        new_tag, _ = Tag.objects.get_or_create(tag='New')
-        recent_products = Product.objects.order_by('-id')[:5]
-        if self in recent_products:
-            self.product_tag.add(new_tag)
-        else:
-            self.product_tag.remove(new_tag)
 
     def __str__(self):
         return f'{self.product_name}'
@@ -186,6 +173,7 @@ class Inquiry(models.Model):
     phone_number = models.CharField(max_length=15)
     subject = models.CharField(max_length=150)
     message = models.TextField()
+    is_reviewed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Inquiry from {self.name} - {self.subject}"
