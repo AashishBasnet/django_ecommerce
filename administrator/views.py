@@ -1,14 +1,15 @@
+from django.utils.text import slugify
 from Home.models import Product  # Import Product from Home app
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
-from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm
+from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from Home.models import Profile, Inquiry
 from django.db.models import Q
-from blog.models import Post
+from blog.models import Post, Category
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -234,6 +235,7 @@ def EditCategoryView(request, category_id):
                     existing_category.delete()
             except ObjectDoesNotExist:
                 pass
+
             instance.save()
             messages.success(request, "Category was successfully edited")
             return redirect('all-categories')
@@ -247,7 +249,9 @@ def EditTagView(request, tag_id):
     if request.method == 'POST':
         form = AddTagForm(request.POST, request.FILES, instance=tag)
         if form.is_valid():
-            form.save()
+            tag = form.save(commit=False)
+            tag.slug = slugify(tag.tag)  # Update the slug based on the name
+            tag.save()
             messages.success(request, "Tag was successfully edited")
             return redirect('all-tags')
     else:
@@ -330,3 +334,56 @@ def AdminSearchView(request):
         'tags': tags,
         'paginator': paginator
     })
+
+
+def AllBlogCategoryView(request):
+    categories = Category.objects.all().order_by(
+        '-id')
+    paginator = Paginator(categories, 15)
+    page_number = request.GET.get('page')
+    categories_page = paginator.get_page(page_number)
+    return render(request, "administrator/all_blog_categories_template.html", {
+        'categories': categories_page,
+    })
+
+
+def AddBlogCategoryView(request):
+    if request.method == 'POST':
+        form = AddBlogCategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.slug = slugify(category.name)
+            category.save()
+            messages.success(request, "Blog category successfully added")
+            return redirect('all-blog-categories')
+        else:
+            messages.error(request, "Please correct the errors in the form")
+    else:
+        form = AddBlogCategoryForm()
+    return render(request, 'administrator/add_blog_category_template.html', {'form': form})
+
+
+def EditBlogCategoryView(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == 'POST':
+        form = AddBlogCategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(request, "Blog category successfully updated")
+            return redirect('all-blog-categories')
+        else:
+            messages.error(request, "Please correct the errors in the form")
+    else:
+        form = AddBlogCategoryForm(instance=category)
+    return render(request, 'administrator/edit_blog_category_template.html', {'form': form, 'category': category})
+
+
+def DeleteBlogCategoryView(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+
+    # blog category deletion
+    category.delete()
+    messages.success(request, "Category successfully deleted")
+    # redirecting to all-categories
+    return redirect('all-blog-categories')

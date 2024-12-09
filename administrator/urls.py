@@ -29,5 +29,12 @@ urlpatterns = [
     path('add-category', views.AddCategoryView, name='add-category'),
 
     path("admin-search/", views.AdminSearchView, name='admin-search'),
+    path('all-blog-categories', views.AllBlogCategoryView,
+         name='all-blog-categories'),
+    path('add-blog-category', views.AddBlogCategoryView, name='add-blog-category'),
 
+    path('edit-blog-category/<int:category_id>',
+         views.EditBlogCategoryView, name='edit-blog-category'),
+    path('delete-blog-category/<int:category_id>',
+         views.DeleteBlogCategoryView, name='delete-blog-category'),
 ]

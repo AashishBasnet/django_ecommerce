@@ -11,9 +11,17 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
     def save(self, *args, **kwargs):
+        # Generate slug if not already set
         if not self.slug:
-            self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
+            base_slug = slugify(self.name)
+            unique_slug = base_slug
+            counter = 1
+            # Loop to ensure uniqueness of slug
+            while Categories.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = unique_slug
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

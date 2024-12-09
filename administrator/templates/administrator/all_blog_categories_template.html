@@ -1,0 +1,232 @@
+{% extends 'index.html' %}
+{% block title %}
+  All Blog Categories
+{% endblock %}
+{% block links %}
+  <style>
+    .product-section {
+      padding: 40px 0;
+      background-color: #f9f9f9;
+    }
+    
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .product-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #333;
+    }
+    
+    .add-product-btn {
+      background-color: #72aec8;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    
+    .add-product-btn:hover {
+      background-color: #5a8f9f;
+      color: white;
+    }
+    
+    .product-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .product-item {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease-in-out;
+    }
+    
+    .product-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .product-item h3 {
+      font-size: 1.2rem;
+      color: #333;
+      margin: 0;
+    }
+    
+    .product-item a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    
+    .product-item a:hover {
+      color: #0056b3;
+    }
+    
+    .navigation {
+      padding: 20px 0;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">All Blog Categories</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">All Blog Categories</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="product-section">
+    <div class="side d-flex">
+      <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light" style="width: 280px;">
+        <a href="{% url 'admin-dashboard' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32">
+            <use xlink:href="#bootstrap" />
+          </svg>
+          <span class="fs-4">Dashboard</span>
+        </a>
+        <hr />
+        <div class="nav flex-column mb-auto">
+          <li class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-expanded="false" aria-controls="navCollapse">
+            <span class="nav-link link-dark fw-bold" aria-current="page" style="margin-left: 24px;">Products</span>
+          </li>
+          <div class="collapse" id="navCollapse">
+            <ul class="nav nav-pills flex-column">
+              <li class="nav-item">
+                <a href="{% url 'all-products' %}" class="nav-link link-dark" aria-current="page"><span style="margin-left: 24px;">All Products</span></a>
+              </li>
+              <li>
+                <a href="{% url 'all-categories' %}" class="nav-link link-dark"><span style="margin-left: 24px;">Product Categories</span></a>
+              </li>
+              <li>
+                <a href="{% url 'all-tags' %}" class="nav-link link-dark"><span style="margin-left: 24px;">Product Tags</span></a>
+              </li>
+            </ul>
+          </div>
+          <li class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#categoriesCollapse" aria-expanded="false" aria-controls="categoriesCollapse">
+            <span class="nav-link link-dark fw-bold" aria-current="page" style="margin-left: 24px;">Blogs</span>
+          </li>
+          <div class="collapse" id="categoriesCollapse">
+            <ul class="nav nav-pills flex-column">
+              <li class="nav-item">
+                <a href="{% url 'admin-all-blogs' %}" class="nav-link link-dark" aria-current="page"><span style="margin-left: 24px;">All Posts</span></a>
+              </li>
+              <li>
+                <a href="#" class="nav-link link-dark"><span style="margin-left: 24px;">Blog Categories</span></a>
+              </li>
+              <li>
+                <a href="#" class="nav-link link-dark"><span style="margin-left: 24px;">Blog Tags</span></a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Blog Section -->
+          <li class="nav-item" type="button" data-bs-toggle="collapse" data-bs-target="#blogCollapse" aria-expanded="false" aria-controls="blogCollapse">
+            <span class="nav-link link-dark fw-bold" aria-current="page" style="margin-left: 24px;">Orders</span>
+          </li>
+          <div class="collapse" id="blogCollapse">
+            <ul class="nav nav-pills flex-column">
+              <li class="nav-item">
+                <a href="{% url 'shipped-dashboard' %}" class="nav-link link-dark" aria-current="page"><span style="margin-left: 24px;">Shipped Orders</span></a>
+              </li>
+              <li>
+                <a href="{% url 'not-shipped-dashboard' %}" class="nav-link link-dark"><span style="margin-left: 24px;">Unshipped orders</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <hr />
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
+            <strong>mdo</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li>
+              <a class="dropdown-item" href="#">New project...</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Profile</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Sign out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="container">
+        <div class="product-header">
+          <h1>All Categories</h1>
+          <a href="{% url 'add-blog-category' %}" class="add-product-btn">Add Category <b>+</b></a>
+        </div>
+        <ul class="product-list">
+          {% for category in categories %}
+            <li class="product-item">
+              <h3>{{ category.name }}</h3>
+              <a href="{% url 'edit-blog-category' category.id %}">Edit</a>
+            </li>
+          {% endfor %}
+        </ul>
+        <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+          <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+            {% if categories.has_previous %}
+              <a href="?page={{ categories.previous_page_number }}">
+                <svg class="chevron-left pe-3">
+                  <use xlink:href="#chevron-left"></use>
+                </svg>
+              </a>
+            {% endif %}
+
+            {% for num in categories.paginator.page_range %}
+              {% if categories.number == num %}
+                <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+              {% else %}
+                <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+
+            {% if categories.has_next %}
+              <a href="?page={{ categories.next_page_number }}">
+                <svg class="chevron-right ps-3">
+                  <use xlink:href="#chevron-right"></use>
+                </svg>
+              </a>
+            {% endif %}
+          </div>
+        </nav>
+      </div>
+    </div>
+  </section>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
+{% block subscribe %}
+
+{% endblock %}
