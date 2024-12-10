@@ -2,14 +2,14 @@ from django.utils.text import slugify
 from Home.models import Product  # Import Product from Home app
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
-from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm
+from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from Home.models import Profile, Inquiry
 from django.db.models import Q
-from blog.models import Post, Category
+from blog.models import Post, Category, Tag as T
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -387,3 +387,55 @@ def DeleteBlogCategoryView(request, category_id):
     messages.success(request, "Category successfully deleted")
     # redirecting to all-categories
     return redirect('all-blog-categories')
+
+
+def AllBlogTagView(request):
+    tags = T.objects.all().order_by('-id')
+    paginator = Paginator(tags, 15)
+    page_number = request.GET.get('page')
+    tags_page = paginator.get_page(page_number)
+    return render(request, "administrator/all_blog_tags_template.html", {
+        'tags': tags_page,
+    })
+
+
+def AddBlogTagView(request):
+    if request.method == 'POST':
+        form = AddBlogTagForm(request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.slug = slugify(tag.name)
+            tag.save()
+            messages.success(request, "Tag successfully added")
+            return redirect('all-blog-tags')  # Update this URL name as needed
+        else:
+            messages.error(request, "Please correct the errors in the form")
+    else:
+        form = AddBlogTagForm()
+    return render(request, 'administrator/add_blog_tag_template.html', {'form': form})
+
+
+def EditBlogTagView(request, tag_id):
+    tag = get_object_or_404(T, id=tag_id)
+    if request.method == 'POST':
+        form = AddBlogTagForm(request.POST, instance=tag)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(request, "Tag successfully updated")
+            return redirect('all-blog-tags')  # Update this URL name as needed
+        else:
+            messages.error(request, "Please correct the errors in the form")
+    else:
+        form = AddBlogTagForm(instance=tag)
+    return render(request, 'administrator/edit_blog_tag_template.html', {'form': form, 'tag': tag})
+
+
+def DeleteBlogTagView(request, tag_id):
+    tag = get_object_or_404(T, id=tag_id)
+
+    # Tag deletion
+    tag.delete()
+    messages.success(request, "Tag successfully deleted")
+    # Redirecting to all tags
+    return redirect('all-blog-tags')  # Update this URL name as needed

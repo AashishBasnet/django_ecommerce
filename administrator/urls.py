@@ -37,4 +37,14 @@ urlpatterns = [
          views.EditBlogCategoryView, name='edit-blog-category'),
     path('delete-blog-category/<int:category_id>',
          views.DeleteBlogCategoryView, name='delete-blog-category'),
+
+    path('all-blog-tags', views.AllBlogTagView,
+         name='all-blog-tags'),
+    path('add-blog-tag', views.AddBlogTagView, name='add-blog-tag'),
+
+    path('edit-blog-tag/<int:tag_id>',
+         views.EditBlogTagView, name='edit-blog-tag'),
+    path('delete-blog-tag/<int:tag_id>',
+         views.DeleteBlogTagView, name='delete-blog-tag'),
+
 ]

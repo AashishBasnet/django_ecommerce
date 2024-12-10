@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% block title %}
-  All Blog Categories
+  All Blog Tags
 {% endblock %}
 {% block links %}
   <style>
@@ -87,10 +87,10 @@
       <div class="container">
         <div class="row">
           <div class="text-center padding-large no-padding-bottom">
-            <h1 class="display-2 text-uppercase text-dark">All Blog Categories</h1>
+            <h1 class="display-2 text-uppercase text-dark">All Blog Tags</h1>
             <div class="breadcrumbs">
               <span class="item"><a href="{% url 'home' %}">Home ></a></span>
-              <span class="item">All Blog Categories</span>
+              <span class="item">All Blog Tags</span>
             </div>
           </div>
         </div>
@@ -184,37 +184,37 @@
       </div>
       <div class="container">
         <div class="product-header">
-          <h1>All Categories</h1>
-          <a href="{% url 'add-blog-category' %}" class="add-product-btn">Add Category <b>+</b></a>
+          <h1>All Tags</h1>
+          <a href="{% url 'add-blog-tag' %}" class="add-product-btn">Add Tags <b>+</b></a>
         </div>
         <ul class="product-list">
-          {% for category in categories %}
+          {% for tag in tags %}
             <li class="product-item">
-              <h3>{{ category.name }}</h3>
-              <a href="{% url 'edit-blog-category' category.id %}">Edit</a>
+              <h3>{{ tag.name }}</h3>
+              <a href="{% url 'edit-blog-tag' tag.id %}">Edit</a>
             </li>
           {% endfor %}
         </ul>
         <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
           <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-            {% if categories.has_previous %}
-              <a href="?page={{ categories.previous_page_number }}">
+            {% if tags.has_previous %}
+              <a href="?page={{ tags.previous_page_number }}">
                 <svg class="chevron-left pe-3">
                   <use xlink:href="#chevron-left"></use>
                 </svg>
               </a>
             {% endif %}
 
-            {% for num in categories.paginator.page_range %}
-              {% if categories.number == num %}
+            {% for num in tags.paginator.page_range %}
+              {% if tags.number == num %}
                 <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
               {% else %}
                 <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
               {% endif %}
             {% endfor %}
 
-            {% if categories.has_next %}
-              <a href="?page={{ categories.next_page_number }}">
+            {% if tags.has_next %}
+              <a href="?page={{ tags.next_page_number }}">
                 <svg class="chevron-right ps-3">
                   <use xlink:href="#chevron-right"></use>
                 </svg>

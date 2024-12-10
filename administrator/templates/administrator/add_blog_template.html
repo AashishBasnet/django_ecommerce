@@ -147,7 +147,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">{{ form.category.label }} &nbsp;<a href="{% url 'add-category' %}" class="text-primary">add new category</a></label>
+          <label class="form-label">{{ form.category.label }} &nbsp;<a href="{% url 'add-blog-category' %}" class="text-primary">add new category</a></label>
           {{ form.category|add_class:'form-control' }}
           {% for error in form.category.errors %}
             <div class="text-danger small">{{ error }}</div>
@@ -175,7 +175,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">{{ form.tags.label }} &nbsp;<a href="{% url 'add-tag' %}" class="text-primary">add new tag</a></label>
+          <label class="form-label">{{ form.tags.label }} &nbsp;<a href="{% url 'add-blog-tag' %}" class="text-primary">add new tag</a></label>
           {{ form.tags|add_class:'form-control' }}
           {% for error in form.tags.errors %}
             <div class="text-danger small">{{ error }}</div>

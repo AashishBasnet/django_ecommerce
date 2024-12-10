@@ -40,6 +40,23 @@ class AddBlogCategoryForm(forms.ModelForm):
         ]
 
 
+class AddBlogTagForm(forms.ModelForm):
+    class Meta:
+        model = T
+        fields = ['name']
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].strip()
+        normalized_name = name.lower()
+
+        if T.objects.filter(name__iexact=name).exists():
+            raise ValidationError(f"A blog tag with the name '{
+                                  name}' already exists.")
+
+        self.cleaned_data['name'] = normalized_name
+        return normalized_name
+
+
 class AddTagForm(forms.ModelForm):
     class Meta:
         model = Tag
