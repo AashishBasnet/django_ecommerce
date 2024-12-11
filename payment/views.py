@@ -16,6 +16,7 @@ from django.conf import settings
 import uuid  # unique user id for duplicate orders
 import requests
 from decimal import Decimal
+from django.core.paginator import Paginator
 
 
 def get_exchange_rate():
@@ -342,8 +343,10 @@ def NotShippedDashboardView(request):
             # redirect
             messages.success(request, "Shipping Status Updated")
             return redirect('not-shipped-dashboard')
-
-        return render(request, "payment/not_shipped_dashboard_template.html", {"orders": orders})
+        paginator = Paginator(orders, 15)
+        page_number = request.GET.get('page')
+        order_page = paginator.get_page(page_number)
+        return render(request, "payment/not_shipped_dashboard_template.html", {"orders": order_page})
     else:
         messages.success(
             request, "Access Denied! only authorized users can view this page.")
@@ -365,7 +368,10 @@ def ShippedDashboardView(request):
             # redirect
             messages.success(request, "Shipping Status Updated")
             return redirect('shipped-dashboard')
-        return render(request, "payment/shipped_dashboard_template.html", {"orders": orders})
+        paginator = Paginator(orders, 15)
+        page_number = request.GET.get('page')
+        order_page = paginator.get_page(page_number)
+        return render(request, "payment/shipped_dashboard_template.html", {"orders": order_page})
     else:
         messages.success(
             request, "Access Denied! only authorized users can view this page.")
