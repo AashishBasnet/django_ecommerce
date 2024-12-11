@@ -1,0 +1,96 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}
+  Inquiry By {{ inquiry.name }}
+{% endblock %}
+{% block links %}
+  <style>
+    .main-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 20px; /* Add gap after the section */
+      max-width: 800px; /* Limit blog width */
+      margin-left: auto;
+      margin-right: auto; /* Center align the blog container */
+    }
+    
+    .title {
+      font-size: 32px;
+      color: #343a40;
+      margin: 0 0 10px;
+      text-align: left;
+    }
+    
+    .author {
+      font-size: 16px;
+      color: #6c757d;
+      margin: 0 0 20px;
+      text-align: left;
+    }
+    
+    .message-box {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 5px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #495057;
+      margin-bottom: 20px; /* Add spacing below the message */
+    }
+    
+    .read-button {
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto; /* Center align the button */
+      text-transform: uppercase;
+    }
+    
+    .read-button:hover {
+      background-color: #228b22;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">User Inquiry</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">User Inquiry</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="main-container">
+    <h3 class="title">{{ inquiry.subject }}</h3>
+    <p class="author">submitted by: {{ inquiry.name }}</p>
+    <div class="message-box">{{ inquiry.message }}</div>
+    <p>
+      Email: <a href="mailto:{{ inquiry.email }}">{{ inquiry.email }}</a>
+    </p>
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="read-button">✔ Read</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block subscribe %}
+
+{% endblock %}
+{% block footer %}
+
+{% endblock %}

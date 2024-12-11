@@ -1,8 +1,8 @@
 from django.utils.text import slugify
-from Home.models import Product  # Import Product from Home app
+from Home.models import Product, Inquiry
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
-from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm
+from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm, InquiryForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
@@ -14,19 +14,6 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from datetime import timedelta
-# View for adding a new post
-
-
-# def DashboardView(request):
-#     users = User.objects.filter(is_superuser=False)
-#     user_inquiry = Inquiry.objects.filter(is_reviewed=False)
-#     inquiry_count = 0
-#     user_count = 0
-#     for user in users:
-#         user_count += 1
-#     for inquiry in user_inquiry:
-#         inquiry_count += 1
-#     return render(request, "administrator/admin_dashboard_template.html", {'user_count': user_count, 'inquiry_count': inquiry_count})
 
 
 def DashboardView(request):
@@ -62,13 +49,23 @@ def AllUsersView(request):
 
 
 def UserInquiriesView(request):
-    inquiry_list = Inquiry.objects.all()
+    inquiry_list = Inquiry.objects.filter(is_reviewed=False).order_by('-id')
     paginator = Paginator(inquiry_list, 20)
 
     page_number = request.GET.get('page')
     inquiries = paginator.get_page(page_number)
 
     return render(request, "administrator/user_inquiries_template.html", {'inquiries': inquiries})
+
+
+def SingleInquiryView(request, inquiry_id):
+    inquiry = get_object_or_404(Inquiry, id=inquiry_id)
+    if request.method == "POST":
+        inquiry.is_reviewed = True
+        inquiry.save()
+        messages.success(request, "Inquiry was marked as read")
+        return redirect('all-user-inquiries')
+    return render(request, "administrator/single_inquiry_template.html", {"inquiry": inquiry})
 
 
 def AddPostView(request):

@@ -48,5 +48,6 @@ urlpatterns = [
          views.DeleteBlogTagView, name='delete-blog-tag'),
     path('admin-all-users', views.AllUsersView, name='admin-all-users'),
     path('all-user-inquiries', views.UserInquiriesView, name='all-user-inquiries'),
-
+    path('single-user-inquiry/<int:inquiry_id>',
+         views.SingleInquiryView, name='single-user-inquiry')
 ]

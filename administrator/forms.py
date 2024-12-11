@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from Home.models import Product, Categories, Tag
+from Home.models import Product, Categories, Tag, Inquiry
 from tinymce.widgets import TinyMCE
 from blog.models import Post, Category, Tag as T
 
@@ -87,3 +87,9 @@ class PostForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
+
+class InquiryForm(forms.ModelForm):
+    class Meta:
+        model = Inquiry
+        fields = ['is_reviewed']

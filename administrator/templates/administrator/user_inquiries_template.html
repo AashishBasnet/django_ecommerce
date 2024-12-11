@@ -254,7 +254,9 @@
           <tbody>
             {% for inquiry in inquiries %}
               <tr>
-                <td>{{ inquiry.name }}</td>
+                <td>
+                  <a href="{% url 'single-user-inquiry' inquiry.id %}">{{ inquiry.name }}</a>
+                </td>
                 {% if inquiry.email %}
                   <td>{{ inquiry.email }}</td>
                 {% else %}

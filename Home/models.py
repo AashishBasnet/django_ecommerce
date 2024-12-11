@@ -172,7 +172,7 @@ class Inquiry(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone_number = models.CharField(max_length=15)
-    subject = models.CharField(max_length=150)
+    subject = models.CharField(max_length=50)
     message = models.TextField()
     is_reviewed = models.BooleanField(default=False)
     created_at = models.DateField(default=datetime.date.today)
