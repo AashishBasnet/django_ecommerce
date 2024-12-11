@@ -46,5 +46,7 @@ urlpatterns = [
          views.EditBlogTagView, name='edit-blog-tag'),
     path('delete-blog-tag/<int:tag_id>',
          views.DeleteBlogTagView, name='delete-blog-tag'),
+    path('admin-all-users', views.AllUsersView, name='admin-all-users'),
+    path('all-user-inquiries', views.UserInquiriesView, name='all-user-inquiries'),
 
 ]

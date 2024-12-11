@@ -12,20 +12,63 @@ from django.db.models import Q
 from blog.models import Post, Category, Tag as T
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.utils import timezone
+from datetime import timedelta
 # View for adding a new post
 
 
+# def DashboardView(request):
+#     users = User.objects.filter(is_superuser=False)
+#     user_inquiry = Inquiry.objects.filter(is_reviewed=False)
+#     inquiry_count = 0
+#     user_count = 0
+#     for user in users:
+#         user_count += 1
+#     for inquiry in user_inquiry:
+#         inquiry_count += 1
+#     return render(request, "administrator/admin_dashboard_template.html", {'user_count': user_count, 'inquiry_count': inquiry_count})
+
+
 def DashboardView(request):
+    today = timezone.now()
+    last_week_start = today - timedelta(weeks=1)
+    print(last_week_start)
     users = User.objects.filter(is_superuser=False)
+    user_count = users.count()
     user_inquiry = Inquiry.objects.filter(is_reviewed=False)
-    inquiry_count = 0
-    user_count = 0
-    for user in users:
-        user_count += 1
-    for inquiry in user_inquiry:
-        inquiry_count += 1
-    return render(request, "administrator/admin_dashboard_template.html", {'user_count': user_count, 'inquiry_count': inquiry_count})
+    inquiry_count = user_inquiry.count()
+
+    users_last_week = User.objects.filter(
+        is_superuser=False, date_joined__gte=last_week_start)
+    user_count_last_week = users_last_week.count()
+    user_change = 0
+    user_change = (user_count - user_count_last_week)
+
+    return render(request, "administrator/admin_dashboard_template.html", {
+        'user_count': user_count,
+        'user_change': user_change,
+        'inquiry_count': inquiry_count,
+    })
+
+
+def AllUsersView(request):
+    user_list = User.objects.filter(is_superuser=False)
+    paginator = Paginator(user_list, 20)
+
+    page_number = request.GET.get('page')
+    users = paginator.get_page(page_number)
+
+    return render(request, "administrator/all_users_template.html", {'users': users})
+
+
+def UserInquiriesView(request):
+    inquiry_list = Inquiry.objects.all()
+    paginator = Paginator(inquiry_list, 20)
+
+    page_number = request.GET.get('page')
+    inquiries = paginator.get_page(page_number)
+
+    return render(request, "administrator/user_inquiries_template.html", {'inquiries': inquiries})
 
 
 def AddPostView(request):

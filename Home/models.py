@@ -106,8 +106,9 @@ class Product(models.Model):
     product_category = models.ForeignKey(
         Categories, on_delete=models.CASCADE, default='')
     product_description = models.CharField(
-        max_length=250, default='', blank=True, null=True)
-    product_long_description = HTMLField(blank=True, null=True)
+        max_length=300, default='', blank=True, null=True)
+    product_long_description = models.TextField(
+        default='', blank=True, null=True)
     product_additional_information = models.TextField(
         max_length=500, default='', blank=True, null=True)
     product_image = models.ImageField(upload_to='uploads/product/', null=True)
@@ -174,6 +175,7 @@ class Inquiry(models.Model):
     subject = models.CharField(max_length=150)
     message = models.TextField()
     is_reviewed = models.BooleanField(default=False)
+    created_at = models.DateField(default=datetime.date.today)
 
     def __str__(self):
         return f"Inquiry from {self.name} - {self.subject}"

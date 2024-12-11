@@ -228,49 +228,99 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="col-xl-3 col-sm-6 mb-4">
-                  <div class="card stylish-card">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-8">
-                          <div class="numbers">
-                            <p class="text-uppercase font-weight-bold">Total Users</p>
-                            <h5 class="font-weight-bolder">{{ user_count }}</h5>
-                            <p>
-                              <span class="text-success font-weight-bolder">+3%</span> since last week
-                            </p>
+                  <a href="{% url 'admin-all-users' %}">
+                    <div class="card stylish-card">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-8">
+                            <div class="numbers">
+                              <p class="text-uppercase font-weight-bold">Total Users</p>
+                              <h5 class="font-weight-bolder">{{ user_count }}</h5>
+                              <p>
+                                <span class="{% if user_change > 0 %}
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                  text-success
+
+
+
+
+
+
+
+
+
+                                  {% elif user_change < 0 %}
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                                                                     
+                                   text-danger
+
+
+
+
+
+
+
+
+
+
+                                  {% endif %} font-weight-bolder">
+                                  {% if user_change == 0 %}
+                                    No
+                                  {% else %}
+                                    {% if user_change > 0 %}+{% endif %} {{ user_change }}
+                                  {% endif %}
+                                </span> New User(s) since last week
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-4 text-end">
-                          <div class="icon bg-gradient-danger text-center rounded-circle">
-                            <i class="ni ni-world text-lg" aria-hidden="true"></i>
+                          <div class="col-4 text-end">
+                            <div class="icon bg-gradient-danger text-center rounded-circle">
+                              <i class="ni ni-world text-lg" aria-hidden="true"></i>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-4">
-                  <div class="card stylish-card">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-8">
-                          <div class="numbers">
-                            <p class="text-uppercase font-weight-bold">Unreviewed Inquiries</p>
-                            <h5 class="font-weight-bolder">{{ inquiry_count }}</h5>
-                            <p>
-                              <span class="text-danger font-weight-bolder">-2%</span> since last quarter
-                            </p>
+                  <a href="{% url 'all-user-inquiries' %}">
+                    <div class="card stylish-card">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-8">
+                            <div class="numbers">
+                              <p class="text-uppercase font-weight-bold">Unreviewed Inquiries</p>
+                              <h5 class="font-weight-bolder">{{ inquiry_count }}</h5>
+                            </div>
                           </div>
-                        </div>
-                        <div class="col-4 text-end">
-                          <div class="icon bg-gradient-success text-center rounded-circle">
-                            <i class="ni ni-paper-diploma text-lg" aria-hidden="true"></i>
+                          <div class="col-4 text-end">
+                            <div class="icon bg-gradient-success text-center rounded-circle">
+                              <i class="ni ni-paper-diploma text-lg" aria-hidden="true"></i>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
                 <div class="col-xl-3 col-sm-6 mb-4">
                   <div class="card stylish-card">
@@ -362,4 +412,10 @@
       </div>
     </div>
   </div>
+{% endblock %}
+{% block subscribe %}
+
+{% endblock %}
+{% block footer %}
+
 {% endblock %}

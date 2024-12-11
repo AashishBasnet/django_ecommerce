@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
-
+{% load static %}
 {% block title %}
-  Shipping Dashboard
+  All inquiries
 {% endblock %}
 {% block links %}
   <style>
@@ -57,6 +57,88 @@
     .btn-danger:hover {
       background-color: #c82333;
     }
+    
+    .main-container {
+      padding: 20px; /* Add some padding for aesthetics */
+    }
+    
+    .stylish-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stylish-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 10px;
+      color: white;
+    }
+    
+    .numbers p {
+      margin: 0;
+    }
+    
+    /* Remove margin from the hero section */
+    .hero-section {
+      margin-bottom: 0; /* Remove bottom margin */
+    }
+    
+    /* Remove padding from the main container */
+    .main-container {
+      padding-top: 0; /* Remove top padding */
+    }
+    
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .user-table th,
+    .user-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .user-table th {
+      background-color: #4caf50;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .user-table tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .user-table td {
+      color: #333;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none; /* Hide sidebar on small screens */
+      }
+      .main-container {
+        margin-left: 0; /* Remove left margin */
+        padding: 10px; /* Add padding */
+      }
+      .user-table th,
+      .user-table td {
+        padding: 10px; /* Reduce padding for smaller screens */
+      }
+    }
   </style>
 {% endblock %}
 {% block content %}
@@ -65,18 +147,18 @@
       <div class="container">
         <div class="row">
           <div class="text-center padding-large no-padding-bottom">
-            <h1 class="display-2 text-uppercase text-dark">Shipped Items</h1>
+            <h1 class="display-2 text-uppercase text-dark">inquiries</h1>
             <div class="breadcrumbs">
               <span class="item"><a href="{% url 'home' %}">Home ></a></span>
-              <span class="item">Shipped Items</span>
+              <span class="item">inquiries</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <div class="side d-flex">
-    <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light" style="width: 280px;">
+  <div class="d-flex flex-wrap">
+    <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light sidebar" style="width: 280px;">
       <a href="{% url 'admin-dashboard' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap" />
@@ -136,11 +218,11 @@
 
       <hr />
       <div class="dropdown">
-        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser 1" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
           <strong>mdo</strong>
         </a>
-        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser   1 ">
           <li>
             <a class="dropdown-item" href="#">New project...</a>
           </li>
@@ -159,58 +241,66 @@
         </ul>
       </div>
     </div>
-    <div class="container">
+    <div class="container main-container">
       <div class="row">
-        <div class="col-10 mx-auto">
-          <br /><br />
-          <h1 class="text-center mb-4">Shipped Items</h1>
-          <div class="table-responsive">
-            <table class="table custom-table">
-              <thead>
-                <tr>
-                  <th scope="col">Order Number</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Customer Email</th>
-                  <th scope="col">Date Ordered</th>
-                  <th scope="col">Date Shipped</th>
-                  <th scope="col">Shipping Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for order in orders %}
-                  <tr>
-                    <td>
-                      <a href="{% url 'orders' order.id %}" class="text-decoration-none text-dark">{{ order.id }}</a>
-                    </td>
-                    <td>Rs. {{ order.amount_paid }}</td>
-                    <td>
-                      {% if order.email %}
-                        {{ order.email }}
-                      {% else %}
-                        -
-                      {% endif %}
-                    </td>
-                    <td>{{ order.date_ordered }}</td>
-                    <td>{{ order.date_shipped }}</td>
-                    <td>
-                      <form method="POST" class="d-inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="shipping_status" value="false" />
-                        <input type="hidden" name="num" value="{{ order.id }}" />
-                        <button type="submit" class="btn btn-danger btn-sm">Mark UnShipped</button>
-                      </form>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email/Phone</th>
+              <th>Date Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inquiry in inquiries %}
+              <tr>
+                <td>{{ inquiry.name }}</td>
+                {% if inquiry.email %}
+                  <td>{{ inquiry.email }}</td>
+                {% else %}
+                  <td>{{ inquiry.phone }}</td>
+                {% endif %}
+                <td>{{ inquiry.created_at|date:'b d, Y' }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="3">No inquiries found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+          <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+            {% if inquiries.has_previous %}
+              <a href="?page={{ inquiries.previous_page_number }}">
+                <svg class="chevron-left pe-3">
+                  <use xlink:href="#chevron-left"></use>
+                </svg>
+              </a>
+            {% endif %}
+
+            {% for num in inquiries.paginator.page_range %}
+              {% if inquiries.number == num %}
+                <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+              {% else %}
+                <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+
+            {% if inquiries.has_next %}
+              <a href="?page={{ inquiries.next_page_number }}">
+                <svg class="chevron-right ps-3">
+                  <use xlink:href="#chevron-right"></use>
+                </svg>
+              </a>
+            {% endif %}
           </div>
-        </div>
+        </nav>
       </div>
     </div>
   </div>
-
-  <br /><br />
 {% endblock %}
 {% block subscribe %}
 
