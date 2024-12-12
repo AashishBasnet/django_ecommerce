@@ -8,18 +8,43 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from Home.models import Profile, Inquiry
-from django.db.models import Q
+from django.db.models import Q, Sum
 from blog.models import Post, Category, Tag as T
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
+from payment.models import OrderItem, Order
+from dateutil.relativedelta import relativedelta
 
 
 def DashboardView(request):
     today = timezone.now()
+
+    first_day_of_current_month = today.replace(day=1)
+
+    this_month_orders = Order.objects.filter(
+        date_ordered__gte=first_day_of_current_month, date_ordered__lte=today)
+    total_amount_this_month = 0
+
+    for order in this_month_orders:
+        order_items = OrderItem.objects.filter(order=order)
+        for order_item in order_items:
+            item_price = order_item.price * order_item.quantity
+            total_amount_this_month += item_price
+
+    last_24_hours_orders = Order.objects.filter(
+        date_ordered__gte=today - timezone.timedelta(hours=24), date_ordered__lte=today)
+    total_amount_last_24_hours = 0
+
+    for order in last_24_hours_orders:
+        order_items = OrderItem.objects.filter(order=order)
+        for order_item in order_items:
+            item_price = order_item.price * order_item.quantity
+            total_amount_last_24_hours += item_price
+
     last_week_start = today - timedelta(weeks=1)
-    print(last_week_start)
+
     users = User.objects.filter(is_superuser=False)
     user_count = users.count()
     user_inquiry = Inquiry.objects.filter(is_reviewed=False)
@@ -35,6 +60,8 @@ def DashboardView(request):
         'user_count': user_count,
         'user_change': user_change,
         'inquiry_count': inquiry_count,
+        'sales_this_month': total_amount_this_month,
+        'total_amount_last_24_hours': total_amount_last_24_hours,
     })
 
 

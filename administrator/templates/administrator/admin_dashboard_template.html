@@ -64,25 +64,31 @@
     }
     
     .stylish-card {
+      font-weight: bold;
+      background-color: #fff;
       transition: transform 0.3s, box-shadow 0.3s;
       border-radius: 15px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
-    
+    .stylish-card p {
+      font-weight: bold;
+      color: #67748e;
+    }
+    .stylish-card h5 {
+      font-weight: bolder;
+      color: #344767;
+    }
     .stylish-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     }
-    
-    .icon {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      padding: 10px;
-      color: white;
+    .card-money {
+      font-weight: bold;
+      color: #2dce89;
+    }
+    .card-money-loss {
+      font-weight: bold;
+      color: #f5365c;
     }
     
     .numbers p {
@@ -213,15 +219,8 @@
                         <div class="col-8">
                           <div class="numbers">
                             <p class="text-uppercase font-weight-bold">Today's Money</p>
-                            <h5 class="font-weight-bolder">$53,000</h5>
-                            <p>
-                              <span class="text-success font-weight-bolder">+55%</span> since yesterday
-                            </p>
-                          </div>
-                        </div>
-                        <div class="col-4 text-end">
-                          <div class="icon bg-gradient-primary text-center rounded-circle">
-                            <i class="ni ni-money-coins text-lg" aria-hidden="true"></i>
+                            <h5 class="font-weight-bolder">Rs <span class="card-money">{{ total_amount_last_24_hours }}</span></h5>
+                            <p>since last 24 hours.</p>
                           </div>
                         </div>
                       </div>
@@ -249,7 +248,79 @@
                                     
                                     
                                     
-                                  text-success
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                  card-money
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -269,8 +340,80 @@
                                     
                                     
                                     
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                                                                      
-                                   text-danger
+                                   card-money-loss
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -291,11 +434,6 @@
                               </p>
                             </div>
                           </div>
-                          <div class="col-4 text-end">
-                            <div class="icon bg-gradient-danger text-center rounded-circle">
-                              <i class="ni ni-world text-lg" aria-hidden="true"></i>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -312,11 +450,6 @@
                               <h5 class="font-weight-bolder">{{ inquiry_count }}</h5>
                             </div>
                           </div>
-                          <div class="col-4 text-end">
-                            <div class="icon bg-gradient-success text-center rounded-circle">
-                              <i class="ni ni-paper-diploma text-lg" aria-hidden="true"></i>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -328,16 +461,8 @@
                       <div class="row">
                         <div class="col-8">
                           <div class="numbers">
-                            <p class="text-uppercase font-weight-bold">Sales</p>
-                            <h5 class="font-weight-bolder">$103,430</h5>
-                            <p>
-                              <span class="text-success font-weight-bolder">+5%</span> than last month
-                            </p>
-                          </div>
-                        </div>
-                        <div class="col-4 text-end">
-                          <div class="icon bg-gradient-warning text-center rounded-circle">
-                            <i class="ni ni-cart text-lg" aria-hidden="true"></i>
+                            <p class="text-uppercase font-weight-bold">Sales This Month</p>
+                            <h5 class="font-weight-bolder">Rs <span class="card-money">{{ sales_this_month }}</span></h5>
                           </div>
                         </div>
                       </div>
@@ -351,7 +476,7 @@
                     <div class="card-header bg-transparent">
                       <h6 class="text-capitalize">Sales overview</h6>
                       <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up text-success"></i>
+                        <i class="fa fa-arrow-up card-money"></i>
                         <span class="font-weight-bold">4% more</span> in 2021
                       </p>
                     </div>
@@ -368,9 +493,6 @@
                       <div class="carousel-inner h-100">
                         <div class="carousel-item h-100 ```html active" style="background-image: url('../assets/img/carousel-1.jpg'); background-size: cover;">
                           <div class="carousel-caption d-none d-md-block text-start start-0 ms-5">
-                            <div class="icon bg-white text-center rounded-circle mb-3">
-                              <i class="ni ni-camera-compact text-dark"></i>
-                            </div>
                             <h5 class="text-white mb-1">Get started with Argon</h5>
                             <p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
                           </div>
