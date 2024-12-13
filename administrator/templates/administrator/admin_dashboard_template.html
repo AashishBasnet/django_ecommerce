@@ -79,7 +79,6 @@
       color: #344767;
     }
     .stylish-card:hover {
-      transform: translateY(-5px);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     }
     .card-money {
@@ -284,7 +283,29 @@
                                     
                                     
                                     
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                   card-money
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -376,8 +397,30 @@
                                     
                                     
                                     
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                                                                      
                                    card-money-loss
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -472,18 +515,16 @@
               </div>
               <div class="row mt-4">
                 <div class="col-lg-7 mb-4">
-                  <div class="card h-100">
+                  <div class="card stylish-card h-100">
+                    <!-- Added stylish-card class -->
                     <div class="card-header bg-transparent">
                       <h6 class="text-capitalize">Sales overview</h6>
                       <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up card-money"></i>
-                        <span class="font-weight-bold">4% more</span> in 2021
+                        <span class="font-weight-bold">sales in the past</span> 30 days
                       </p>
                     </div>
                     <div class="card-body">
-                      <div class="chart">
-                        <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-                      </div>
+                      <div class="chart">{{ sales_graph|safe }}</div>
                     </div>
                   </div>
                 </div>

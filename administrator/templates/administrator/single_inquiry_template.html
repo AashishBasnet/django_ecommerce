@@ -81,10 +81,12 @@
     <p>
       Email: <a href="mailto:{{ inquiry.email }}">{{ inquiry.email }}</a>
     </p>
-    <form method="POST">
-      {% csrf_token %}
-      <button type="submit" class="read-button">✔ Read</button>
-    </form>
+    {% if inquiry.is_reviewed == False %}
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="read-button">✔ Read</button>
+      </form>
+    {% endif %}
   </div>
 {% endblock %}
 

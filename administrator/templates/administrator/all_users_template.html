@@ -58,10 +58,6 @@
       background-color: #c82333;
     }
     
-    .main-container {
-      padding: 20px; /* Add some padding for aesthetics */
-    }
-    
     .stylish-card {
       transition: transform 0.3s, box-shadow 0.3s;
       border-radius: 15px;
@@ -93,11 +89,6 @@
       margin-bottom: 0; /* Remove bottom margin */
     }
     
-    /* Remove padding from the main container */
-    .main-container {
-      padding-top: 0; /* Remove top padding */
-    }
-    
     .user-table {
       width: 100%;
       border-collapse: collapse;
@@ -125,6 +116,19 @@
       color: #333;
     }
     
+    .flex-container {
+      display: flex; /* Use flexbox for layout */
+    }
+    
+    .sidebar {
+      width: 280px; /* Fixed width for sidebar */
+    }
+    
+    .main-container {
+      flex-grow: 1; /* Allow main container to take remaining space */
+      padding: 20px; /* Add some padding for aesthetics */
+    }
+    
     /* Responsive styles */
     @media (max-width: 768px) {
       .sidebar {
@@ -133,10 +137,6 @@
       .main-container {
         margin-left: 0; /* Remove left margin */
         padding: 10px; /* Add padding */
-      }
-      .user-table th,
-      .user-table td {
-        padding: 10px; /* Reduce padding for smaller screens */
       }
     }
   </style>
@@ -157,8 +157,9 @@
       </div>
     </div>
   </section>
-  <div class="d-flex flex-wrap">
-    <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light sidebar" style="width: 280px;">
+  <div class="flex-container">
+    <!-- Flex container for sidebar and main content -->
+    <div class="d-flex flex-column flex-shrink-0 p-3 link-dark bg-light sidebar">
       <a href="{% url 'admin-dashboard' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap" />

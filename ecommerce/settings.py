@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'tinymce',
     'cloudinary_storage',
     'cloudinary',
+    'django_extensions',
 
 
 ]
@@ -109,7 +110,16 @@ DATABASES = {
     }
 }
 
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'django',
+#         'USER': 'postgres',
+#         'PASSWORD': '<pass>',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',

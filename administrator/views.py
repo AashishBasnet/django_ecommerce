@@ -8,53 +8,91 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 from Home.models import Profile, Inquiry
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, F
 from blog.models import Post, Category, Tag as T
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.utils.timezone import now
 from datetime import timedelta, datetime
 from payment.models import OrderItem, Order
 from dateutil.relativedelta import relativedelta
 
+import plotly.graph_objects as go
+
 
 def DashboardView(request):
-    today = timezone.now()
+    today = now()
 
+    # Monthly Sales Data
     first_day_of_current_month = today.replace(day=1)
-
     this_month_orders = Order.objects.filter(
         date_ordered__gte=first_day_of_current_month, date_ordered__lte=today)
-    total_amount_this_month = 0
+    total_amount_this_month = sum(
+        order_item.price * order_item.quantity
+        for order in this_month_orders
+        for order_item in OrderItem.objects.filter(order=order)
+    )
 
-    for order in this_month_orders:
-        order_items = OrderItem.objects.filter(order=order)
-        for order_item in order_items:
-            item_price = order_item.price * order_item.quantity
-            total_amount_this_month += item_price
-
+    # Last 24 Hours Sales Data
     last_24_hours_orders = Order.objects.filter(
-        date_ordered__gte=today - timezone.timedelta(hours=24), date_ordered__lte=today)
-    total_amount_last_24_hours = 0
+        date_ordered__gte=today - timedelta(hours=24), date_ordered__lte=today)
+    total_amount_last_24_hours = sum(
+        order_item.price * order_item.quantity
+        for order in last_24_hours_orders
+        for order_item in OrderItem.objects.filter(order=order)
+    )
 
-    for order in last_24_hours_orders:
-        order_items = OrderItem.objects.filter(order=order)
-        for order_item in order_items:
-            item_price = order_item.price * order_item.quantity
-            total_amount_last_24_hours += item_price
-
+    # Weekly Sales Data
     last_week_start = today - timedelta(weeks=1)
 
+    # Daily Sales Data for Graph
+    last_30_days = today - timedelta(days=30)
+    daily_sales = (
+        Order.objects.filter(date_ordered__gte=last_30_days)
+        .annotate(date=F("date_ordered__date"))
+        .values("date")
+        .annotate(total_sales=Sum("amount_paid"))
+        .order_by("date")
+    )
+
+    dates = [entry["date"] for entry in daily_sales]
+    sales = [entry["total_sales"] for entry in daily_sales]
+
+    # Plotly Graph
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=dates, y=sales, name="Daily Sales"))
+    fig.update_layout(
+
+        xaxis_title="Date",
+        yaxis_title="Total Sales (in NPR)",
+        template="plotly_white",
+        autosize=True,
+    )
+    # configuring plotly
+
+    config = {
+        "scrollZoom": True,
+        "displayModeBar": True,
+        "modeBarButtonsToRemove": [
+            "lasso2d", "select2d", "autoScale2d", "hoverClosestCartesian",
+            "hoverCompareCartesian", "resetScale2d", "pan2d", "toImage"
+        ],
+        "displaylogo": False,
+    }
+
+    graph_html = fig.to_html(full_html=False, config=config)
+
+    # Additional Data
     users = User.objects.filter(is_superuser=False)
     user_count = users.count()
     user_inquiry = Inquiry.objects.filter(is_reviewed=False)
     inquiry_count = user_inquiry.count()
-
     users_last_week = User.objects.filter(
-        is_superuser=False, date_joined__gte=last_week_start)
+        is_superuser=False, date_joined__gte=last_week_start
+    )
     user_count_last_week = users_last_week.count()
-    user_change = 0
-    user_change = (user_count - user_count_last_week)
+    user_change = user_count - user_count_last_week
 
     return render(request, "administrator/admin_dashboard_template.html", {
         'user_count': user_count,
@@ -62,6 +100,7 @@ def DashboardView(request):
         'inquiry_count': inquiry_count,
         'sales_this_month': total_amount_this_month,
         'total_amount_last_24_hours': total_amount_last_24_hours,
+        'sales_graph': graph_html,
     })
 
 
