@@ -38,13 +38,37 @@
 # webencodings==0.5.1
 # whitenoise==6.8.1
 
+# asgiref==3.8.1
+# Django==5.1.4
+# django-ckeditor==6.7.1
+# django-js-asset==2.2.0
+# django-markdownify==0.9.5
+# django-paypal==2.1
+# django-storages==1.14.4  # Or keep `cloudinary`, not both
+# markdownify==0.13.1
+# pillow==10.4.0
+# psycopg2-binary==2.9.10
+# python-dotenv==1.0.1
+# pytz==2024.2
+# requests==2.32.3
+# sqlparse==0.5.1
+# tzdata==2024.2
+# whitenoise==6.8.1
+# cloudinary==1.41.0
+# django-cloudinary-storage==0.1.5
+
+
+# new requiremnts:    
+
 asgiref==3.8.1
 Django==5.1.4
 django-ckeditor==6.7.1
 django-js-asset==2.2.0
 django-markdownify==0.9.5
 django-paypal==2.1
-django-storages==1.14.4  # Or keep `cloudinary`, not both
+django-storages==1.14.4  
+cloudinary==1.41.0  
+django-cloudinary-storage==0.3.0 
 markdownify==0.13.1
 pillow==10.4.0
 psycopg2-binary==2.9.10
@@ -54,5 +78,3 @@ requests==2.32.3
 sqlparse==0.5.1
 tzdata==2024.2
 whitenoise==6.8.1
-cloudinary==1.41.0
-django-cloudinary-storage==0.1.5

@@ -1,7 +1,7 @@
 from .forms import InquiryForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
-from .models import Product, Categories, Profile, Tag
+from .models import Product, Categories, Profile, Tag, BannerImage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -20,6 +20,7 @@ from blog.views import Post
 
 
 def HomeView(request):
+    banner_images = BannerImage.objects.all().order_by('-id')
     products = Product.objects.all()
     posts = Post.objects.all().order_by('-id')[:3]
     new_products = Product.objects.all().order_by('-id')[:5]
@@ -46,7 +47,8 @@ def HomeView(request):
                       'tags': tags,
                       'discount_upto': round_max_discount,
                       'new_products': new_products,
-                      'posts': posts
+                      'posts': posts,
+                      'banner_images': banner_images,
                   })
 
 

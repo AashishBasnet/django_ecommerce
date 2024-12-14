@@ -182,3 +182,8 @@ class Inquiry(models.Model):
 
     class Meta:
         verbose_name = 'User Inquires'
+
+
+class BannerImage(models.Model):
+    image = models.ImageField(
+        upload_to='uploads/banners/', null=True)

@@ -3,45 +3,69 @@
 {% block title %}
   Home
 {% endblock %}
+{% block links %}
+  <style>
+    .hero-swiper-slide {
+      position: relative;
+      width: 100%;
+      height: 75vh; /* Full viewport height */
+      overflow: hidden;
+    }
+    
+    .hero-banner-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensures the image covers the entire banner without distortion */
+    }
+  </style>
+{% endblock %}
 
 {% block content %}
   <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
     <div class="swiper main-swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <div class="container">
-            <div class="row d-flex align-items-center">
-              <div class="col-md-6">
-                <div class="banner-content">
-                  <h1 class="display-2 text-uppercase text-dark pb-5">Your Products Are Great.</h1>
-                  <a href="{% url 'shop' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
+        {% if not banner_images %}
+          <div class="swiper-slide">
+            <div class="container">
+              <div class="row d-flex align-items-center">
+                <div class="col-md-6">
+                  <div class="banner-content">
+                    <h1 class="display-2 text-uppercase text-dark pb-5">Your Products Are Great.</h1>
+                    <a href="{% url 'shop' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-5">
-                <div>
-                  <img src="{% static 'images/banner-image.png' %}" alt="banner" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="container">
-            <div class="row d-flex flex-wrap align-items-center">
-              <div class="col-md-6">
-                <div class="banner-content">
-                  <h1 class="display-2 text-uppercase text-dark pb-5">Technology Hack You Won't Get</h1>
-                  <a href="{% url 'shop' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
-                </div>
-              </div>
-              <div class="col-md-5">
-                <div>
-                  <img src="{% static 'images/banner-image.png' %}" alt="banner" />
+                <div class="col-md-5">
+                  <div>
+                    <img src="{% static 'images/banner-image.png' %}" alt="banner" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+          <div class="swiper-slide">
+            <div class="container">
+              <div class="row d-flex flex-wrap align-items-center">
+                <div class="col-md-6">
+                  <div class="banner-content">
+                    <h1 class="display-2 text-uppercase text-dark pb-5">Technology Hack You Won't Get</h1>
+                    <a href="{% url 'shop' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Product</a>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div>
+                    <img src="{% static 'images/banner-image.png' %}" alt="banner" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          {% for banner_image in banner_images %}
+            <div class="hero-swiper-slide swiper-slide">
+              <a href="{% url 'shop' %}"><img src="{{ banner_image.image.url }}" alt="banner" class="hero-banner-image" /></a>
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
     <div class="swiper-icon swiper-arrow swiper-arrow-prev">
