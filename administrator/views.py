@@ -1,8 +1,9 @@
+from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from Home.models import Product, Inquiry
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
-from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm, InquiryForm
+from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm, InquiryForm, AddBannerImageForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
@@ -157,6 +158,46 @@ def WebsiteCustomizationView(request):
     # banner images
     banner_images = BannerImage.objects.all().order_by('-id')
     return render(request, "administrator/website_customization_template.html", {'banner_images': banner_images})
+
+
+def AddBannerImageView(request):
+    if request.method == 'POST':
+        form = AddBannerImageForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            banner = form.save()
+            banner.save()
+            messages.success(request, 'Banner was successfully added')
+            return redirect('website-customization')
+    else:
+        form = AddBannerImageForm()
+    return render(request, "administrator/add_banner_image_template.html", {'form': form})
+
+
+def EditBannerImageView(request, banner_id):
+    banner_instance = get_object_or_404(BannerImage, id=banner_id)
+
+    if request.method == 'POST':
+        form = AddBannerImageForm(
+            request.POST, request.FILES, instance=banner_instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Banner was successfully updated')
+            return redirect('website-customization')
+    else:
+        form = AddBannerImageForm(instance=banner_instance)
+
+    return render(request, "administrator/edit_banner_image_template.html", {'form': form, 'banner_instance': banner_instance})
+
+
+def DeleteBannerImageView(request, banner_id):
+    banner = get_object_or_404(BannerImage, id=banner_id)
+
+    # banner deletion
+    banner.delete()
+    messages.success(request, "Banner successfully deleted")
+    # redirecting to website-customization
+    return redirect('website-customization')
 
 
 def AllUsersView(request):

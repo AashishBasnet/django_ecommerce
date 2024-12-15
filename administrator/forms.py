@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from Home.models import Product, Categories, Tag, Inquiry
+from Home.models import Product, Categories, Tag, Inquiry, BannerImage
 from tinymce.widgets import TinyMCE
 from blog.models import Post, Category, Tag as T
 
@@ -93,3 +93,9 @@ class InquiryForm(forms.ModelForm):
     class Meta:
         model = Inquiry
         fields = ['is_reviewed']
+
+
+class AddBannerImageForm(forms.ModelForm):
+    class Meta:
+        model = BannerImage
+        fields = '__all__'

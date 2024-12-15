@@ -51,5 +51,11 @@ urlpatterns = [
     path('single-user-inquiry/<int:inquiry_id>',
          views.SingleInquiryView, name='single-user-inquiry'),
     path('website-customization', views.WebsiteCustomizationView,
-         name='website-customization')
+         name='website-customization'),
+    path('add-banner-image', views.AddBannerImageView, name='add-banner-image'),
+    path('edit-banner-image/<int:banner_id>',
+         views.EditBannerImageView, name='edit-banner-image'),
+    path('delete-banner-image/<int:banner_id>',
+         views.DeleteBannerImageView, name='delete-banner-image')
+
 ]

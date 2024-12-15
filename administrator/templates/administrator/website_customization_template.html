@@ -1,15 +1,35 @@
 {% extends 'index.html' %}
 {% load static %}
-
+{% block title %}
+  Customize
+{% endblock %}
+{% block links %}
+  <style>
+    .hero-swiper-slide {
+      position: relative;
+      width: 100%;
+      height: 75vh;
+      overflow: hidden;
+    }
+    
+    .hero-banner-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+{% endblock %}
 {% block content %}
-  <!-- New Section for Banner Information -->
   <div class="container my-5 pt-5">
     <div class="row">
       <div class="col-md-6">
-        <h2>Your BANNER IMAGES are:</h2>
+        <h2>Banner Images</h2>
+        {% if not banner_images %}
+          <p class="text-warning">You have not added any banner images so default banner images are being shown!</p>
+        {% endif %}
       </div>
       <div class="col-md-6 text-md-end">
-        <button class="btn btn-primary">Upload new banner image</button>
+        <a href="{% url 'add-banner-image' %}"><button class="btn btn-primary">Upload new banner image</button></a>
       </div>
     </div>
   </div>
@@ -53,7 +73,7 @@
         {% else %}
           {% for banner_image in banner_images %}
             <div class="hero-swiper-slide swiper-slide">
-              <img src="{{ banner_image.image.url }}" alt="banner" class="hero-banner-image" />
+              <a href="{% url 'edit-banner-image' banner_image.id %}"><img src="{{ banner_image.image.url }}" alt="banner" class="hero-banner-image" /></a>
             </div>
           {% endfor %}
         {% endif %}
