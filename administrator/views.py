@@ -17,13 +17,63 @@ from django.utils.timezone import now
 from datetime import timedelta, datetime
 from payment.models import OrderItem, Order
 from dateutil.relativedelta import relativedelta
-
 import plotly.graph_objects as go
+from html2image import Html2Image
+from Home.models import BannerImage
+import os
+
+# Function to determine the appropriate host dynamically
+
+
+def get_django_home_url():
+    ALLOWED_HOSTS = [
+        '.vercel.app',
+        '.now.sh',
+        '127.0.0.1',
+        'localhost',
+        '53bc-2400-1a00-b060-1b87-a019-8bb1-92c4-e15b.ngrok-free.app'
+    ]
+    if os.getenv('ENV') == 'production':
+        # Example: Use the first production host
+        return f"https://{ALLOWED_HOSTS[0]}"
+    elif os.getenv('ENV') == 'staging':
+        # Example: Use staging host
+        return f"https://{ALLOWED_HOSTS[1]}"
+    else:
+        # Default to localhost for development
+        return f"http://{ALLOWED_HOSTS[2]}:8000/"
 
 
 def DashboardView(request):
     today = now()
+    hti = Html2Image()
 
+    # Set the output directory
+    output_dir = "static/images"
+    hti.output_path = output_dir  # Specify the directory for saving files
+
+    # Django homepage URL (replace with your actual function or URL)
+    django_home_url = get_django_home_url()
+    output_file = "homepage_screenshot.png"
+
+    # Ensure the output directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"Created directory '{output_dir}'.")
+
+    # Delete the previous screenshot if it exists
+    full_output_path = os.path.join(output_dir, output_file)
+    if os.path.exists(full_output_path):
+        os.remove(full_output_path)
+        print(f"Previous screenshot '{full_output_path}' deleted.")
+
+    # Save the new screenshot
+    hti.screenshot(
+        url=django_home_url,
+        save_as=output_file  # Only the filename, not the full path
+    )
+
+    print(f"New screenshot saved as '{full_output_path}'.")
     # Monthly Sales Data
     first_day_of_current_month = today.replace(day=1)
     this_month_orders = Order.objects.filter(
@@ -93,7 +143,6 @@ def DashboardView(request):
     )
     user_count_last_week = users_last_week.count()
     user_change = user_count - user_count_last_week
-
     return render(request, "administrator/admin_dashboard_template.html", {
         'user_count': user_count,
         'user_change': user_change,
@@ -102,6 +151,12 @@ def DashboardView(request):
         'total_amount_last_24_hours': total_amount_last_24_hours,
         'sales_graph': graph_html,
     })
+
+
+def WebsiteCustomizationView(request):
+    # banner images
+    banner_images = BannerImage.objects.all().order_by('-id')
+    return render(request, "administrator/website_customization_template.html", {'banner_images': banner_images})
 
 
 def AllUsersView(request):
