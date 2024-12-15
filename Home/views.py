@@ -32,7 +32,7 @@ def HomeView(request):
             discount_percentage = (
                 (product.product_price - product.product_sale_price) / product.product_price) * 100
             discount.append(float(f"{discount_percentage:.2f}"))
-
+    round_max_discount = 0
 # Find the maximum discount percentage
     if discount:
         maximum_discount = max(discount)
