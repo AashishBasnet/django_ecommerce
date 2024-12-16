@@ -145,6 +145,10 @@ class Product(models.Model):
         # Save the product
         super().save(*args, **kwargs)
 
+    def get_price(self):
+        """Returns the sale price if available, otherwise the regular price."""
+        return self.product_sale_price if self.product_sale_price else self.product_price
+
     def __str__(self):
         return f'{self.product_name}'
 

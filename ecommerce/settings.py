@@ -35,9 +35,9 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1',
-                 'localhost', '53bc-2400-1a00-b060-1b87-a019-8bb1-92c4-e15b.ngrok-free.app']
+                 'localhost', 'a1de-2400-1a00-b060-1c92-b9bf-23aa-9f4b-3af9.ngrok-free.app']
 CSRF_TRUSTED_ORIGINS = [
-    'https://53bc-2400-1a00-b060-1b87-a019-8bb1-92c4-e15b.ngrok-free.app']
+    'https://a1de-2400-1a00-b060-1c92-b9bf-23aa-9f4b-3af9.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [
@@ -103,12 +103,12 @@ WSGI_APPLICATION = "ecommerce.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -120,16 +120,16 @@ WSGI_APPLICATION = "ecommerce.wsgi.application"
 #         'PORT': '5432',
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
-        'HOST': 'junction.proxy.rlwy.net',
-        'PORT': '14588',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
+#         'HOST': 'junction.proxy.rlwy.net',
+#         'PORT': '14588',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

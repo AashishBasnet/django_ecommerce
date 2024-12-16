@@ -78,7 +78,11 @@ def DashboardView(request):
     # Monthly Sales Data
     first_day_of_current_month = today.replace(day=1)
     this_month_orders = Order.objects.filter(
-        date_ordered__gte=first_day_of_current_month, date_ordered__lte=today)
+        paid=True,  # Only consider paid orders
+        date_ordered__gte=first_day_of_current_month,
+        date_ordered__lte=today
+    )
+
     total_amount_this_month = sum(
         order_item.price * order_item.quantity
         for order in this_month_orders
@@ -87,7 +91,11 @@ def DashboardView(request):
 
     # Last 24 Hours Sales Data
     last_24_hours_orders = Order.objects.filter(
-        date_ordered__gte=today - timedelta(hours=24), date_ordered__lte=today)
+        paid=True,  # Only consider paid orders
+        date_ordered__gte=today - timedelta(hours=24),
+        date_ordered__lte=today
+    )
+
     total_amount_last_24_hours = sum(
         order_item.price * order_item.quantity
         for order in last_24_hours_orders
@@ -100,7 +108,10 @@ def DashboardView(request):
     # Daily Sales Data for Graph
     last_30_days = today - timedelta(days=30)
     daily_sales = (
-        Order.objects.filter(date_ordered__gte=last_30_days)
+        Order.objects.filter(
+            paid=True,  # Only consider paid orders
+            date_ordered__gte=last_30_days
+        )
         .annotate(date=F("date_ordered__date"))
         .values("date")
         .annotate(total_sales=Sum("amount_paid"))

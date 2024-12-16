@@ -17,18 +17,26 @@ import uuid  # unique user id for duplicate orders
 import requests
 from decimal import Decimal
 from django.core.paginator import Paginator
+from paypal.standard.models import ST_PP_COMPLETED
 
 
 def get_exchange_rate():
-    url = "https://open.er-api.com/v6/latest/NPR"  # API endpoint
-    response = requests.get(url)
+    url = "https://open.er-api.com/v6/latest/NPR"
+    try:
+        # Add a timeout to prevent hanging
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
 
-    if response.status_code == 200:
         data = response.json()
-        # Fetch the USD rate from the response
+
         return Decimal(data['rates']['USD'])
-    else:
-        raise Exception("Error fetching exchange rate")
+    except (requests.ConnectionError, requests.Timeout) as e:
+        print(f"Connection error: {e}")
+
+        return "Connection Timeout"
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        raise
 
 
 def BillingInfoView(request):
@@ -38,6 +46,11 @@ def BillingInfoView(request):
         quantities = cart.get_quants
         totals = cart.cart_total()
         exchange_rate = get_exchange_rate()
+
+        if exchange_rate == "Connection Timeout":
+            messages.warning(
+                request, "Unable to fetch the exchange rate. Please check your internet connection.")
+            return redirect('checkout')
 
         # Convert totals from NPR to USD
         amount_in_usd = (totals * exchange_rate)
@@ -164,7 +177,7 @@ def BillingInfoView(request):
 
 
 def PaymentSuccessView(request):
-    # Check the cart
+   # Check the cart
     cart = Cart(request)
     cart_products = cart.get_prods
     quantities = cart.get_quants
@@ -187,7 +200,6 @@ def PaymentSuccessView(request):
     for key in list(request.session.keys()):
         if key == 'session_key':
             del request.session[key]
-
     messages.success(
         request, "Payment successful! Your order has been placed.")
     return render(request, "payment/payment_success_template.html", {})
@@ -329,13 +341,14 @@ def ProcessOrderView(request):
 
 def NotShippedDashboardView(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipped=False).order_by('-date_ordered')
+        # Filter orders that are not shipped and paid
+        orders = Order.objects.filter(
+            shipped=False, paid=True).order_by('-date_ordered')
         if request.POST:
             status = request.POST['shipping_status']
             num = request.POST['num']
             # get the order
             order = Order.objects.filter(id=num)
-
             # grab date and time
             now = datetime.datetime.now()
             # update order
@@ -355,7 +368,8 @@ def NotShippedDashboardView(request):
 
 def ShippedDashboardView(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders = Order.objects.filter(shipped=True).order_by('-date_shipped')
+        orders = Order.objects.filter(
+            shipped=True, paid=True).order_by('-date_shipped')
         if request.POST:
             status = request.POST['shipping_status']
             num = request.POST['num']
