@@ -335,4 +335,19 @@
     </div>
     <div class="swiper-pagination"></div>
   </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const swiper = new Swiper('.main-swiper', {
+        loop: true,
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false
+        },
+        navigation: {
+          nextEl: '.swiper-arrow-next',
+          prevEl: '.swiper-arrow-prev'
+        }
+      })
+    })
+  </script>
 {% endblock %}

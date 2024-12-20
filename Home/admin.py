@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categories, Customer, Product, Order, Tag, Profile, Inquiry
+from .models import Categories, Customer, Product, Order, Tag, Profile, Inquiry, UserReview
 from django.contrib.auth.models import User
 # Register your models here.
 
@@ -10,7 +10,7 @@ admin.site.register(Order)
 admin.site.register(Tag)
 admin.site.register(Profile)
 admin.site.register(Inquiry)
-
+admin.site.register(UserReview)
 # mix up the profile model with user model or merge the infos
 
 

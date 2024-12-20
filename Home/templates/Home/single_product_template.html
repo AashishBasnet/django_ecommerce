@@ -88,7 +88,51 @@
                             value="1"
                             min="1"
                             max="{% if products.stock > 5 %}
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
                               5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             {% else %}
                               {{ products.stock }}
                             {% endif %}"
@@ -175,76 +219,35 @@
               {% endif %}
             </div>
 
+            <!-- Reviews Tab -->
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
-              <div class="review-box d-flex flex-wrap">
-                <div class="col-lg-6 d-flex flex-wrap">
-                  <div class="col-md-2">
-                    <div class="image-holder">
-                      <img src="{% static 'images/review-item1.jpg' %}" alt="review" class="img-fluid" />
+              <div class="review-box">
+                <!-- First Review -->
+
+                <!-- Add More Reviews -->
+
+                {% for review in user_reviews %}
+                  <div class="review-item row">
+                    <div class="col-md-10">
+                      <div class="review-content">
+                        <div class="rating-container d-flex align-items-center">
+                          <span class="rating-count">({{ review.rating }})</span>
+                        </div>
+                        <div class="review-header">
+                          <span class="author-name">{{ review.username }}</span>
+                          <span class="review-date">– {{ review.review_date|date:'b d, Y' }}</span>
+                        </div>
+                        <p>{{ review.review }}</p>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-8">
-                    <div class="review-content">
-                      <div class="rating-container d-flex align-items-center">
-                        <div class="rating" data-rating="1" onclick="rate(1)">
-                          <i class="icon icon-star"></i>
-                        </div>
-                        <div class="rating" data-rating="2" onclick="rate(1)">
-                          <i class="icon icon-star"></i>
-                        </div>
-                        <div class="rating" data-rating="3" onclick="rate(1)">
-                          <i class="icon icon-star"></i>
-                        </div>
-                        <div class="rating" data-rating="4" onclick="rate(1)">
-                          <i class="icon icon-star-half"></i>
-                        </div>
-                        <div class="rating" data-rating="5" onclick="rate(1)">
-                          <i class="icon icon-star-empty"></i>
-                        </div>
-                        <span class="rating-count">(3.5)</span>
-                      </div>
-                      <div class="review-header">
-                        <span class="author-name">Tina Johnson</span>
-                        <span class="review-date">– 03/07/2023</span>
-                      </div>
-                      <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis convallis</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 d-flex flex-wrap">
-                  <div class="col-md-2">
-                    <div class="image-holder">
-                      <img src="images/review-item2.jpg" alt="review" class="img-fluid" />
-                    </div>
-                  </div>
-                  <div class="col-md-8">
-                    <div class="review-content">
-                      <div class="rating-container d-flex align-items-center">
-                        <div class="rating" data-rating="1" onclick="rate(1)">
-                          <i class="icon icon-star"></i>
-                        </div>
-                        <div class="rating" data-rating="2" onclick="rate(1)">
-                          <i class="icon icon-star"></i>
-                        </div>
-                        <div class="rating" data-rating="3" onclick="rate(1)">
-                          <i class="icon icon-star"></i>
-                        </div>
-                        <div class="rating" data-rating="4" onclick="rate(1)">
-                          <i class="icon icon-star-half"></i>
-                        </div>
-                        <div class="rating" data-rating="5" onclick="rate(1)">
-                          <i class="icon icon-star-empty"></i>
-                        </div>
-                        <span class="rating-count">(3.5)</span>
-                      </div>
-                      <div class="review-header">
-                        <span class="author-name">Jenny Willis</span>
-                        <span class="review-date">– 03/06/2022</span>
-                      </div>
-                      <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus urna duis convallis convallis</p>
-                    </div>
-                  </div>
-                </div>
+                  <hr />
+                {% endfor %}
+              </div>
+              <hr />
+              <!-- Small Button -->
+              <div class="text-center mt-3">
+                <button class="btn btn-primary btn-sm" id="see-more-reviews">See More Reviews</button>
               </div>
             </div>
           </div>

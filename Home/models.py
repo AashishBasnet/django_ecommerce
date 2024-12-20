@@ -191,3 +191,18 @@ class Inquiry(models.Model):
 class BannerImage(models.Model):
     image = models.ImageField(
         upload_to='uploads/banners/', null=True)
+
+
+class UserReview(models.Model):
+    username = models.CharField(max_length=100)
+    review = models.TextField()
+    rating = models.DecimalField(
+        decimal_places=1, max_digits=3,
+        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
+        null=True, blank=False
+    )
+    is_useful = models.BooleanField(default=False)
+    review_date = models.DateField(default=datetime.date.today)
+
+    def __str__(self):
+        return f"Review by {self.username}"

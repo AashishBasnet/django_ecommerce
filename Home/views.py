@@ -1,7 +1,7 @@
 from .forms import InquiryForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
-from .models import Product, Categories, Profile, Tag, BannerImage
+from .models import Product, Categories, Profile, Tag, BannerImage, UserReview
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -174,7 +174,7 @@ def UserRegisterView(request):
 
 def SingleProductView(request, slug):
     tags = Tag.objects.all()
-
+    user_reviews = UserReview.objects.all().order_by('-id')[:2]
     product = get_object_or_404(Product, slug=slug)
 
     all_products = Product.objects.filter(
@@ -184,7 +184,8 @@ def SingleProductView(request, slug):
                   {
                       'products': product,
                       'all_products': all_products,
-                      'tags': tags
+                      'tags': tags,
+                      'user_reviews': user_reviews
                   })
 
 
