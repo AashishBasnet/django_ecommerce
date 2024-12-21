@@ -1,30 +1,107 @@
 {% extends 'index.html' %}
+{% load widget_tweaks %}
+
 {% block title %}
   All Reviews
 {% endblock %}
+
 {% block links %}
   <style>
     .card {
       border: 1px solid #e0e0e0;
       border-radius: 10px;
       transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+    
     .card:hover {
       transform: scale(1.05);
     }
+    
     .card-title {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: bold;
     }
+    
     .card-subtitle {
-      font-size: 1rem;
+      font-size: 1.25rem;
       color: #6c757d;
     }
+    
     .card-text {
       font-size: 1rem;
     }
+    
     .text-muted {
       font-size: 0.875rem;
+    }
+    
+    .review-form {
+      margin-top: 30px;
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .review-form input,
+    .review-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+    }
+    
+    .review-form button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .review-form button:hover {
+      background-color: #0056b3;
+    }
+    
+    .review-item {
+      margin-bottom: 30px;
+    }
+    
+    .review-content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .rating-slider-container {
+      position: relative;
+      width: 100%;
+      height: 50px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    
+    .rating-slider {
+      width: 100%;
+      height: 10px;
+      background-color: #007bff;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    
+    .rating-value {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
     }
   </style>
 {% endblock %}
@@ -59,11 +136,57 @@
               <span class="author-name">{{ review.username }}</span>
               <span class="review-date">– {{ review.review_date|date:'b d, Y' }}</span>
             </div>
+            {% if request.user.username == review.username %}
+              <button type="button" class="btn btn-danger btn-sm mt-2">Delete</button>
+            {% endif %}
           </div>
         </div>
       </div>
       <hr />
-      <br /><br /><br />
     {% endfor %}
+
+    <!-- Rating Slider for User Review -->
+    {% if request.user.is_authenticated %}
+      <form method="POST" class="review-form">
+        {% csrf_token %}
+
+        <!-- Displaying rating content within the form -->
+        <div class="form-group">
+          <label class="form-label">{{ form.review.label }}</label>
+          {{ form.review|add_class:'form-control' }}
+          {% if form.review.errors %}
+            <div class="alert alert-danger">
+              <ul>
+                {% for error in form.review.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          <label for="rating">Rating</label>
+          <div class="rating-slider-container">
+            <div class="rating-value" id="rating-value">{{ form.rating.value|default:0 }}</div>
+            <input type="range" class="rating-slider" min="0" max="5" step="0.1" id="rating-slider" name="rating" value="{{ form.rating.value|default:0 }}" />
+          </div>
+        </div>
+
+        <!-- Hidden input field to store rating -->
+        <input type="hidden" name="rating" id="rating-input" value="{{ form.rating.value|default:0 }}" />
+
+        <button type="submit">Submit Review</button>
+      </form>
+    {% endif %}
   </div>
+  <script>
+    // JavaScript to handle the rating slider
+    const ratingSlider = document.getElementById('rating-slider')
+    const ratingValue = document.getElementById('rating-value')
+    const ratingInput = document.getElementById('rating-input')
+    
+    // Update the displayed rating value and the hidden input field value as user scrolls
+    ratingSlider.addEventListener('input', function () {
+      ratingValue.textContent = ratingSlider.value
+      ratingInput.value = ratingSlider.value
+    })
+  </script>
 {% endblock %}

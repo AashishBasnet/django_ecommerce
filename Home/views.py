@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, InquiryForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, InquiryForm, UserReviewForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
@@ -190,10 +190,28 @@ def SingleProductView(request, slug):
                   })
 
 
+# def AllReviewsView(request, slug):
+#     reviews = UserReview.objects.filter(review_for__slug=slug).order_by('-id')
+#     return render(request, "Home/all_reviews_template.html", {
+#         'reviews': reviews
+#     })
+
 def AllReviewsView(request, slug):
+    product = Product.objects.get(slug=slug)
+    if request.method == 'POST':
+        form = UserReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.username = request.user.username
+            review.review_for = product
+            review.save()
+            return redirect('all-reviews', slug=slug)
+    else:
+        form = UserReviewForm()
     reviews = UserReview.objects.filter(review_for__slug=slug).order_by('-id')
     return render(request, "Home/all_reviews_template.html", {
-        'reviews': reviews
+        'form': form,
+        'reviews': reviews,
     })
 
 

@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator, EmailValidator, MinLengthVali
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django import forms
-from .models import Profile, Inquiry
+from .models import Profile, Inquiry, UserReview
 
 
 class UserInfoForm(forms.ModelForm):
@@ -223,3 +223,9 @@ class InquiryForm(forms.ModelForm):
             # Prepopulate phone number if available in user profile
             if hasattr(user, 'profile') and user.profile.phone:
                 self.fields['phone_number'].initial = user.profile.phone
+
+
+class UserReviewForm(forms.ModelForm):
+    class Meta:
+        model = UserReview
+        fields = ['review', 'rating']
