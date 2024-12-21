@@ -174,7 +174,8 @@ def UserRegisterView(request):
 
 def SingleProductView(request, slug):
     tags = Tag.objects.all()
-    user_reviews = UserReview.objects.all().order_by('-id')[:2]
+    user_reviews = UserReview.objects.filter(
+        review_for__slug=slug).order_by('-id')[:2]
     product = get_object_or_404(Product, slug=slug)
 
     all_products = Product.objects.filter(
@@ -187,6 +188,13 @@ def SingleProductView(request, slug):
                       'tags': tags,
                       'user_reviews': user_reviews
                   })
+
+
+def AllReviewsView(request, slug):
+    reviews = UserReview.objects.filter(review_for__slug=slug).order_by('-id')
+    return render(request, "Home/all_reviews_template.html", {
+        'reviews': reviews
+    })
 
 
 def ProductCategoryView(request, slug):

@@ -110,7 +110,43 @@
                               
                               
                               
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
                               5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -220,35 +256,43 @@
             </div>
 
             <!-- Reviews Tab -->
+
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
-              <div class="review-box">
-                <!-- First Review -->
+              {% if user_reviews %}
+                <div class="review-box">
+                  <!-- First Review -->
 
-                <!-- Add More Reviews -->
+                  <!-- Add More Reviews -->
 
-                {% for review in user_reviews %}
-                  <div class="review-item row">
-                    <div class="col-md-10">
-                      <div class="review-content">
-                        <div class="rating-container d-flex align-items-center">
-                          <span class="rating-count">({{ review.rating }})</span>
+                  {% for review in user_reviews %}
+                    {% if review.review_for.id == products.id %}
+                      <div class="review-item row">
+                        <div class="col-md-10">
+                          <div class="review-content">
+                            <div class="rating-container d-flex align-items-center">
+                              <span class="rating-count">({{ review.rating }})</span>
+                            </div>
+                            <p>{{ review.review }}</p>
+                            <div class="review-header">
+                              <span class="author-name">{{ review.username }}</span>
+                              <span class="review-date">– {{ review.review_date|date:'b d, Y' }}</span>
+                            </div>
+                          </div>
                         </div>
-                        <div class="review-header">
-                          <span class="author-name">{{ review.username }}</span>
-                          <span class="review-date">– {{ review.review_date|date:'b d, Y' }}</span>
-                        </div>
-                        <p>{{ review.review }}</p>
                       </div>
-                    </div>
-                  </div>
-                  <hr />
-                {% endfor %}
-              </div>
-              <hr />
-              <!-- Small Button -->
-              <div class="text-center mt-3">
-                <button class="btn btn-primary btn-sm" id="see-more-reviews">See More Reviews</button>
-              </div>
+                      <hr />
+                    {% endif %}
+                  {% endfor %}
+                </div>
+
+                <hr />
+                <!-- Small Button -->
+                <div class="text-center mt-3">
+                  <a href=" {% url 'all-reviews' products.slug %}"><button class="btn btn-primary btn-sm" id="see-more-reviews">See More Reviews</button></a>
+                </div>
+              {% else %}
+                <p>There is no review for this product yet.</p>
+              {% endif %}
             </div>
           </div>
         </div>

@@ -195,7 +195,7 @@ class BannerImage(models.Model):
 
 class UserReview(models.Model):
     username = models.CharField(max_length=100)
-    review = models.TextField()
+    review = models.TextField(max_length=500)
     rating = models.DecimalField(
         decimal_places=1, max_digits=3,
         validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
@@ -203,6 +203,8 @@ class UserReview(models.Model):
     )
     is_useful = models.BooleanField(default=False)
     review_date = models.DateField(default=datetime.date.today)
+    review_for = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"Review by {self.username}"

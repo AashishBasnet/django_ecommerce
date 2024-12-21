@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+{% block title %}
+  All Reviews
+{% endblock %}
+{% block links %}
+  <style>
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .card-subtitle {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+    .card-text {
+      font-size: 1rem;
+    }
+    .text-muted {
+      font-size: 0.875rem;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">All Reviews</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">All Reviews</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container mt-5">
+    {% for review in reviews %}
+      <div class="review-item row">
+        <div class="col-md-10">
+          <div class="review-content">
+            <div class="rating-container d-flex align-items-center">
+              <span class="rating-count"><strong>({{ review.rating }})</strong></span>
+            </div>
+            <p>{{ review.review }}</p>
+            <div class="review-header">
+              <span class="author-name">{{ review.username }}</span>
+              <span class="review-date">– {{ review.review_date|date:'b d, Y' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <br /><br /><br />
+    {% endfor %}
+  </div>
+{% endblock %}
