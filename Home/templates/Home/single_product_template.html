@@ -128,7 +128,9 @@
                               
                               
                               
+                              
                               5
+
 
 
 
@@ -292,6 +294,9 @@
                 </div>
               {% else %}
                 <p>There is no review for this product yet.</p>
+                <div class="text-center mt-3">
+                  <a href=" {% url 'all-reviews' products.slug %}"><button class="btn btn-primary btn-sm" id="see-more-reviews">Add Review</button></a>
+                </div>
               {% endif %}
             </div>
           </div>

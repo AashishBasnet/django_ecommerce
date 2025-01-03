@@ -105,7 +105,6 @@
     }
   </style>
 {% endblock %}
-
 {% block content %}
   <section class="hero-section position-relative bg-light-blue padding-medium">
     <div class="hero-content">
@@ -124,6 +123,7 @@
   </section>
 
   <div class="container mt-5">
+    <!-- Display other reviews -->
     {% for review in reviews %}
       <div class="review-item row">
         <div class="col-md-10">
@@ -136,21 +136,49 @@
               <span class="author-name">{{ review.username }}</span>
               <span class="review-date">– {{ review.review_date|date:'b d, Y' }}</span>
             </div>
-            {% if request.user.username == review.username %}
-              <button type="button" class="btn btn-danger btn-sm mt-2">Delete</button>
-            {% endif %}
           </div>
         </div>
       </div>
       <hr />
     {% endfor %}
 
-    <!-- Rating Slider for User Review -->
-    {% if request.user.is_authenticated %}
-      <form method="POST" class="review-form">
-        {% csrf_token %}
+    <!-- Display the user's review -->
+    {% if user_review %}
+      <div class="user-review mt-5">
+        <h3 class="text-dark">Your Review:</h3>
+        <div class="review-item row">
+          <div class="col-md-10">
+            <div class="review-content">
+              <div class="rating-container d-flex align-items-center">
+                <span class="rating-count"><strong>({{ user_review.rating }})</strong></span>
+              </div>
+              <p>{{ user_review.review }}</p>
+              <div class="review-header">
+                <span class="author-name">{{ user_review.username }}</span>
+                <span class="review-date">– {{ user_review.review_date|date:'b d, Y' }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 text-right">
+            <!-- Delete button for user_review -->
+            <form method="POST" action="{% url 'delete-user-review' user_review.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <h2>Add Your Review:</h2>
+    <!-- if there is no verified_order option for user -->
+    {% if not verified_order %}
+      <h3 class="text-muted" style="font-size:x-large;">You have to Verify a Purchase of this item to review!</h3>
+    {% endif %}
 
-        <!-- Displaying rating content within the form -->
+    <!-- Render the review form only if the user has not reviewed -->
+    {% if form %}
+      <form method="POST" class="review-form mt-5">
+        {% csrf_token %}
         <div class="form-group">
           <label class="form-label">{{ form.review.label }}</label>
           {{ form.review|add_class:'form-control' }}
@@ -170,20 +198,18 @@
           </div>
         </div>
 
-        <!-- Hidden input field to store rating -->
         <input type="hidden" name="rating" id="rating-input" value="{{ form.rating.value|default:0 }}" />
-
         <button type="submit">Submit Review</button>
       </form>
     {% endif %}
   </div>
+
   <script>
     // JavaScript to handle the rating slider
     const ratingSlider = document.getElementById('rating-slider')
     const ratingValue = document.getElementById('rating-value')
     const ratingInput = document.getElementById('rating-input')
     
-    // Update the displayed rating value and the hidden input field value as user scrolls
     ratingSlider.addEventListener('input', function () {
       ratingValue.textContent = ratingSlider.value
       ratingInput.value = ratingSlider.value

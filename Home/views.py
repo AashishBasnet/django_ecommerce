@@ -1,5 +1,5 @@
 from .forms import InquiryForm
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import Http404
 from .models import Product, Categories, Profile, Tag, BannerImage, UserReview
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, InquiryForm, UserReviewForm
 from payment.forms import ShippingForm
-from payment.models import ShippingAddress
+from payment.models import ShippingAddress, Order, OrderItem
 from django import forms
 from django.db.models import Q
 from cart.cart import Cart
@@ -113,35 +113,6 @@ def UserLoginView(request):
     else:
         return render(request, "Home/login_template.html", {})
 
-# def UserLoginView(request):
-#     if request.method == "POST":
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             # Do some Shopping Cart stuff
-#             current_user = Profile.objects.get(user__id=request.user.id)
-#             # Get their saved cart from database
-#             saved_cart = current_user.old_cart
-#             # convert database string to python dictionary
-#             if saved_cart:
-#                 # convert to dictionary using JSON
-#                 converted_cart = json.loads(saved_cart)
-#                 # Add the loaded cart dictionary to our session
-#                 cart = Cart(request)
-#                 # Loop through the cart an add the items from database
-#                 for key, value in converted_cart.items():
-#                     cart.db_add(product=key, quantity=value)
-
-#             messages.success(request, ("You Have Been Logged In"))
-#             return redirect("home")
-#         else:
-#             messages.warning(request, ("There was a error logging you in"))
-#             return redirect("login")
-#     else:
-#         return render(request, "Home/login_template.html", {})
-
 
 def UserLogoutView(request):
     logout(request)
@@ -191,14 +162,50 @@ def SingleProductView(request, slug):
 
 
 # def AllReviewsView(request, slug):
-#     reviews = UserReview.objects.filter(review_for__slug=slug).order_by('-id')
+#     product = Product.objects.get(slug=slug)
+#     user_review = None
+#     if request.user.is_authenticated:
+#         user_review = UserReview.objects.filter(
+#             review_for=product, username=request.user.username).first()
+
+#     if request.method == 'POST' and not user_review:
+#         form = UserReviewForm(request.POST)
+#         if form.is_valid():
+#             review = form.save(commit=False)
+#             review.username = request.user.username
+#             review.review_for = product
+#             review.save()
+#             return redirect('all-reviews', slug=slug)
+#     else:
+#         form = None if user_review else UserReviewForm()
+
+#     reviews = UserReview.objects.filter(review_for=product).exclude(
+#         username=request.user.username).order_by('-id')
 #     return render(request, "Home/all_reviews_template.html", {
-#         'reviews': reviews
+#         'form': form,
+#         'reviews': reviews,
+#         'user_review': user_review,
 #     })
 
 def AllReviewsView(request, slug):
-    product = Product.objects.get(slug=slug)
-    if request.method == 'POST':
+    product = get_object_or_404(Product, slug=slug)
+    user_review = None
+    verified_order = False
+
+    if request.user.is_authenticated:
+        # Checking if the user has a verified order for this product or not
+        orders = Order.objects.filter(user=request.user, paid=True)
+        verified_order = OrderItem.objects.filter(
+            order__in=orders, product=product
+        ).exists()
+
+        # Checking if the user has already reviewed the product
+        user_review = UserReview.objects.filter(
+            review_for=product, username=request.user.username
+        ).first()
+
+    # Handle form submission if conditions are met
+    if request.method == 'POST' and not user_review and verified_order:
         form = UserReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
@@ -207,12 +214,25 @@ def AllReviewsView(request, slug):
             review.save()
             return redirect('all-reviews', slug=slug)
     else:
-        form = UserReviewForm()
-    reviews = UserReview.objects.filter(review_for__slug=slug).order_by('-id')
+        # Only showing the form if the user has a verified order
+        form = UserReviewForm() if verified_order and not user_review else None
+
+    reviews = UserReview.objects.filter(review_for=product).exclude(
+        username=request.user.username
+    ).order_by('-id')
     return render(request, "Home/all_reviews_template.html", {
         'form': form,
         'reviews': reviews,
+        'user_review': user_review,
+        'verified_order': verified_order
     })
+
+
+def DeleteUserReviewView(request, review_id):
+    review = get_object_or_404(UserReview, id=review_id, username=request.user)
+    review.delete()
+    slug = review.review_for.slug
+    return redirect(reverse('all-reviews', kwargs={'slug': slug}))
 
 
 def ProductCategoryView(request, slug):
