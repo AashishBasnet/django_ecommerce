@@ -6,6 +6,12 @@
 {% endblock %}
 {% block links %}
   <style>
+    .review-content {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
     #imageZoom {
       width: 550px;
       height: 700px;
@@ -49,16 +55,23 @@
             <img src="{{ products.product_image.url }}" alt="single-product" class="img-fluid w-100" />
           </div>
         </div>
+
         <div class="col-lg-6">
           <div class="product-info">
             <div class="element-header">
               <h3 itemprop="name" class="display-7 text-uppercase">{{ products.product_name }}</h3>
               <div class="rating-container d-flex align-items-center">
                 <div class="rating" data-rating="1">
-                  <svg class="star star-fill">
-                    <use xlink:href="#star-fill"></use>
-                  </svg>
-                  <span class="rating-count ps-2">{{ products.product_rating }}</span>
+                  {% if average_rating %}
+                    <svg class="star star-fill">
+                      <use xlink:href="#star-fill"></use>
+                    </svg>
+                  {% endif %}
+                  {% if average_rating %}
+                    <span class="rating-count ps-2">{{ average_rating }}</span>
+                  {% else %}
+                    <span class="rating-count ps-2">(no rating yet)</span>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -129,7 +142,43 @@
                               
                               
                               
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
                               5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -262,6 +311,13 @@
             <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
               {% if user_reviews %}
                 <div class="review-box">
+                  {% if average_rating is not None %}
+                    <h3><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ average_rating }} out of 5</h3>
+                    <br />
+                  {% else %}
+                    <h3>There is no review for the item yet. Be the first one to review!</h3>
+                    <br />
+                  {% endif %}
                   <!-- First Review -->
 
                   <!-- Add More Reviews -->
@@ -272,7 +328,7 @@
                         <div class="col-md-10">
                           <div class="review-content">
                             <div class="rating-container d-flex align-items-center">
-                              <span class="rating-count">({{ review.rating }})</span>
+                              <span class="rating-count"><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ review.rating }}</span>
                             </div>
                             <p>{{ review.review }}</p>
                             <div class="review-header">
@@ -282,12 +338,10 @@
                           </div>
                         </div>
                       </div>
-                      <hr />
+                      <br />
                     {% endif %}
                   {% endfor %}
                 </div>
-
-                <hr />
                 <!-- Small Button -->
                 <div class="text-center mt-3">
                   <a href=" {% url 'all-reviews' products.slug %}"><button class="btn btn-primary btn-sm" id="see-more-reviews">See More Reviews</button></a>

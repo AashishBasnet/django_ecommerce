@@ -114,11 +114,6 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='uploads/product/', null=True)
 
     product_tag = models.ManyToManyField(Tag, blank=True)
-    product_rating = models.DecimalField(
-        decimal_places=1, max_digits=3,
-        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],
-        null=True, blank=False
-    )
     product_sale_price = models.DecimalField(
         decimal_places=2, max_digits=8, null=True, blank=True)
     slug = models.SlugField(unique=True, blank=True, null=True)

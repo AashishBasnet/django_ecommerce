@@ -17,6 +17,7 @@ import math
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from blog.views import Post
 # Create your views here.
+from django.db.models import Avg
 
 
 def HomeView(request):
@@ -145,52 +146,32 @@ def UserRegisterView(request):
 
 def SingleProductView(request, slug):
     tags = Tag.objects.all()
+
     user_reviews = UserReview.objects.filter(
         review_for__slug=slug).order_by('-id')[:2]
     product = get_object_or_404(Product, slug=slug)
-
+    average_rating = UserReview.objects.filter(review_for__id=product.id).aggregate(Avg('rating'))[
+        'rating__avg']
     all_products = Product.objects.filter(
         product_category=product.product_category).order_by('-id')[:5]
-
+    average_rating = round(
+        average_rating, 2) if average_rating is not None else None
     return render(request, "Home/single_product_template.html",
                   {
                       'products': product,
                       'all_products': all_products,
                       'tags': tags,
-                      'user_reviews': user_reviews
+                      'user_reviews': user_reviews,
+                      'average_rating': average_rating
                   })
 
-
-# def AllReviewsView(request, slug):
-#     product = Product.objects.get(slug=slug)
-#     user_review = None
-#     if request.user.is_authenticated:
-#         user_review = UserReview.objects.filter(
-#             review_for=product, username=request.user.username).first()
-
-#     if request.method == 'POST' and not user_review:
-#         form = UserReviewForm(request.POST)
-#         if form.is_valid():
-#             review = form.save(commit=False)
-#             review.username = request.user.username
-#             review.review_for = product
-#             review.save()
-#             return redirect('all-reviews', slug=slug)
-#     else:
-#         form = None if user_review else UserReviewForm()
-
-#     reviews = UserReview.objects.filter(review_for=product).exclude(
-#         username=request.user.username).order_by('-id')
-#     return render(request, "Home/all_reviews_template.html", {
-#         'form': form,
-#         'reviews': reviews,
-#         'user_review': user_review,
-#     })
 
 def AllReviewsView(request, slug):
     product = get_object_or_404(Product, slug=slug)
     user_review = None
     verified_order = False
+    average_rating = UserReview.objects.filter(review_for__id=product.id).aggregate(Avg('rating'))[
+        'rating__avg']
 
     if request.user.is_authenticated:
         # Checking if the user has a verified order for this product or not
@@ -212,6 +193,8 @@ def AllReviewsView(request, slug):
             review.username = request.user.username
             review.review_for = product
             review.save()
+            average_rating = UserReview.objects.filter(review_for__id=product.id).aggregate(Avg('rating'))[
+                'rating__avg']
             return redirect('all-reviews', slug=slug)
     else:
         # Only showing the form if the user has a verified order
@@ -220,11 +203,18 @@ def AllReviewsView(request, slug):
     reviews = UserReview.objects.filter(review_for=product).exclude(
         username=request.user.username
     ).order_by('-id')
+    paginator = Paginator(reviews, 15)
+    page_number = request.GET.get('page')
+    reviews = paginator.get_page(page_number)
+    average_rating = round(
+        average_rating, 2) if average_rating is not None else None
+    print(average_rating)
     return render(request, "Home/all_reviews_template.html", {
         'form': form,
         'reviews': reviews,
         'user_review': user_review,
-        'verified_order': verified_order
+        'verified_order': verified_order,
+        'average_rating': average_rating
     })
 
 

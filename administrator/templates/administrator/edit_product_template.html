@@ -294,13 +294,7 @@
             <div class="text-danger small">{{ error }}</div>
           {% endfor %}
         </div>
-        <div class="mb-3">
-          <label class="form-label">{{ form.product_rating.label }} *</label>
-          {{ form.product_rating|add_class:'form-control' }}
-          {% for error in form.product_rating.errors %}
-            <div class="text-danger small">{{ error }}</div>
-          {% endfor %}
-        </div>
+
         <div class="mb-3">
           <label class="form-label">{{ form.product_tag.label }} &nbsp;<a href="{% url 'add-tag' %}" class="text-primary">add new tag</a></label>
           {{ form.product_tag|add_class:'form-control' }}

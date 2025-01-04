@@ -16,7 +16,6 @@ class AddProductForm(forms.ModelForm):
             'product_long_description',
             'product_additional_information',
             'product_image',
-            'product_rating',
             'product_tag',
             'product_sale_price',
             'stock',
