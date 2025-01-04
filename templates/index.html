@@ -325,53 +325,33 @@
     {% endblock %}
     {% block subscribe %}
       <section id="subscribe" class="container-grid padding-large position-relative overflow-hidden">
-        <div class="container">
-          <div class="row">
-            <div class="subscribe-content bg-dark d-flex flex-wrap justify-content-center align-items-center padding-medium">
-              <div class="col-md-6 col-sm-12">
-                <div class="display-header pe-3">
-                  <h2 class="display-7 text-uppercase text-light">Subscribe Us Now</h2>
-                  <p>Get latest news, updates and deals directly mailed to your inbox.</p>
-                </div>
+        <section id="instagram" class="padding-large overflow-hidden no-padding-top">
+          <div class="container">
+            <div class="row">
+              <div class="display-header text-uppercase text-dark text-center pb-3">
+                <h2 class="display-7">Shop By Categories</h2>
               </div>
-              <div class="col-md-5 col-sm-12">
-                <form class="subscription-form validate">
-                  <div class="input-group flex-wrap">
-                    <input class="form-control btn-rounded-none" type="email" name="EMAIL" placeholder="Your email address here" required="" />
-                    <button class="btn btn-medium btn-primary text-uppercase btn-rounded-none" type="submit" name="subscribe">Subscribe</button>
-                  </div>
-                </form>
+              <div class="d-flex flex-wrap justify-content-center">
+                {% for category in categories|slice:':5' %}
+                  {% if category.category_display_image %}
+                    <figure class="instagram-item pe-2 image-holder">
+                      <a href="{% url 'category' category.slug %}" class="image-link position-relative">
+                        <img src="{{ category.category_display_image.url }}" alt="instagram" class="insta-image" />
+                        <div class="icon-overlay position-absolute d-flex justify-content-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2 13h13l2-6H6"></path>
+                          </svg>
+                        </div>
+                      </a>
+                    </figure>
+                  {% endif %}
+                {% endfor %}
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <section id="instagram" class="padding-large overflow-hidden no-padding-top">
-        <div class="container">
-          <div class="row">
-            <div class="display-header text-uppercase text-dark text-center pb-3">
-              <h2 class="display-7">Shop By Categories</h2>
-            </div>
-            <div class="d-flex flex-wrap justify-content-center">
-              {% for category in categories|slice:':5' %}
-                {% if category.category_display_image %}
-                  <figure class="instagram-item pe-2 image-holder">
-                    <a href="{% url 'category' category.slug %}" class="image-link position-relative">
-                      <img src="{{ category.category_display_image.url }}" alt="instagram" class="insta-image" />
-                      <div class="icon-overlay position-absolute d-flex justify-content-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="9" cy="21" r="1"></circle>
-                          <circle cx="20" cy="21" r="1"></circle>
-                          <path d="M1 1h4l2 13h13l2-6H6"></path>
-                        </svg>
-                      </div>
-                    </a>
-                  </figure>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        </div>
+        </section>
       </section>
     {% endblock %}
     {% block footer %}

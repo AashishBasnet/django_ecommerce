@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, Category, Tag
+from django.shortcuts import render, get_object_or_404, redirect, reverse
+from .models import Post, Category, Tag, Comment
 from django.core.paginator import Paginator, PageNotAnInteger
 from django.contrib import messages
 from django.db.models import Q
+from .forms import CommentForm
 
 
 def AllBlogsView(request):
@@ -23,17 +24,68 @@ def AllBlogsView(request):
     return render(request, "blog/all_blogs_template.html", {'posts': posts_paginated, 'all_categories': all_categories, 'tags': tags, 'latest_posts': latest_posts})
 
 
+# def SingleBlogView(request, slug):
+#     post = get_object_or_404(Post, slug=slug)
+#     previous_post = Post.objects.filter(id=post.id-1).first()
+#     next_post = Post.objects.filter(id=post.id + 1).first()
+#     all_posts = Post.objects.all()
+
+#     return render(request, "blog/single_blog_template.html",
+#                   {"post": post,
+#                    "all_posts": all_posts,
+#                    "previous_post": previous_post,
+#                    "next_post": next_post,
+#                    })
+
+
 def SingleBlogView(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    previous_post = Post.objects.filter(id=post.id-1).first()
+    previous_post = Post.objects.filter(id=post.id - 1).first()
     next_post = Post.objects.filter(id=post.id + 1).first()
     all_posts = Post.objects.all()
-    return render(request, "blog/single_blog_template.html",
-                  {"post": post,
-                   "all_posts": all_posts,
-                   "previous_post": previous_post,
-                   "next_post": next_post,
-                   })
+    # handling how comments are seen
+    if request.user.is_authenticated:
+        user_comments = Comment.objects.filter(
+            post=post, user=request.user).order_by('-id')
+        other_comments = Comment.objects.filter(
+            post=post).exclude(user=request.user).order_by('-id')
+        comments = list(user_comments) + list(other_comments)
+    else:
+        comments = Comment.objects.filter(post=post).order_by('-id')
+
+    paginator = Paginator(comments, 5)
+    page_number = request.GET.get('page')
+    comments = paginator.get_page(page_number)
+    # Initializing the form
+    form = CommentForm()
+
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.user = request.user
+                comment.post = post
+                comment.save()
+                return redirect("single-blog", slug=slug)
+        else:
+            return redirect("login")
+
+    return render(request, "blog/single_blog_template.html", {
+        "post": post,
+        "all_posts": all_posts,
+        "previous_post": previous_post,
+        "next_post": next_post,
+        "form": form,
+        "comments": comments
+    })
+
+
+def DeleteUserCommentView(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id, user=request.user)
+    comment.delete()
+    slug = comment.post.slug
+    return redirect(reverse('single-blog', kwargs={'slug': slug}))
 
 
 def BlogCategoryView(request, slug):

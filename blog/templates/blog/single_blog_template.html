@@ -3,12 +3,124 @@
 {% block title %}
   {{ post.title }}
 {% endblock %}
+{% load widget_tweaks %}
 {% block links %}
   <style>
     .post-content {
       text-align: justify;
       margin: 0 10px;
       padding: 0;
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8); /* Darker backdrop for emphasis */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.4s ease-in-out; /* Smooth fade-in effect */
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, #ffffff, #f0f4f8); /* Soft gradient background */
+      padding: 30px;
+      border-radius: 16px; /* Increased rounding for a modern look */
+      width: 450px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
+      transform: scale(0.95);
+      animation: scaleUp 0.4s ease-in-out forwards; /* Scale-in animation for popping effect */
+      transition: transform 0.3s ease; /* Transition for hover effect */
+    }
+    
+    .modal-content:hover {
+      transform: scale(1); /* Slightly grow on hover */
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .modal-description {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    .modal-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+    }
+    
+    .modal button {
+      padding: 14px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease; /* Smooth transitions for hover effects */
+    }
+    
+    .modal .btn-danger {
+      background-color: #e63946; /* Updated color */
+      color: #fff;
+    }
+    
+    .modal .btn-danger:hover {
+      background-color: #d62839; /* Slightly darker red on hover */
+      box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3); /* Subtle shadow on hover */
+      transform: translateY(-2px); /* Lift effect on hover */
+    }
+    
+    .modal .btn-secondary {
+      background-color: #f1faee; /* Softer background color */
+      color: #333;
+    }
+    
+    .modal .btn-secondary:hover {
+      background-color: #a8dadc; /* Slightly darker teal on hover */
+      box-shadow: 0 4px 8px rgba(168, 221, 220, 0.3); /* Subtle shadow on hover */
+      transform: translateY(-2px); /* Lift effect on hover */
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    @keyframes scaleUp {
+      from {
+        transform: scale(0.95);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .modal-description {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
     }
   </style>
 {% endblock %}
@@ -127,86 +239,90 @@
                 </div>
               </div>
             </article>
-            {% comment %} <section id="post-comment">
+            <section id="post-comment">
               <div class="container">
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="comments-wrap">
-                      <h2 class="display-6 fw-normal text-dark text-uppercase"><span class="count">3</span> Comments</h2>
+                      <h2 class="display-6 fw-normal text-dark text-uppercase"><span class="count">{{ comments.paginator.count }}</span> Comments</h2>
+
                       <div class="comment-list padding-small">
-                        <article class="comment-item d-flex flex-wrap mb-3">
-                          <div class="col-lg-1 col-sm-3 me-4 mb-3">
-                            <img src="{% static 'images/commentor-item1.jpg' %}" alt="default" class="img-fluid" />
-                          </div>
-                          <div class="col-lg-10 col-sm-9 author-wrap">
-                            <div class="author-post">
-                              <div class="comment-meta d-flex">
-                                <div class="author-name fw-bold text-uppercase pe-1">Sam Smith</div>
-                                <span class="meta-date">Jul 10</span>
-                              </div>
-                              <p class="no-margin">Mattis pulvinar non viverra donec pellentesque. Odio mi consequat libero dolor. Porta ut diam lobortis eget leo, lectus. Tortor diam dignissim amet, in interdum aliquet. Nascetur libero elementum adipiscing mauris maecenas et magna.</p>
-                              <div class="comments-reply">
-                                <a href="#" class="btn btn-normal text-primary">Reply Now</a>
-                              </div>
-                            </div>
-                          </div>
-                        </article>
-                        <article class="comment-item d-flex child-comments flex-wrap ps-5 mb-3">
-                          <div class="col-lg-1 col-sm-3 me-4 mb-3">
-                            <img src="{% static 'images/commentor-item2.jpg' %}" alt="default" class="img-fluid" />
-                          </div>
-                          <div class="col-lg-10 col-sm-9 author-wrap">
-                            <div class="author-post">
-                              <div class="comment-meta d-flex">
-                                <div class="author-name fw-bold text-uppercase pe-1">Santie Mary</div>
-                                <span class="meta-date">Jul 10</span>
-                              </div>
-                              <p class="no-margin">Tristique tempis condimentum diam done ullancomroer sit element henddg sit he consequert.Tristique tempis condimentum diam done ullancomroer sit element henddg sit he consequert.</p>
-                              <div class="comments-reply">
-                                <a href="#" class="btn btn-normal text-primary">Reply Now</a>
-                              </div>
-                            </div>
-                          </div>
-                        </article>
-                        <article class="comment-item d-flex flex-wrap">
-                          <div class="col-lg-1 col-sm-3 me-4 mb-3">
-                            <img src="{% static 'images/commentor-item3.jpg' %}" alt="default" class="img-fluid" />
-                          </div>
-                          <div class="col-lg-10 col-sm-9 author-wrap">
-                            <div class="author-post">
-                              <div class="comment-meta d-flex">
-                                <div class="author-name fw-bold text-uppercase pe-1">Analisa Nora</div>
-                                <span class="meta-date">Jul 10</span>
-                              </div>
-                              <p class="no-margin">Tristique tempis condimentum diam done ullancomroer sit element henddg sit he consequert.Tristique tempis condimentum diam done ullancomroer sit element henddg sit he consequert.</p>
-                              <div class="comments-reply">
-                                <a href="#" class="btn btn-normal text-primary">Reply Now</a>
+                        {% for comment in comments %}
+                          <article class="comment-item d-flex flex-wrap mb-3">
+                            <div class="col-lg-10 col-sm-9 author-wrap">
+                              <div class="author-post">
+                                <div class="comment-meta d-flex">
+                                  <div class="author-name fw-bold text-uppercase pe-1">{{ comment.user }}</div>
+                                  <span class="meta-date text-primary">{{ comment.created_at|date:'M d, Y' }}</span>
+                                </div>
+                                <p class="no-margin">{{ comment.content }}</p>
+                                <div class="comments-reply">
+                                  {% if comment.user == request.user %}
+                                    <form id="delete-form" method="POST" action="{% url 'delete-comment' comment.id %}" class="mt-3">
+                                      {% csrf_token %}
+                                      <button type="button" class="btn btn-normal text-danger" onclick="showDeleteConfirmation()">Delete</button>
+                                    </form>
+
+                                    <!-- Confirmation Dialog -->
+                                    <div id="delete-confirmation" class="modal" style="display: none;">
+                                      <div class="modal-content">
+                                        <h4 class="modal-title">Confirm Deletion</h4>
+                                        <p class="text-danger modal-description">Are you sure you want to delete this Comment? This action cannot be undone.</p>
+                                        <div class="modal-actions">
+                                          <button onclick="confirmDelete()" class="btn btn-danger">Yes, Delete</button>
+                                          <button onclick="closeDeleteConfirmation()" class="btn btn-secondary">Cancel</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </article>
+                          </article>
+                        {% endfor %}
+                        {% if comments %}
+                          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+                            <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+                              {% if comments.has_previous %}
+                                <a href="?page={{ comments.previous_page_number }}">
+                                  <svg class="chevron-left pe-3">
+                                    <use xlink:href="#chevron-left"></use>
+                                  </svg>
+                                </a>
+                              {% endif %}
+
+                              {% for num in comments.paginator.page_range %}
+                                {% if comments.number == num %}
+                                  <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+                                {% else %}
+                                  <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                              {% endfor %}
+
+                              {% if comments.has_next %}
+                                <a href="?page={{ comments.next_page_number }}">
+                                  <svg class="chevron-right ps-3">
+                                    <use xlink:href="#chevron-right"></use>
+                                  </svg>
+                                </a>
+                              {% endif %}
+                            </div>
+                          </nav>
+                        {% endif %}
                       </div>
                     </div>
                     <div class="comment-respond mt-3">
                       <h2 class="display-6 fw-normal text-dark text-uppercase">Leave a Comment</h2>
-                      <form method="post" class="form-group padding-small">
-                        <p>Your email address will not be published. Required fields are marked *</p>
+                      <form method="POST" enctype="multipart/form-data" action="{% url 'single-blog' post.slug %}">
+                        {% csrf_token %}
                         <div class="row">
-                          <div class="col-lg-12 mb-3">
-                            <textarea class="form-control ps-3 pt-3" id="comment" name="comment" placeholder="Write your comment here *"></textarea>
+                          <div class="mb-3">
+                            {{ form.content|add_class:'form-control' }}
+                            {% for error in form.content.errors %}
+                              <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
                           </div>
-                          <div class="col-lg-6 mb-3">
-                            <input class="form-control ps-3" type="text" name="author" id="author" placeholder="Write your full name here *" />
-                          </div>
-                          <div class="col-lg-6">
-                            <input class="form-control ps-3" type="email" name="email" id="email" placeholder="Write your e-mail address *" />
-                          </div>
-                          <div class="col-lg-12">
-                            <label class="d-flex align-items-center">
-                              <input type="checkbox" class="checked-box me-2" />
-                              <span class="label-body">Save my name, email, and website in this browser for the next time.</span>
-                            </label>
-                          </div>
+
                           <div class="col-lg-12 mt-3">
                             <button class="btn btn-medium btn-black text-uppercase btn-rounded-none" type="submit">Post Comment</button>
                           </div>
@@ -216,7 +332,7 @@
                   </div>
                 </div>
               </div>
-            </section> {% endcomment %}
+            </section>
           </div>
         </main>
       </div>
@@ -249,4 +365,20 @@
       </div>
     </div>
   </section>
+  <script>
+    // Show Confirmation Modal
+    function showDeleteConfirmation() {
+      document.getElementById('delete-confirmation').style.display = 'flex'
+    }
+    
+    // Close Confirmation Modal
+    function closeDeleteConfirmation() {
+      document.getElementById('delete-confirmation').style.display = 'none'
+    }
+    
+    // Confirm Delete
+    function confirmDelete() {
+      document.getElementById('delete-form').submit()
+    }
+  </script>
 {% endblock %}

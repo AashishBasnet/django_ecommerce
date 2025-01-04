@@ -8,5 +8,7 @@ urlpatterns = [
     path("blog-tag/<slug:slug>", views.BlogTagView, name='blog-tag'),
     path("<slug:slug>", views.SingleBlogView, name='single-blog'),
     path("blog-search/", views.BlogSearchView, name='blog-search'),
+    path("delete-comment/<int:comment_id>",
+         views.DeleteUserCommentView, name='delete-comment'),
 
 ]
