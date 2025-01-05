@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% load widget_tweaks %}
+{% load forms_extras %}
 
 {% block title %}
   All Reviews
@@ -63,7 +64,7 @@
     }
     
     .review-form button:hover {
-      background-color: #0056b3;
+      background-color: #72aec8;
     }
     
     .review-item {
@@ -89,7 +90,7 @@
     .rating-slider {
       width: 100%;
       height: 10px;
-      background-color: #007bff;
+      background-color: #72aec8;
       border-radius: 10px;
       cursor: pointer;
     }
@@ -235,7 +236,33 @@
 
   <div class="container mt-5">
     {% if average_rating is not None %}
-      <h3><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ average_rating }} out of 5</h3>
+      <h3>
+        <div class="rating">
+          {% if average_rating %}
+            {% for star in average_rating|floor|in_range %}
+              <svg class="star star-fill">
+                <use xlink:href="#star-fill" style="fill:#72AEC8"></use>
+              </svg>
+            {% endfor %}
+            {% if average_rating|floor|subtract:average_rating != 0 %}
+              <svg class="star star-half">
+                <use xlink:href="#star-half"></use>
+              </svg>
+            {% endif %}
+            {% for star in 5|subtract:average_rating|floor|in_range %}
+              <svg class="star star-empty">
+                <use xlink:href="#star-empty"></use>
+              </svg>
+            {% endfor %}
+          {% endif %}
+          {% if average_rating %}
+            <span class="rating-count ps-2">({{ average_rating }})</span>
+          {% else %}
+            <span class="rating-count ps-2">(no rating yet)</span>
+          {% endif %}
+        </div>
+      </h3>
+
       <br />
     {% else %}
       <h3>There is no review for the item yet. Be the first one to review!</h3>
@@ -247,7 +274,27 @@
         <div class="col-md-10">
           <div class="review-content">
             <div class="rating-container d-flex align-items-center">
-              <span class="rating-count"><strong><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ review.rating }}</strong></span>
+              <span class="rating-count">
+                <strong>
+                  <div class="rating">
+                    {% for star in review.rating|floor|in_range %}
+                      <svg class="star star-fill">
+                        <use xlink:href="#star-fill" style="fill:#72AEC8"></use>
+                      </svg>
+                    {% endfor %}
+                    {% if review.rating|floor|subtract:review.rating != 0 %}
+                      <svg class="star star-half">
+                        <use xlink:href="#star-half"></use>
+                      </svg>
+                    {% endif %}
+                    {% for star in 5|subtract:review.rating|floor|in_range %}
+                      <svg class="star star-empty">
+                        <use xlink:href="#star-empty"></use>
+                      </svg>
+                    {% endfor %}({{ review.rating }})
+                  </div>
+                </strong>
+              </span>
             </div>
             <p>{{ review.review }}</p>
             <div class="review-header">
@@ -295,7 +342,27 @@
           <div class="col-md-10">
             <div class="review-content">
               <div class="rating-container d-flex align-items-center">
-                <span class="rating-count"><strong><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ user_review.rating }}</strong></span>
+                <span class="rating-count">
+                  <strong>
+                    <div class="rating">
+                      {% for star in user_review.rating|floor|in_range %}
+                        <svg class="star star-fill">
+                          <use xlink:href="#star-fill" style="fill:#72AEC8"></use>
+                        </svg>
+                      {% endfor %}
+                      {% if user_review.rating|floor|subtract:user_review.rating != 0 %}
+                        <svg class="star star-half">
+                          <use xlink:href="#star-half"></use>
+                        </svg>
+                      {% endif %}
+                      {% for star in 5|subtract:user_review.rating|floor|in_range %}
+                        <svg class="star star-empty">
+                          <use xlink:href="#star-empty"></use>
+                        </svg>
+                      {% endfor %}({{ user_review.rating }})
+                    </div>
+                  </strong>
+                </span>
               </div>
               <p>{{ user_review.review }}</p>
               <div class="review-header">

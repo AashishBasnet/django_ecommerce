@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
+{% load forms_extras %}
 {% block title %}
   Home
 {% endblock %}
@@ -255,10 +256,11 @@
       </div>
     </div>
   </section>
+
   <section id="testimonials" class="position-relative">
     <div class="container">
       <div class="row">
-        <div class="review-content position-relative">
+        <h2 class="display-7 text-dark text-uppercase">Latest Reviews</h2><div class="review-content position-relative">
           <div class="swiper-icon swiper-arrow swiper-arrow-prev position-absolute d-flex align-items-center">
             <svg class="chevron-left">
               <use xlink:href="#chevron-left" />
@@ -271,58 +273,35 @@
               </svg>
             </div>
             <div class="swiper-wrapper">
-              <div class="swiper-slide text-center d-flex justify-content-center">
-                <div class="review-item col-md-10">
-                  <i class="icon icon-review"></i>
-                  <blockquote>“Tempus oncu enim pellen tesque este pretium in neque, elit morbi sagittis lorem habi mattis Pellen tesque pretium feugiat vel morbi suspen dise sagittis lorem habi tasse morbi.”</blockquote>
-                  <div class="rating">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-half">
-                      <use xlink:href="#star-half"></use>
-                    </svg>
-                    <svg class="star star-empty">
-                      <use xlink:href="#star-empty"></use>
-                    </svg>
-                  </div>
-                  <div class="author-detail">
-                    <div class="name text-dark text-uppercase pt-2">Emma Chamberlin</div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide text-center d-flex justify-content-center">
-                <div class="review-item col-md-10">
-                  <i class="icon icon-review"></i>
-                  <blockquote>“A blog is a digital publication that can complement a website or exist independently. A blog may include articles, short posts, listicles, infographics, videos, and other digital content.”</blockquote>
-                  <div class="rating">
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
-                    <svg class="star star-half">
-                      <use xlink:href="#star-half"></use>
-                    </svg>
-                    <svg class="star star-empty">
-                      <use xlink:href="#star-empty"></use>
-                    </svg>
-                  </div>
-                  <div class="author-detail">
-                    <div class="name text-dark text-uppercase pt-2">Jennie Rose</div>
+              {% for review in reviews %}
+                <div class="swiper-slide text-center d-flex justify-content-center">
+                  <div class="review-item col-md-10">
+                    <i class="icon icon-review"></i>
+                    <blockquote>“{{ review.review }}”</blockquote>
+                    <div class="rating">
+                      {% for star in review.rating|floor|in_range %}
+                        <svg class="star star-fill">
+                          <use xlink:href="#star-fill"></use>
+                        </svg>
+                      {% endfor %}
+                      {% if review.rating|floor|subtract:review.rating != 0 %}
+                        <svg class="star star-half">
+                          <use xlink:href="#star-half"></use>
+                        </svg>
+                      {% endif %}
+                      {% for star in 5|subtract:review.rating|floor|in_range %}
+                        <svg class="star star-empty">
+                          <use xlink:href="#star-empty"></use>
+                        </svg>
+                      {% endfor %}
+                    </div>
+
+                    <div class="author-detail">
+                      <div class="name text-dark text-uppercase pt-2">{{ review.username }}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              {% endfor %}
             </div>
           </div>
           <div class="swiper-icon swiper-arrow swiper-arrow-next position-absolute d-flex align-items-center">

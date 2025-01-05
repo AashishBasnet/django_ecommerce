@@ -128,7 +128,7 @@ DATABASES = {
 #         'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
 #         'HOST': 'junction.proxy.rlwy.net',
 #         'PORT': '14588',
-#     }
+#   }
 # }
 
 # Password validation

@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 
 {% load static %}
+{% load forms_extras %}
 {% block title %}
   Buy {{ products.product_name }}
 {% endblock %}
@@ -61,14 +62,26 @@
             <div class="element-header">
               <h3 itemprop="name" class="display-7 text-uppercase">{{ products.product_name }}</h3>
               <div class="rating-container d-flex align-items-center">
-                <div class="rating" data-rating="1">
+                <div class="rating">
                   {% if average_rating %}
-                    <svg class="star star-fill">
-                      <use xlink:href="#star-fill"></use>
-                    </svg>
+                    {% for star in average_rating|floor|in_range %}
+                      <svg class="star star-fill">
+                        <use xlink:href="#star-fill" style="fill:#72AEC8"></use>
+                      </svg>
+                    {% endfor %}
+                    {% if average_rating|floor|subtract:average_rating != 0 %}
+                      <svg class="star star-half">
+                        <use xlink:href="#star-half"></use>
+                      </svg>
+                    {% endif %}
+                    {% for star in 5|subtract:average_rating|floor|in_range %}
+                      <svg class="star star-empty">
+                        <use xlink:href="#star-empty"></use>
+                      </svg>
+                    {% endfor %}
                   {% endif %}
                   {% if average_rating %}
-                    <span class="rating-count ps-2">{{ average_rating }}</span>
+                    <span class="rating-count ps-2">({{ average_rating }})</span>
                   {% else %}
                     <span class="rating-count ps-2">(no rating yet)</span>
                   {% endif %}
@@ -160,7 +173,61 @@
                               
                               
                               
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
                               5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -312,7 +379,31 @@
               {% if user_reviews %}
                 <div class="review-box">
                   {% if average_rating is not None %}
-                    <h3><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ average_rating }} out of 5</h3>
+                    <div class="rating">
+                      {% if average_rating %}
+                        {% for star in average_rating|floor|in_range %}
+                          <svg class="star star-fill">
+                            <use xlink:href="#star-fill" style="fill:#72AEC8"></use>
+                          </svg>
+                        {% endfor %}
+                        {% if average_rating|floor|subtract:average_rating != 0 %}
+                          <svg class="star star-half">
+                            <use xlink:href="#star-half"></use>
+                          </svg>
+                        {% endif %}
+                        {% for star in 5|subtract:average_rating|floor|in_range %}
+                          <svg class="star star-empty">
+                            <use xlink:href="#star-empty"></use>
+                          </svg>
+                        {% endfor %}
+                      {% endif %}
+                      {% if average_rating %}
+                        <span class="rating-count ps-2">({{ average_rating }})</span>
+                      {% else %}
+                        <span class="rating-count ps-2">(no rating yet)</span>
+                      {% endif %}
+                    </div>
+
                     <br />
                   {% else %}
                     <h3>There is no review for the item yet. Be the first one to review!</h3>
@@ -328,7 +419,25 @@
                         <div class="col-md-10">
                           <div class="review-content">
                             <div class="rating-container d-flex align-items-center">
-                              <span class="rating-count"><i class="fa-solid fa-star" style="color: #FFD43B;"></i> {{ review.rating }}</span>
+                              <span class="rating-count">
+                                <div class="rating">
+                                  {% for star in review.rating|floor|in_range %}
+                                    <svg class="star star-fill">
+                                      <use xlink:href="#star-fill" style="fill:#72AEC8"></use>
+                                    </svg>
+                                  {% endfor %}
+                                  {% if review.rating|floor|subtract:review.rating != 0 %}
+                                    <svg class="star star-half">
+                                      <use xlink:href="#star-half"></use>
+                                    </svg>
+                                  {% endif %}
+                                  {% for star in 5|subtract:review.rating|floor|in_range %}
+                                    <svg class="star star-empty">
+                                      <use xlink:href="#star-empty"></use>
+                                    </svg>
+                                  {% endfor %}({{ review.rating }})
+                                </div>
+                              </span>
                             </div>
                             <p>{{ review.review }}</p>
                             <div class="review-header">

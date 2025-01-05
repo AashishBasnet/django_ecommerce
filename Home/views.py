@@ -21,6 +21,7 @@ from django.db.models import Avg
 
 
 def HomeView(request):
+    reviews = UserReview.objects.all().order_by('-id')[:5]
     banner_images = BannerImage.objects.all().order_by('-id')
     products = Product.objects.all()
     posts = Post.objects.all().order_by('-id')[:3]
@@ -29,7 +30,6 @@ def HomeView(request):
     discount = []
     for product in products:
         if product.product_sale_price:
-            # Calculate discount percentage and format to two decimal places
             discount_percentage = (
                 (product.product_price - product.product_sale_price) / product.product_price) * 100
             discount.append(float(f"{discount_percentage:.2f}"))
@@ -50,6 +50,7 @@ def HomeView(request):
                       'new_products': new_products,
                       'posts': posts,
                       'banner_images': banner_images,
+                      'reviews': reviews,
                   })
 
 
@@ -146,7 +147,6 @@ def UserRegisterView(request):
 
 def SingleProductView(request, slug):
     tags = Tag.objects.all()
-
     user_reviews = UserReview.objects.filter(
         review_for__slug=slug).order_by('-id')[:2]
     product = get_object_or_404(Product, slug=slug)
