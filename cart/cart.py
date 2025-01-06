@@ -90,6 +90,28 @@ class Cart():
                         vat_total = round(vat_total, 2)
         return vat_total
 
+    def cart_total_without_vat(self):
+        # Get Product IDs
+        product_ids = self.cart.keys()
+        # Lookup these keys in your product database model
+        products = Product.objects.filter(id__in=product_ids)
+        quantities = self.cart
+        # Start counting at 0
+        total = 0
+
+        for key, value in quantities.items():
+            # Convert key string into int so we can do math
+            key = int(key)
+            for product in products:
+                if product.id == key:
+                    if product.product_sale_price is not None:
+                        total += product.product_sale_price * value
+                    else:
+                        total += product.product_price * value
+
+        # Return the total without adding VAT
+        return round(total, 2)
+
     def cart_sub_total(self):
         # Get Product IDs
         product_ids = self.cart.keys()

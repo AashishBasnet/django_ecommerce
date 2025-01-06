@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block title %}
-  Shipping Dashboard
+  Order #{{ order.id }}
 {% endblock %}
 
 {% block content %}
@@ -91,6 +91,13 @@
                   <button class="btn btn-dark">Mark As Not Shipped</button>
                 </form>
               {% endif %}
+              <p>
+                <strong>Paid Via:</strong>{% if order.epay %}
+                  esewa
+                {% else %}
+                  paypal
+                {% endif %}
+              </p>
             </div>
           </div>
         </div>

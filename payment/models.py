@@ -65,6 +65,7 @@ class Order(models.Model):
     # PayPal Invoice and paid is True/False
     invoice = models.CharField(max_length=250, null=True, blank=True)
     paid = models.BooleanField(default=False)
+    epay = models.BooleanField(default=False)
 
     def __str__(self):
         return f'order -{self.id}'

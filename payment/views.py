@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from Home.models import Product
 from django.shortcuts import render
 from django.shortcuts import render, redirect
@@ -18,6 +19,24 @@ import requests
 from decimal import Decimal
 from django.core.paginator import Paginator
 from paypal.standard.models import ST_PP_COMPLETED
+import hmac
+import hashlib
+import base64
+from django.http import JsonResponse
+import json
+
+
+def genSha256(key, message):
+    key = key.encode('utf-8')
+    message = message.encode('utf-8')
+
+    hmac_sha256 = hmac.new(key, message, hashlib.sha256)
+    digest = hmac_sha256.digest()
+
+    # Convert the digest to a Base64-encoded string
+    signature = base64.b64encode(digest).decode('utf-8')
+
+    return signature
 
 
 def get_exchange_rate():
@@ -40,6 +59,63 @@ def get_exchange_rate():
 
 
 def BillingInfoView(request):
+    esewa_my_shipping = request.POST
+    request.session['my_shipping'] = esewa_my_shipping
+
+    # Gather order info
+    esewa_full_name = esewa_my_shipping['shipping_full_name']
+    esewa_email = esewa_my_shipping['shipping_email']
+
+    # create shipping address from session info
+    esewa_shipping_address = f"{esewa_my_shipping['shipping_address1']}\n{esewa_my_shipping['shipping_address2']}\n{esewa_my_shipping['shipping_city']}\n{
+        esewa_my_shipping['shipping_state']}\n{esewa_my_shipping['shipping_zipcode']}\n{esewa_my_shipping['shipping_country']}"
+
+    esewa_host = request.get_host()
+    esewa_success_url = f'http://{esewa_host}{reverse("payment-success")}'
+    esewa_failure_url = f'http://{esewa_host}{reverse("payment-failed")}'
+    key = '8gBm/:&EnhH.1/q'
+    uid = str(uuid.uuid4())
+    esewa_cart = Cart(request)
+    esewa_cart_products = esewa_cart.get_prods
+    esewa_quantities = esewa_cart.get_quants
+    esewa_totals = esewa_cart.cart_total()
+    esewa_totals_without_vat = esewa_cart.cart_total_without_vat()
+    esewa_vat = esewa_totals - esewa_totals_without_vat
+    message = f'total_amount={esewa_totals},transaction_uuid={
+        uid},product_code=EPAYTEST'
+    signature = genSha256(key, message)
+
+    user = request.user
+    # create Order
+    create_order = Order(user=user, full_name=esewa_full_name, email=esewa_email,
+                         shipping_address=esewa_shipping_address, amount_paid=esewa_totals, invoice=uid, epay=True)
+    create_order.save()
+
+    # Add order items
+    # get the order id
+    order_id = create_order.pk
+    # get product Info
+    for product in esewa_cart_products():
+        # get id
+        product_id = product.id
+        # get price
+        if product.product_sale_price and product.product_sale_price > 0:
+            price = product.product_sale_price
+        else:
+            price = product.product_price
+            # get quantity
+        for key, value in esewa_quantities().items():
+            if int(key) == product.id:
+                # create order item
+                create_order_item = OrderItem(
+                    order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
+                create_order_item.save()
+
+            # delete cart from database (old_cart_field)
+    current_user = Profile.objects.filter(user__id=request.user.id)
+    # delete shopping cart in db (old_cart field)
+    current_user.update(old_cart="")
+
     if request.POST:
         cart = Cart(request)
         cart_products = cart.get_prods
@@ -55,7 +131,6 @@ def BillingInfoView(request):
         # Convert totals from NPR to USD
         amount_in_usd = (totals * exchange_rate)
         amount_in_usd = format(amount_in_usd, '.2f')
-        print(f"amount in usd: {amount_in_usd}")
         # create a session with shipping info
         my_shipping = request.POST
         request.session['my_shipping'] = my_shipping
@@ -130,7 +205,14 @@ def BillingInfoView(request):
                 "quantities": quantities,
                 "totals": totals,
                 "shipping_info": request.POST,
-                "billing_form": billing_form
+                "billing_form": billing_form,
+                'signature': signature,
+                'uid': uid,
+                'esewa_totals': esewa_totals,
+                'esewa_totals_without_vat': esewa_totals_without_vat,
+                'esewa_vat': esewa_vat,
+                'esewa_success_url': esewa_success_url,
+                'esewa_failure_url': esewa_failure_url
             })
 
         else:
@@ -168,7 +250,12 @@ def BillingInfoView(request):
                 "quantities": quantities,
                 "totals": totals,
                 "shipping_info": request.POST,
-                "billing_form": billing_form
+                "billing_form": billing_form,
+                'signature': signature,
+                'uid': uid,
+                'esewa_totals': esewa_totals,
+                'esewa_totals_without_vat': esewa_totals_without_vat,
+                'esewa_vat': esewa_vat,
             })
 
     else:
@@ -176,8 +263,68 @@ def BillingInfoView(request):
         return redirect('home')
 
 
+# def PaymentSuccessView(request):
+#    # Check the cart
+#     cart = Cart(request)
+#     cart_products = cart.get_prods
+#     quantities = cart.get_quants
+
+#     # Decrease stock for purchased products
+#     for product in cart_products():
+#         product_id = product.id
+#         quantity = quantities().get(str(product_id), 0)
+
+#         # Check and update stock
+#         if product.stock >= quantity:
+#             product.stock -= quantity
+#             product.save()
+#         else:
+#             messages.warning(request, f"Not enough stock for {
+#                              product.product_name}.")
+#             return redirect('cart')  # Redirect to cart in case of stock issue
+
+#     # Clear the cart
+#     for key in list(request.session.keys()):
+#         if key == 'session_key':
+#             del request.session[key]
+#     messages.success(
+#         request, "Payment successful! Your order has been placed.")
+#     return render(request, "payment/payment_success_template.html", {})
+
+
 def PaymentSuccessView(request):
-   # Check the cart
+    # Decode and process Base64-encoded 'data' parameter
+    encoded_data = request.GET.get('data', None)
+    decoded_data = {}
+
+    if encoded_data:
+        try:
+            # Decode Base64 and parse JSON
+            decoded_bytes = base64.b64decode(encoded_data)
+            decoded_string = decoded_bytes.decode('utf-8')
+            decoded_data = json.loads(decoded_string)
+
+            my_Invoice = str(decoded_data['transaction_uuid'])
+
+            try:
+                # Look up the order based on the PayPal invoice
+                my_Order = Order.objects.get(invoice=my_Invoice)
+
+                # Check if the payment status is completed
+                if decoded_data['status'] == "COMPLETE":
+                    my_Order.paid = True
+                    my_Order.save()
+
+            except ObjectDoesNotExist:
+                print(f"Order with invoice {my_Invoice} not found.")
+
+        except (base64.binascii.Error, json.JSONDecodeError) as e:
+            messages.error(request, "Failed to process payment data.")
+            return redirect('cart')  # Redirect to cart if decoding fails
+
+    # Log or process the decoded data if needed
+
+    # Check the cart
     cart = Cart(request)
     cart_products = cart.get_prods
     quantities = cart.get_quants
@@ -200,9 +347,12 @@ def PaymentSuccessView(request):
     for key in list(request.session.keys()):
         if key == 'session_key':
             del request.session[key]
+
+    # Success message
     messages.success(
         request, "Payment successful! Your order has been placed.")
-    return render(request, "payment/payment_success_template.html", {})
+    # Render success template and pass the decoded data
+    return render(request, "payment/payment_success_template.html", {"decoded_data": decoded_data})
 
 
 def PaymentFailedView(request):
