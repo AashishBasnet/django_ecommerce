@@ -35,9 +35,12 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1',
-                 'localhost', 'f5a6-2400-1a00-b060-6b4b-1067-86b0-7a5c-7c85.ngrok-free.app']
+                 'localhost', '6089-2400-1a00-b060-feb3-a1aa-f071-5bc3-d62a.ngrok-free.app']
 CSRF_TRUSTED_ORIGINS = [
-    'https://f5a6-2400-1a00-b060-6b4b-1067-86b0-7a5c-7c85.ngrok-free.app']
+    'https://6089-2400-1a00-b060-feb3-a1aa-f071-5bc3-d62a.ngrok-free.app',  'https://www.paypal.com',
+    'https://api.paypal.com',
+    'https://www.sandbox.paypal.com',  # Add this if you're testing in the sandbox
+    'https://api.sandbox.paypal.com',]
 # Application definition
 
 INSTALLED_APPS = [

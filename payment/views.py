@@ -1,3 +1,8 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
+from django.core.cache import cache
+from django.dispatch import receiver
+from paypal.standard.ipn.signals import valid_ipn_received
 from django.core.exceptions import ObjectDoesNotExist
 from Home.models import Product
 from django.shortcuts import render
@@ -292,11 +297,33 @@ def BillingInfoView(request):
 #     return render(request, "payment/payment_success_template.html", {})
 
 
+@receiver(valid_ipn_received)
+def handle_paypal_ipn(sender, **kwargs):
+    # Extract the IPN object sent by PayPal
+    ipn_obj = sender
+
+    # Retrieve the invoice
+    invoice = ipn_obj.invoice
+    print(f"Invoice received: {invoice}")
+
+    # You can store the invoice in a temporary cache or session if needed
+    # Example with cache (requires django.core.cache)
+
+    cache.set(f"paypal_invoice_{invoice}", invoice, timeout=3600)
+
+
 def PaymentSuccessView(request):
     # Decode and process Base64-encoded 'data' parameter
     encoded_data = request.GET.get('data', None)
     decoded_data = {}
-
+    paypal_payer = request.GET.get('PayerID', None)
+    if paypal_payer is None and encoded_data is None:
+        # If neither payment method is used, restrict access
+        messages.warning(
+            request, "Unauthorized access: No payment data provided.")
+        return redirect('home')
+    else:
+        payment_done = True
     if encoded_data:
         try:
             # Decode Base64 and parse JSON
@@ -305,9 +332,9 @@ def PaymentSuccessView(request):
             decoded_data = json.loads(decoded_string)
 
             my_Invoice = str(decoded_data['transaction_uuid'])
-
+            print(str(decoded_data))
             try:
-                # Look up the order based on the PayPal invoice
+                # Look up the order based on the esewa invoice
                 my_Order = Order.objects.get(invoice=my_Invoice)
 
                 # Check if the payment status is completed
@@ -319,8 +346,8 @@ def PaymentSuccessView(request):
                 print(f"Order with invoice {my_Invoice} not found.")
 
         except (base64.binascii.Error, json.JSONDecodeError) as e:
-            messages.error(request, "Failed to process payment data.")
-            return redirect('cart')  # Redirect to cart if decoding fails
+            messages.warning(request, "Failed to process payment data.")
+            return redirect('home')  # Redirect to home if decoding fails
 
     # Log or process the decoded data if needed
 
@@ -328,6 +355,10 @@ def PaymentSuccessView(request):
     cart = Cart(request)
     cart_products = cart.get_prods
     quantities = cart.get_quants
+    cart_totals = cart.cart_total()
+    render_cart_products = cart_products
+    render_cart_quantities = quantities
+    render_cart_totals = cart_totals
 
     # Decrease stock for purchased products
     for product in cart_products():
@@ -341,7 +372,7 @@ def PaymentSuccessView(request):
         else:
             messages.warning(request, f"Not enough stock for {
                              product.product_name}.")
-            return redirect('cart')  # Redirect to cart in case of stock issue
+            return redirect('home')  # Redirect to cart in case of stock issue
 
     # Clear the cart
     for key in list(request.session.keys()):
@@ -352,7 +383,12 @@ def PaymentSuccessView(request):
     messages.success(
         request, "Payment successful! Your order has been placed.")
     # Render success template and pass the decoded data
-    return render(request, "payment/payment_success_template.html", {"decoded_data": decoded_data})
+    return render(request, "payment/payment_success_template.html", {"decoded_data": decoded_data,
+                                                                     "cart_products": render_cart_products,
+                                                                     "quantities": render_cart_quantities,
+                                                                     "totals": render_cart_totals,
+                                                                     'payment_done': payment_done
+                                                                     })
 
 
 def PaymentFailedView(request):

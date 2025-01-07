@@ -4,14 +4,48 @@
 {% endblock %}
 {% block content %}
   <br /><br /><br /><br />
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <br /><br />
-        This is some stuff
-        <br /><br />
+  {% if payment_done and totals %}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <br /><br />
+          <div class="card mb-4 flex-fill me-2">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">Order Summary</h5>
+            </div>
+            <div class="card-body">
+              {% for product in cart_products %}
+                <div class="order-item d-flex align-items-center mb-3">
+                  <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-thumbnail me-3" style="width: 50px; height: 50px;" />
+                  <div>
+                    <strong>{{ product.product_name }}</strong>: Rs.{% if product.product_sale_price is not None %}
+                      {{ product.product_sale_price }}
+                    {% else %}
+                      {{ product.product_price }}
+                    {% endif %}
+                    <br />
+                    <small>
+                      Quantity:{% for key, value in quantities.items %}
+                        {% if key == product.id|slugify %}
+                          {{ value }}
+                        {% endif %}
+                      {% endfor %}
+                    </small>
+                  </div>
+                </div>
+                <hr />
+              {% endfor %}
+              <strong>Total: Rs. {{ totals }}</strong>
+              <br /><br />
+              <a href="{% url 'cart-summary' %}" class="btn btn-dark btn-medium text-uppercase btn-rounded-none mt-4">Update Items</a>
+            </div>
+          </div>
+          <br /><br />
+        </div>
       </div>
     </div>
-  </div>
+  {% else %}
+    There is nothing Here
+  {% endif %}
   <br /><br /><br /><br /><br /><br /><br /><br /><br />
 {% endblock %}

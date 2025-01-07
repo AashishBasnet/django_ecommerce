@@ -21,6 +21,7 @@ from django.db.models import Avg
 
 
 def HomeView(request):
+
     reviews = UserReview.objects.all().order_by('-id')[:5]
     banner_images = BannerImage.objects.all().order_by('-id')
     products = Product.objects.all()
