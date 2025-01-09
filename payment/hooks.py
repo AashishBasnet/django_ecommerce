@@ -19,7 +19,6 @@ def paypal_payment_received(sender, **kwargs):
 
     # Grab the invoice
     my_Invoice = str(paypal_obj.invoice)
-    print(f"Invoice received in hooks.py {sender.payer_id}: {my_Invoice}")
 
     try:
         # Look up the order based on the PayPal invoice

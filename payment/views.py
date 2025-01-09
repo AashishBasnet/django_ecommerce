@@ -311,7 +311,6 @@ def handle_paypal_ipn(sender, **kwargs):
 
     # Retrieve the invoice
     invoice = ipn_obj.invoice
-    print(f"Invoice received {sender.payer_id}: {invoice}")
 
     # You can store the invoice in a temporary cache or session if needed
     # Example with cache (requires django.core.cache)
@@ -340,7 +339,6 @@ def PaymentSuccessView(request):
             decoded_data = json.loads(decoded_string)  # Parse JSON
 
             my_Invoice = str(decoded_data['transaction_uuid'])
-            print(str(decoded_data))
             try:
                 # Look up the order based on the esewa invoice
                 my_Order = Order.objects.get(invoice=my_Invoice)
