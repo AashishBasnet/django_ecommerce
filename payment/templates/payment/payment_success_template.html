@@ -1,15 +1,29 @@
 {% extends 'index.html' %}
+
 {% block title %}
   Payment Success!
 {% endblock %}
+
 {% block content %}
-  <br /><br /><br /><br />
-  {% if payment_done and totals %}
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 offset-md-3">
-          <br /><br />
-          <div class="card mb-4 flex-fill me-2">
+  <div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <!-- Payment Success Message -->
+        <div class="payment-success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.93 10.97l5.586-5.586a.75.75 0 1 0-1.06-1.06L6.5 9.44 4.54 7.47a.75.75 0 0 0-1.08 1.04l2.5 2.5a.75.75 0 0 0 1.06 0z" />
+          </svg>
+          <h2 class="text-success mt-3">Payment Successful!</h2>
+          <p class="text-muted">Thank you for your purchase. Here is a summary of your order.</p>
+        </div>
+        <hr class="my-4" />
+      </div>
+    </div>
+
+    {% if payment_done and totals %}
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
             <div class="card-header bg-primary text-white">
               <h5 class="mb-0">Order Summary</h5>
             </div>
@@ -40,12 +54,14 @@
               <a href="{% url 'cart-summary' %}" class="btn btn-dark btn-medium text-uppercase btn-rounded-none mt-4">Update Items</a>
             </div>
           </div>
-          <br /><br />
         </div>
       </div>
-    </div>
-  {% else %}
-    There is nothing Here
-  {% endif %}
-  <br /><br /><br /><br /><br /><br /><br /><br /><br />
+    {% else %}
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+          <p class="text-muted">There is nothing here.</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

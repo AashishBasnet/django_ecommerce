@@ -296,6 +296,13 @@ def BillingInfoView(request):
 #         request, "Payment successful! Your order has been placed.")
 #     return render(request, "payment/payment_success_template.html", {})
 
+def is_valid_base64(s):
+    try:
+        base64.b64decode(s)
+        return True
+    except base64.binascii.Error:
+        return False
+
 
 @receiver(valid_ipn_received)
 def handle_paypal_ipn(sender, **kwargs):
@@ -304,12 +311,12 @@ def handle_paypal_ipn(sender, **kwargs):
 
     # Retrieve the invoice
     invoice = ipn_obj.invoice
-    print(f"Invoice received: {invoice}")
+    print(f"Invoice received {sender.payer_id}: {invoice}")
 
     # You can store the invoice in a temporary cache or session if needed
     # Example with cache (requires django.core.cache)
 
-    cache.set(f"paypal_invoice_{invoice}", invoice, timeout=3600)
+    cache.set(f"paypal_invoice_{sender}", invoice, timeout=3600)
 
 
 def PaymentSuccessView(request):
@@ -317,6 +324,7 @@ def PaymentSuccessView(request):
     encoded_data = request.GET.get('data', None)
     decoded_data = {}
     paypal_payer = request.GET.get('PayerID', None)
+
     if paypal_payer is None and encoded_data is None:
         # If neither payment method is used, restrict access
         messages.warning(
@@ -324,12 +332,12 @@ def PaymentSuccessView(request):
         return redirect('home')
     else:
         payment_done = True
-    if encoded_data:
+    if encoded_data and is_valid_base64(encoded_data):
         try:
             # Decode Base64 and parse JSON
             decoded_bytes = base64.b64decode(encoded_data)
-            decoded_string = decoded_bytes.decode('utf-8')
-            decoded_data = json.loads(decoded_string)
+            decoded_string = decoded_bytes.decode('utf-8')  # Decode as UTF-8
+            decoded_data = json.loads(decoded_string)  # Parse JSON
 
             my_Invoice = str(decoded_data['transaction_uuid'])
             print(str(decoded_data))
@@ -345,9 +353,14 @@ def PaymentSuccessView(request):
             except ObjectDoesNotExist:
                 print(f"Order with invoice {my_Invoice} not found.")
 
-        except (base64.binascii.Error, json.JSONDecodeError) as e:
+        except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError) as e:
+            # Handle decoding errors or invalid JSON
+            print(f"Error processing payment data: {e}")
             messages.warning(request, "Failed to process payment data.")
             return redirect('home')  # Redirect to home if decoding fails
+    else:
+        messages.warning(request, "Invalid payment data.")
+        return redirect('home')
 
     # Log or process the decoded data if needed
 
