@@ -268,34 +268,6 @@ def BillingInfoView(request):
         return redirect('home')
 
 
-# def PaymentSuccessView(request):
-#    # Check the cart
-#     cart = Cart(request)
-#     cart_products = cart.get_prods
-#     quantities = cart.get_quants
-
-#     # Decrease stock for purchased products
-#     for product in cart_products():
-#         product_id = product.id
-#         quantity = quantities().get(str(product_id), 0)
-
-#         # Check and update stock
-#         if product.stock >= quantity:
-#             product.stock -= quantity
-#             product.save()
-#         else:
-#             messages.warning(request, f"Not enough stock for {
-#                              product.product_name}.")
-#             return redirect('cart')  # Redirect to cart in case of stock issue
-
-#     # Clear the cart
-#     for key in list(request.session.keys()):
-#         if key == 'session_key':
-#             del request.session[key]
-#     messages.success(
-#         request, "Payment successful! Your order has been placed.")
-#     return render(request, "payment/payment_success_template.html", {})
-
 def is_valid_base64(s):
     try:
         base64.b64decode(s)

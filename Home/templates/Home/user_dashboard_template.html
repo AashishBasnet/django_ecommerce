@@ -1,0 +1,130 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Shipping Dashboard
+{% endblock %}
+
+{% block links %}
+  <style>
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .custom-table thead {
+      background: linear-gradient(90deg, #71aec8, #4a9bbe);
+      color: white;
+    }
+    
+    .custom-table th,
+    .custom-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .custom-table tbody tr {
+      transition: background-color 0.3s ease;
+    }
+    
+    .custom-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .custom-table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    .breadcrumbs {
+      margin: 20px 0;
+      font-size: 14px;
+      color: #6c757d;
+    }
+    
+    .breadcrumbs .item a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    
+    .breadcrumbs .item a:hover {
+      text-decoration: underline;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid mt-4 pt-4">
+    <div class="row">
+      <div class="col-10 mx-auto">
+        <br /><br />
+        <h1 class="text-center mb-4">Your Orders</h1>
+        <div class="table-responsive">
+          <table class="table custom-table">
+            <thead>
+              <tr>
+                <th scope="col">Order Number</th>
+                <th scope="col">Price</th>
+                <th scope="col">Date Ordered</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in user_orders %}
+                <tr>
+                  <td>
+                    <a href="{% url 'orders' order.id %}" class="text-decoration-none text-dark">{{ order.id }}</a>
+                  </td>
+                  <td>Rs. {{ order.amount_paid }}</td>
+
+                  <td>{{ order.date_ordered }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4">No UnShipped Products Found.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
+    <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
+      {% if user_orders.has_previous %}
+        <a href="?page={{ user_orders.previous_page_number }}">
+          <svg class="chevron-left pe-3">
+            <use xlink:href="#chevron-left"></use>
+          </svg>
+        </a>
+      {% endif %}
+
+      {% for num in user_orders.paginator.page_range %}
+        {% if user_orders.number == num %}
+          <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
+        {% else %}
+          <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if user_orders.has_next %}
+        <a href="?page={{ user_orders.next_page_number }}">
+          <svg class="chevron-right ps-3">
+            <use xlink:href="#chevron-right"></use>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+  </nav>
+  <br /><br />
+{% endblock %}
+
+{% block subscribe %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

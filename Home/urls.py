@@ -18,5 +18,7 @@ urlpatterns = [
     path("contact/", views.ContactView, name='contact'),
     path("all-reviews/<slug:slug>", views.AllReviewsView, name='all-reviews'),
     path('delete-user-review/<int:review_id>',
-         views.DeleteUserReviewView, name='delete-user-review')
+         views.DeleteUserReviewView, name='delete-user-review'),
+    path("user-dashboard", views.UserDashboardView, name='user-dashboard'),
+
 ]
