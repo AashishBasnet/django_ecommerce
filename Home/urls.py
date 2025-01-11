@@ -20,5 +20,7 @@ urlpatterns = [
     path('delete-user-review/<int:review_id>',
          views.DeleteUserReviewView, name='delete-user-review'),
     path("user-dashboard", views.UserDashboardView, name='user-dashboard'),
+    path("user-orders/<int:pk>",
+         views.UserOrdersView, name="user-orders"),
 
 ]

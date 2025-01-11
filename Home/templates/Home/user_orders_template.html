@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Order #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Order</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Order</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <div class="row">
+      <center>
+        <div class="col-8">
+          <br /><br />
+          <div class="card mb-3">
+            <div class="card-header bg-dark text-white text-start">
+              <h4 class="mb-0">Order #{{ order.id }}</h4>
+            </div>
+            <div class="card-body text-start">
+              <p>
+                <strong>Shipping Address:&nbsp;</strong> {{ order.shipping_address }}
+              </p>
+              <p>
+                <strong>Date Ordered:</strong> {{ order.date_ordered }}
+              </p>
+              {% if order.date_shipped %}
+                <p>
+                  <strong>Date Shipped:</strong> {{ order.date_shipped }}
+                </p>
+              {% endif %}
+              <hr />
+
+              <h3>Items Bought:</h3>
+              <br />
+              <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                  <tr>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in items %}
+                    <tr>
+                      <td>{{ item.product }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>Rs. {{ item.price }}</td>
+                    </tr>
+                  {% endfor %}
+                  <tr>
+                    <td>
+                      <strong>Total</strong>
+                    </td>
+                    <td colspan="1"></td>
+                    <td>
+                      <strong>Rs. {{ order.amount_paid }}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                <strong>Paid Via:</strong>{% if order.epay %}
+                  esewa
+                {% else %}
+                  paypal
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      </center>
+    </div>
+  </div>
+
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}

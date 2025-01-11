@@ -428,3 +428,18 @@ def UserDashboardView(request):
     page_number = request.GET.get('page')
     order_page = paginator.get_page(page_number)
     return render(request, "Home/user_dashboard_template.html", {'user_orders': order_page, 'order_items': order_items})
+
+
+def UserOrdersView(request, pk):
+    if request.user.is_authenticated:
+        try:
+            order = Order.objects.get(id=pk, user=request.user)
+            items = OrderItem.objects.filter(order=order)
+        except Order.DoesNotExist:
+            order = None
+            items = []
+        return render(request, 'Home/user_orders_template.html', {"order": order, "items": items})
+    else:
+        messages.warning(
+            request, "Access Denied! only logged in users can view this page.")
+        return redirect('home')
