@@ -41,6 +41,15 @@
                   <strong>Date Shipped:</strong> {{ order.date_shipped }}
                 </p>
               {% endif %}
+              {% if order.shipped %}
+                <p>
+                  <strong>status:</strong> <span class="text-success">Shipped</span>
+                </p>
+              {% else %}
+                <p>
+                  <strong>status:</strong> <span class="text-warning">Pending</span>
+                </p>
+              {% endif %}
               <hr />
 
               <h3>Items Bought:</h3>

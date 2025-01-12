@@ -420,14 +420,25 @@ def UserDashboardView(request):
     if request.user.is_authenticated:
         user_orders = Order.objects.filter(
             paid=True, user=request.user, shipped=False).order_by('-date_ordered')
-        order_items = OrderItem.objects.filter(order__in=user_orders)
+
     else:
         user_orders = None
-        order_items = None
     paginator = Paginator(user_orders, 15)
     page_number = request.GET.get('page')
     order_page = paginator.get_page(page_number)
-    return render(request, "Home/user_dashboard_template.html", {'user_orders': order_page, 'order_items': order_items})
+    return render(request, "Home/user_dashboard_template.html", {'user_orders': order_page})
+
+
+def UserOrderHistoryView(request):
+    if request.user.is_authenticated:
+        user_orders = Order.objects.filter(
+            paid=True, user=request.user, shipped=True).order_by('-date_ordered')
+    else:
+        user_orders = None
+    paginator = Paginator(user_orders, 15)
+    page_number = request.GET.get('page')
+    order_page = paginator.get_page(page_number)
+    return render(request, "Home/user_order_history_template.html", {'user_orders': order_page})
 
 
 def UserOrdersView(request, pk):

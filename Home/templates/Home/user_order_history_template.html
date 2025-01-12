@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block title %}
-  Dashboard
+  Order History
 {% endblock %}
 
 {% block links %}
@@ -60,8 +60,8 @@
     <div class="row">
       <div class="col-10 mx-auto">
         <br /><br />
-        <h1 class="text-center mb-4">Your Orders</h1>
-        <a href="{% url 'order-history' %}" class="text-right mb-4 text-primary">View Old orders >></a>
+        <h1 class="text-center mb-4">Order History</h1>
+        <a href="{% url 'user-dashboard' %}" class="text-right mb-4 text-primary"><< Go back</a>
         <div class="table-responsive">
           <table class="table custom-table">
             <thead>
