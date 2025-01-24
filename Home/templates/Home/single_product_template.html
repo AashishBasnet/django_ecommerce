@@ -100,7 +100,17 @@
             {% if products.stock %}
               <div class="cart-wrap padding-small">
                 <div class="product-quantity">
-                  <div class="stock-number text-dark">{{ products.stock }} in stock</div>
+                  <div class="stock-number text-dark">
+                    {% if user.is_superuser %}
+                      {{ products.stock }} in stock
+                    {% else %}
+                      {% if products.stock > 5 %}
+                        <span class="text-success">in stock</span>
+                      {% else %}
+                        <span class="text-warning">low stock</span>
+                      {% endif %}
+                    {% endif %}
+                  </div>
                   <div class="stock-button-wrap pt-3">
                     <div class="card-body">
                       <div class="row">
@@ -200,7 +210,17 @@
                               
                               
                               
+                              
+                              
+                              
+                              
+                              
                               5
+
+
+
+
+
 
 
 
