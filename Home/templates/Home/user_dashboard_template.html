@@ -56,6 +56,57 @@
 {% endblock %}
 
 {% block content %}
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-2 text-uppercase text-dark">Dashboard</h1>
+            <div class="breadcrumbs">
+              <span class="item"><a href="{% url 'home' %}">Home ></a></span>
+              <span class="item">Dashboard</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container mt-5">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white text-center">
+        <h2>User Profile</h2>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <label class="col-sm-4 col-form-label fw-bold">Username:</label>
+          <div class="col-sm-8">
+            <p class="form-control-plaintext">{{ user.username }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-4 col-form-label fw-bold">Email:</label>
+          <div class="col-sm-8">
+            <p class="form-control-plaintext">{{ user.email }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-4 col-form-label fw-bold">First Name:</label>
+          <div class="col-sm-8">
+            <p class="form-control-plaintext">{{ user.first_name }}</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-4 col-form-label fw-bold">Last Name:</label>
+          <div class="col-sm-8">
+            <p class="form-control-plaintext">{{ user.last_name }}</p>
+          </div>
+        </div>
+        <div class="text-center">
+          {% comment %} <a href="{% url 'update_user' %}" class="btn btn-warning">Edit Profile</a> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container-fluid mt-4 pt-4">
     <div class="row">
       <div class="col-10 mx-auto">

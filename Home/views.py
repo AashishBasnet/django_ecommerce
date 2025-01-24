@@ -423,6 +423,8 @@ def UserDashboardView(request):
 
     else:
         user_orders = None
+        messages.warning(request, "Unauthorized Users cannot access this page")
+        return redirect('home')
     paginator = Paginator(user_orders, 15)
     page_number = request.GET.get('page')
     order_page = paginator.get_page(page_number)
