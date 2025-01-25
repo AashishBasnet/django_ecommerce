@@ -1,7 +1,7 @@
 from .forms import InquiryForm
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.http import Http404
-from .models import Product, Categories, Profile, Tag, BannerImage, UserReview
+from .models import Product, Categories, Profile, Tag, BannerImage, UserReview, HeroSectionImage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -24,9 +24,12 @@ def HomeView(request):
 
     reviews = UserReview.objects.all().order_by('-id')[:5]
     banner_images = BannerImage.objects.all().order_by('-id')
+    hero_section_images = HeroSectionImage.objects.all().order_by('-id')
     products = Product.objects.all()
     posts = Post.objects.all().order_by('-id')[:3]
     new_products = Product.objects.all().order_by('-id')[:5]
+    sale = Product.objects.filter(
+        product_sale_price__isnull=False).order_by('-id')[:5]
     tags = Tag.objects.all()
     discount = []
     for product in products:
@@ -52,15 +55,22 @@ def HomeView(request):
                       'posts': posts,
                       'banner_images': banner_images,
                       'reviews': reviews,
+                      'hero_section_images': hero_section_images,
+                      'sale': sale
                   })
 
 
 def ShopView(request):
-    products_list = Product.objects.all()
+    products_list = Product.objects.all().order_by('-id')
     tags = Tag.objects.all()
     latest_products = Product.objects.all().order_by('-id')[:3]
     category_count = products_list.count()
-
+    req = request.GET.get('q')
+    if req == 'newArrivals':
+        products_list = products_list
+    elif req == 'shopSale':
+        products_list = Product.objects.filter(
+            product_sale_price__isnull=False).order_by('-id')
     # Pagination setup
     paginator = Paginator(products_list, 9)  # Show 9 products per page
     page = request.GET.get('page')
@@ -70,7 +80,6 @@ def ShopView(request):
         products = paginator.page(1)
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
-
     return render(request, "Home/shop_template.html", {
         'products': products,
         'category_count': category_count,

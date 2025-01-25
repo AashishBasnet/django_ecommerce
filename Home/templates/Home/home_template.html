@@ -142,31 +142,29 @@
     <div class="container">
       <div class="row">
         <div class="display-header d-flex justify-content-between pb-3">
-          <h2 class="display-7 text-dark text-uppercase">Mobile Products</h2>
+          <h2 class="display-7 text-dark text-uppercase">New Arrivals</h2>
           <div class="btn-right">
-            <a href="{% url 'category' 'phones' %}" class="btn btn-medium btn-normal text-uppercase">Buy Mobile Products</a>
+            <a href="{% url 'shop' %}?q=newArrivals" class="btn btn-medium btn-normal text-uppercase">Buy New Arrivals</a>
           </div>
         </div>
         <div class="swiper product-swiper">
           <div class="swiper-wrapper">
-            {% for product in products %}
-              {% if product.product_category.category_name == 'phones' %}
-                <div class="swiper-slide">
-                  <div class="product-card d-flex flex-column h-100">
-                    <div class="image-holder position-relative flex-grow-1">
-                      <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
-                    </div>
-                    <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                      <h3 class="card-title text-uppercase mb-0"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
-                      {% if product.product_sale_price is None %}
-                        <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
-                      {% else %}
-                        <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
-                      {% endif %}
-                    </div>
+            {% for product in new_products %}
+              <div class="swiper-slide">
+                <div class="product-card d-flex flex-column h-100">
+                  <div class="image-holder position-relative flex-grow-1">
+                    <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
+                  </div>
+                  <div class="card-detail d-flex justify-content-between align-items-center mt-3">
+                    <h3 class="card-title text-uppercase mb-0"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
+                    {% if product.product_sale_price is None %}
+                      <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
+                    {% else %}
+                      <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
+                    {% endif %}
                   </div>
                 </div>
-              {% endif %}
+              </div>
             {% endfor %}
           </div>
         </div>
@@ -178,31 +176,29 @@
     <div class="container">
       <div class="row">
         <div class="display-header d-flex justify-content-between pb-3">
-          <h2 class="display-7 text-dark text-uppercase">Smart Watches</h2>
+          <h2 class="display-7 text-dark text-uppercase">On sale</h2>
           <div class="btn-right">
-            <a href="{% url 'category' 'smart-watches' %}" class="btn btn-medium btn-normal text-uppercase">Buy Smart Watches</a>
+            <a href="{% url 'shop' %}?q=shopSale" class="btn btn-medium btn-normal text-uppercase">Shop sale</a>
           </div>
         </div>
         <div class="swiper product-watch-swiper">
           <div class="swiper-wrapper">
-            {% for product in products %}
-              {% if product.product_category.category_name == 'Smart Watches' %}
-                <div class="swiper-slide">
-                  <div class="product-card d-flex flex-column h-100">
-                    <div class="image-holder position-relative flex-grow-1">
-                      <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
-                    </div>
-                    <div class="card-detail d-flex justify-content-between align-items-center mt-3">
-                      <h3 class="card-title text-uppercase mb-0"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
-                      {% if product.product_sale_price is None %}
-                        <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
-                      {% else %}
-                        <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
-                      {% endif %}
-                    </div>
+            {% for product in sale %}
+              <div class="swiper-slide">
+                <div class="product-card d-flex flex-column h-100">
+                  <div class="image-holder position-relative flex-grow-1">
+                    <a href="{% url 'product' product.slug %}"><img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" class="img-fluid w-100 h-100 object-fit-cover" /></a>
+                  </div>
+                  <div class="card-detail d-flex justify-content-between align-items-center mt-3">
+                    <h3 class="card-title text-uppercase mb-0"><a href="{% url 'product' product.slug %}">{{ product.product_name }}</a></h3>
+                    {% if product.product_sale_price is None %}
+                      <span class="item-price text-primary">Rs.{{ product.product_price }}</span>
+                    {% else %}
+                      <span class="item-price text-primary">Rs.{{ product.product_sale_price }}</span>
+                    {% endif %}
                   </div>
                 </div>
-              {% endif %}
+              </div>
             {% endfor %}
           </div>
         </div>
@@ -210,22 +206,36 @@
     </div>
     <div class="swiper-pagination position-absolute text-center"></div>
   </section>
-  <section id="yearly-sale" class="bg-light-blue overflow-hidden mt-5 padding-xlarge" style="
+  {% if not hero_section_images %}
+    <section id="yearly-sale" class="bg-light-blue overflow-hidden mt-5 padding-xlarge" style="
     background-image: url({% static 'images/single-image1.png' %});
     background-position: right;
     background-repeat: no-repeat;
   ">
-    <div class="row d-flex flex-wrap align-items-center">
-      <div class="col-md-6 col-sm-12">
-        <div class="text-content offset-4 padding-medium">
-          <h3>Upto {{ discount_upto }}% off</h3>
-          <h2 class="display-2 pb-5 text-uppercase text-dark">New year sale</h2>
-          <a href="{% url 'tags' 'sale' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Sale</a>
+      <div class="row d-flex flex-wrap align-items-center">
+        <div class="col-md-6 col-sm-12">
+          <div class="text-content offset-4 padding-medium">
+            <h3>Upto {{ discount_upto }}% off</h3>
+            <h2 class="display-2 pb-5 text-uppercase text-dark">products on sale</h2>
+            <a href="{% url 'tags' 'sale' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Sale</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12"></div>
+      </div>
+    </section>
+  {% else %}
+    <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
+      <div class="swiper main-swiper">
+        <div class="swiper-wrapper">
+          {% for hero_image in hero_section_images %}
+            <div class="hero-swiper-slide swiper-slide">
+              <a href="{% url 'shop' %}"><img src="{{ hero_image.image.url }}" alt="banner" class="hero-banner-image" /></a>
+            </div>
+          {% endfor %}
         </div>
       </div>
-      <div class="col-md-6 col-sm-12"></div>
-    </div>
-  </section>
+    </section>
+  {% endif %}
   <section id="latest-blog" class="padding-large">
     <div class="container">
       <div class="row">

@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from Home.models import Product, Inquiry
 from django.shortcuts import render, redirect, get_object_or_404
 from Home.models import Product, Categories, Tag
-from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm, InquiryForm, AddBannerImageForm
+from .forms import AddProductForm, AddCategoryForm, AddTagForm, PostForm, AddBlogCategoryForm, AddBlogTagForm, InquiryForm, AddBannerImageForm, AddHeroSectionImageForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.sessions.models import Session
@@ -20,7 +20,7 @@ from payment.models import OrderItem, Order
 from dateutil.relativedelta import relativedelta
 import plotly.graph_objects as go
 from html2image import Html2Image
-from Home.models import BannerImage
+from Home.models import BannerImage, HeroSectionImage
 import os
 
 # Function to determine the appropriate host dynamically
@@ -168,7 +168,9 @@ def DashboardView(request):
 def WebsiteCustomizationView(request):
     # banner images
     banner_images = BannerImage.objects.all().order_by('-id')
-    return render(request, "administrator/website_customization_template.html", {'banner_images': banner_images})
+    hero_section_images = HeroSectionImage.objects.all().order_by('-id')
+    return render(request, "administrator/website_customization_template.html", {'banner_images': banner_images,
+                                                                                 'hero_section_images': hero_section_images})
 
 
 def AddBannerImageView(request):
@@ -183,6 +185,20 @@ def AddBannerImageView(request):
     else:
         form = AddBannerImageForm()
     return render(request, "administrator/add_banner_image_template.html", {'form': form})
+
+
+def AddHeroSectionImageView(request):
+    if request.method == 'POST':
+        form = AddHeroSectionImageForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            hero = form.save()
+            hero.save()
+            messages.success(request, 'Hero section was successfully added')
+            return redirect('website-customization')
+    else:
+        form = AddHeroSectionImageForm()
+    return render(request, "administrator/add_hero_image_template.html", {'form': form})
 
 
 def EditBannerImageView(request, banner_id):
@@ -201,12 +217,38 @@ def EditBannerImageView(request, banner_id):
     return render(request, "administrator/edit_banner_image_template.html", {'form': form, 'banner_instance': banner_instance})
 
 
+def EditHeroSectionImageView(request, hero_section_id):
+    hero_instance = get_object_or_404(HeroSectionImage, id=hero_section_id)
+
+    if request.method == 'POST':
+        form = AddHeroSectionImageForm(
+            request.POST, request.FILES, instance=hero_instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Hero section was successfully updated')
+            return redirect('website-customization')
+    else:
+        form = AddHeroSectionImageForm(instance=hero_instance)
+
+    return render(request, "administrator/edit_hero_image_template.html", {'form': form, 'hero_instance': hero_instance})
+
+
 def DeleteBannerImageView(request, banner_id):
     banner = get_object_or_404(BannerImage, id=banner_id)
 
     # banner deletion
     banner.delete()
     messages.success(request, "Banner successfully deleted")
+    # redirecting to website-customization
+    return redirect('website-customization')
+
+
+def DeleteHeroSectionImageView(request, hero_section_id):
+    hero_section = get_object_or_404(HeroSectionImage, id=hero_section_id)
+
+    # banner deletion
+    hero_section.delete()
+    messages.success(request, "Hero section successfully deleted")
     # redirecting to website-customization
     return redirect('website-customization')
 

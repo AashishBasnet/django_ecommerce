@@ -53,9 +53,14 @@ urlpatterns = [
     path('website-customization', views.WebsiteCustomizationView,
          name='website-customization'),
     path('add-banner-image', views.AddBannerImageView, name='add-banner-image'),
+    path('add-hero-image', views.AddHeroSectionImageView, name='add-hero-image'),
     path('edit-banner-image/<int:banner_id>',
          views.EditBannerImageView, name='edit-banner-image'),
+    path('edit-hero-image/<int:hero_section_id>',
+         views.EditHeroSectionImageView, name='edit-hero-image'),
     path('delete-banner-image/<int:banner_id>',
-         views.DeleteBannerImageView, name='delete-banner-image')
+         views.DeleteBannerImageView, name='delete-banner-image'),
+    path('delete-hero-image/<int:hero_section_id>',
+         views.DeleteHeroSectionImageView, name='delete-hero-image')
 
 ]

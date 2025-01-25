@@ -188,6 +188,11 @@ class BannerImage(models.Model):
         upload_to='uploads/banners/', null=True)
 
 
+class HeroSectionImage(models.Model):
+    image = models.ImageField(
+        upload_to='uploads/lower_hero_section/', null=True)
+
+
 class UserReview(models.Model):
     username = models.CharField(max_length=100)
     review = models.TextField(max_length=500)

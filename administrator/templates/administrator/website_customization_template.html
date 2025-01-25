@@ -90,6 +90,49 @@
       </svg>
     </div>
   </section>
+  <div class="container my-5 pt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Hero Section Images</h2>
+        {% if not banner_images %}
+          <p class="text-warning">You have not added any hero section images so default hero section images are being shown!</p>
+        {% endif %}
+      </div>
+      <div class="col-md-6 text-md-end">
+        <a href="{% url 'add-hero-image' %}"><button class="btn btn-primary">Upload new hero section image</button></a>
+      </div>
+    </div>
+  </div>
+  {% if not hero_section_images %}
+    <section id="yearly-sale" class="bg-light-blue overflow-hidden mt-5 padding-xlarge" style="
+  background-image: url({% static 'images/single-image1.png' %});
+  background-position: right;
+  background-repeat: no-repeat;
+">
+      <div class="row d-flex flex-wrap align-items-center">
+        <div class="col-md-6 col-sm-12">
+          <div class="text-content offset-4 padding-medium">
+            <h3>Upto {{ discount_upto }}% off</h3>
+            <h2 class="display-2 pb-5 text-uppercase text-dark">products on sale</h2>
+            <a href="{% url 'tags' 'sale' %}" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Shop Sale</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12"></div>
+      </div>
+    </section>
+  {% else %}
+    <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
+      <div class="swiper main-swiper">
+        <div class="swiper-wrapper">
+          {% for hero_image in hero_section_images %}
+            <div class="hero-swiper-slide swiper-slide">
+              <a href="{% url 'edit-hero-image' hero_image.id %}"><img src="{{ hero_image.image.url }}" alt="banner" class="hero-banner-image" /></a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
 {% endblock %}
 
 {% block subscribe %}
