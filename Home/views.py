@@ -10,7 +10,8 @@ from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm,
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress, Order, OrderItem
 from django import forms
-from django.db.models import Q
+from django.db import models
+from django.db.models import Q, Case, When, Value, F
 from cart.cart import Cart
 import json
 import math
@@ -60,17 +61,88 @@ def HomeView(request):
                   })
 
 
+# def ShopView(request):
+#     products_list = Product.objects.all().order_by('-id')
+#     tags = Tag.objects.all()
+#     latest_products = Product.objects.all().order_by('-id')[:3]
+#     category_count = products_list.count()
+#     req = request.GET.get('q')
+#     if req == 'newArrivals':
+#         products_list = products_list
+#     elif req == 'shopSale':
+#         products_list = Product.objects.filter(
+#             product_sale_price__isnull=False).order_by('-id')
+#     elif req == 'price_asc':
+#         products_list = Product.objects.annotate(
+#             effective_price=Case(
+#                 When(product_sale_price__isnull=True, then=F('product_price')),
+#                 When(product_sale_price=0, then=F('product_price')),
+#                 default=F('product_sale_price'),
+#                 output_field=models.DecimalField()
+#             )
+#         ).order_by('effective_price')
+#     elif req == 'price_desc':
+#         products_list = Product.objects.annotate(
+#             effective_price=Case(
+#                 When(product_sale_price__isnull=True, then=F('product_price')),
+#                 When(product_sale_price=0, then=F('product_price')),
+#                 default=F('product_sale_price'),
+#                 output_field=models.DecimalField()
+#             )
+#         ).order_by('-effective_price')
+#     # Pagination setup
+#     paginator = Paginator(products_list, 3)  # Show 9 products per page
+#     page = request.GET.get('page')
+#     try:
+#         products = paginator.page(page)
+#     except PageNotAnInteger:
+#         products = paginator.page(1)
+#     except EmptyPage:
+#         products = paginator.page(paginator.num_pages)
+#     return render(request, "Home/shop_template.html", {
+#         'products': products,
+#         'category_count': category_count,
+#         'latest_products': latest_products,
+#         'tags': tags,
+#     })
+
+
 def ShopView(request):
     products_list = Product.objects.all().order_by('-id')
     tags = Tag.objects.all()
     latest_products = Product.objects.all().order_by('-id')[:3]
     category_count = products_list.count()
+
+    # Get the sorting/filtering option from the GET request
     req = request.GET.get('q')
+
+    # Apply different filters based on the 'q' parameter
     if req == 'newArrivals':
         products_list = products_list
     elif req == 'shopSale':
         products_list = Product.objects.filter(
             product_sale_price__isnull=False).order_by('-id')
+    elif req == 'price_asc':
+        products_list = Product.objects.annotate(
+            effective_price=Case(
+                When(product_sale_price__isnull=True, then=F('product_price')),
+                When(product_sale_price=0, then=F('product_price')),
+                default=F('product_sale_price'),
+                output_field=models.DecimalField()
+            )
+        ).order_by('effective_price')
+    elif req == 'price_desc':
+        products_list = Product.objects.annotate(
+            effective_price=Case(
+                When(product_sale_price__isnull=True, then=F('product_price')),
+                When(product_sale_price=0, then=F('product_price')),
+                default=F('product_sale_price'),
+                output_field=models.DecimalField()
+            )
+        ).order_by('-effective_price')
+    elif req == 'default':  # Handle default sorting
+        products_list = Product.objects.all().order_by('-id')
+
     # Pagination setup
     paginator = Paginator(products_list, 9)  # Show 9 products per page
     page = request.GET.get('page')
@@ -80,11 +152,14 @@ def ShopView(request):
         products = paginator.page(1)
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
+
+    # Render the template with products and other context
     return render(request, "Home/shop_template.html", {
         'products': products,
         'category_count': category_count,
         'latest_products': latest_products,
         'tags': tags,
+        'q': req,  # Pass 'q' parameter so it persists in the template
     })
 
 

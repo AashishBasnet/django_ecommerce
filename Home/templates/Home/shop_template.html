@@ -90,6 +90,13 @@
             <div class="showing-product">
               <p>Showing ({{ products.start_index }} - {{ products.end_index }}) of {{ products.paginator.count }} results in Shop.</p>
             </div>
+            <div class="sort-by">
+              <select id="input-sort" class="form-control" data-filter-sort="" data-filter-order="">
+                <option value="?q=default&page=1">Default sorting</option>
+                <option value="?q=price_asc&page=1">Price (Low-High)</option>
+                <option value="?q=price_desc&page=1">Price (High-Low)</option>
+              </select>
+            </div>
           </div>
           <div class="product-content product-store d-flex justify-content-start flex-wrap">
             {% for product in products %}
@@ -114,7 +121,7 @@
           <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
             <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
               {% if products.has_previous %}
-                <a href="?page={{ products.previous_page_number }}">
+                <a href="?q={{ q }}&page={{ products.previous_page_number }}">
                   <svg class="chevron-left pe-3">
                     <use xlink:href="#chevron-left"></use>
                   </svg>
@@ -125,12 +132,12 @@
                 {% if products.number == num %}
                   <span aria-current="page" class="page-numbers current pe-3">{{ num }}</span>
                 {% else %}
-                  <a class="page-numbers pe-3" href="?page={{ num }}">{{ num }}</a>
+                  <a class="page-numbers pe-3" href="?q={{ q }}&page={{ num }}">{{ num }}</a>
                 {% endif %}
               {% endfor %}
 
               {% if products.has_next %}
-                <a href="?page={{ products.next_page_number }}">
+                <a href="?q={{ q }}&page={{ products.next_page_number }}">
                   <svg class="chevron-right ps-3">
                     <use xlink:href="#chevron-right"></use>
                   </svg>
@@ -142,4 +149,10 @@
       </div>
     </div>
   </div>
+  <script>
+    document.getElementById('input-sort').addEventListener('change', function () {
+      const query = this.value
+      window.location.href = `{% url 'shop' %}` + query
+    })
+  </script>
 {% endblock %}
