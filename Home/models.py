@@ -42,7 +42,7 @@ post_save.connect(create_profile, sender=User)
 
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=10, unique=True)
+    tag = models.CharField(max_length=25, unique=True)
 
     def __str__(self):
         return self.tag
@@ -110,7 +110,7 @@ class Product(models.Model):
     product_long_description = models.TextField(
         default='', blank=True, null=True)
     product_additional_information = models.TextField(
-        max_length=500, default='', blank=True, null=True)
+        max_length=10000, default='', blank=True, null=True)
     product_image = models.ImageField(upload_to='uploads/product/', null=True)
 
     product_tag = models.ManyToManyField(Tag, blank=True)

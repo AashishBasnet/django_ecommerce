@@ -35,9 +35,9 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1',
-                 'localhost', '7bf8-2400-1a00-b060-feb3-d589-b54f-f44c-3f77.ngrok-free.app']
+                 'localhost', 'e6e7-27-34-73-210.ngrok-free.app']
 CSRF_TRUSTED_ORIGINS = [
-    'https://7bf8-2400-1a00-b060-feb3-d589-b54f-f44c-3f77.ngrok-free.app',  'https://www.paypal.com',
+    'https://e6e7-27-34-73-210.ngrok-free.app',  'https://www.paypal.com',
     'https://api.paypal.com',
     'https://www.sandbox.paypal.com',  # Add this if you're testing in the sandbox
     'https://api.sandbox.paypal.com',]
@@ -105,24 +105,39 @@ WSGI_APPLICATION = "ecommerce.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+DATABASE_PASSWORD = os.getenv('DB_PASS')
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'django',
 #         'USER': 'postgres',
-#         'PASSWORD': '<pass>',
+#         'PASSWORD': DATABASE_PASSWORD,
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
 # }
+# +++++++++infinity store db+++++++++
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'infinityStore',
+        'USER': 'postgres',
+        'PASSWORD': DATABASE_PASSWORD,
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+# ++++++++++++++++++++++++++++
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',

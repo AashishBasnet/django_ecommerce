@@ -288,6 +288,9 @@
                   <div class="review-item col-md-10">
                     <i class="icon icon-review"></i>
                     <blockquote>“{{ review.review }}”</blockquote>
+                    <p>
+                      Review for <span><a href="{% url 'product' review.review_for.slug %}">{{ review.review_for.product_name }}</a></span>
+                    </p>
                     <div class="rating">
                       {% for star in review.rating|floor|in_range %}
                         <svg class="star star-fill">

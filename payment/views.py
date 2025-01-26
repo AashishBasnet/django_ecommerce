@@ -303,34 +303,36 @@ def PaymentSuccessView(request):
         return redirect('home')
     else:
         payment_done = True
-    if encoded_data and is_valid_base64(encoded_data):
-        try:
-            # Decode Base64 and parse JSON
-            decoded_bytes = base64.b64decode(encoded_data)
-            decoded_string = decoded_bytes.decode('utf-8')  # Decode as UTF-8
-            decoded_data = json.loads(decoded_string)  # Parse JSON
-
-            my_Invoice = str(decoded_data['transaction_uuid'])
+    if encoded_data:
+        if is_valid_base64(encoded_data):
             try:
-                # Look up the order based on the esewa invoice
-                my_Order = Order.objects.get(invoice=my_Invoice)
+                # Decode Base64 and parse JSON
+                decoded_bytes = base64.b64decode(encoded_data)
+                decoded_string = decoded_bytes.decode(
+                    'utf-8')  # Decode as UTF-8
+                decoded_data = json.loads(decoded_string)  # Parse JSON
 
-                # Check if the payment status is completed
-                if decoded_data['status'] == "COMPLETE":
-                    my_Order.paid = True
-                    my_Order.save()
+                my_Invoice = str(decoded_data['transaction_uuid'])
+                try:
+                    # Look up the order based on the esewa invoice
+                    my_Order = Order.objects.get(invoice=my_Invoice)
 
-            except ObjectDoesNotExist:
-                print(f"Order with invoice {my_Invoice} not found.")
+                    # Check if the payment status is completed
+                    if decoded_data['status'] == "COMPLETE":
+                        my_Order.paid = True
+                        my_Order.save()
 
-        except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError) as e:
-            # Handle decoding errors or invalid JSON
-            print(f"Error processing payment data: {e}")
-            messages.warning(request, "Failed to process payment data.")
-            return redirect('home')  # Redirect to home if decoding fails
-    else:
-        messages.warning(request, "Invalid payment data.")
-        return redirect('home')
+                except ObjectDoesNotExist:
+                    print(f"Order with invoice {my_Invoice} not found.")
+
+            except (base64.binascii.Error, json.JSONDecodeError, UnicodeDecodeError) as e:
+                # Handle decoding errors or invalid JSON
+                print(f"Error processing payment data: {e}")
+                messages.warning(request, "Failed to process payment data.")
+                return redirect('home')  # Redirect to home if decoding fails
+        else:
+            messages.warning(request, "Invalid payment data.")
+            return redirect('home')
 
     # Log or process the decoded data if needed
 
