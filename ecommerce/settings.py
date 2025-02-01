@@ -35,9 +35,9 @@ SECRET_KEY = "django-insecure-syj96ft*=19sw6cfks$o)ba^(ob&tq48w=v)obi-7)k36pynx5
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1',
-                 'localhost', 'e6e7-27-34-73-210.ngrok-free.app']
+                 'localhost', 'c77e-2400-1a00-b060-c9ab-f487-c9f8-9c67-6f2d.ngrok-free.app']
 CSRF_TRUSTED_ORIGINS = [
-    'https://e6e7-27-34-73-210.ngrok-free.app',  'https://www.paypal.com',
+    'https://c77e-2400-1a00-b060-c9ab-f487-c9f8-9c67-6f2d.ngrok-free.app',  'https://www.paypal.com',
     'https://api.paypal.com',
     'https://www.sandbox.paypal.com',  # Add this if you're testing in the sandbox
     'https://api.sandbox.paypal.com',]
@@ -126,28 +126,28 @@ DATABASE_PASSWORD = os.getenv('DB_PASS')
 # }
 # +++++++++infinity store db+++++++++
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'infinityStore',
-        'USER': 'postgres',
-        'PASSWORD': DATABASE_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
-# ++++++++++++++++++++++++++++
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'railway',
+#         'NAME': 'infinityStore',
 #         'USER': 'postgres',
-#         'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
-#         'HOST': 'junction.proxy.rlwy.net',
-#         'PORT': '14588',
-#   }
+#         'PASSWORD': DATABASE_PASSWORD,
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
 # }
+
+# ++++++++++++++++++++++++++++
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'bucYIFhiWNohGoLaIjpIzvCbUriGRmhz',
+        'HOST': 'junction.proxy.rlwy.net',
+        'PORT': '14588',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
