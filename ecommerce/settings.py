@@ -205,8 +205,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # white noise static file stuff
-
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 
 DEFAULT_FILE_STORAGE = 'storages.backends.filesystem.FileSystemStorage'
