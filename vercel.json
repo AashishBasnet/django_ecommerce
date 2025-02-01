@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "ecommerce.wsgi.app"
+      "dest": "ecommerce/wsgi.py"
     }
   ]
 }
